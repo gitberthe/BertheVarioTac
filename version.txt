@@ -1,0 +1,2 @@
+le 20240920a :
+ - debut du projest BartheVarioTac
