@@ -105,7 +105,8 @@ LGFX tft;
 static const uint32_t screenWidth  = 240;
 static const uint32_t screenHeight = 320;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[ screenWidth * 10 ];
+static lv_color_t buf1[ screenWidth * 10 ];
+static lv_color_t buf2[ screenWidth * 10 ];
 
 int g_x = 0 ;
 int g_y = 0 ;
@@ -119,8 +120,9 @@ void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *colo
 
    /*tft.startWrite();
    tft.setAddrWindow( area->x1, area->y1, w, h );
-   tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
-   tft.writePixels((lgfx::rgb565_t *)&color_p->full, w * h);
+   //tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
+   //tft.writePixels((lgfx::rgb565_t *)&color_p->full, w * h);
+   tft.fillRect(0, 0,240,320,TFT_WHITE);
    tft.endWrite();*/
 
    //if ( sync_berthe )
@@ -169,7 +171,7 @@ void setup()
 
    // touch_calibrate();//屏幕校准
    lv_init();
-   lv_disp_draw_buf_init( &draw_buf, buf, NULL, screenWidth * 10 );
+   lv_disp_draw_buf_init( &draw_buf, buf1, buf2, screenWidth * 10 );
 
    // Initialize the display
    static lv_disp_drv_t disp_drv;
@@ -219,24 +221,36 @@ void loop()
    tft.startWrite();
    //tft.beginTransaction();
 
-   tft.clearClipRect()  ;
+   //tft.clearClipRect()  ;
    //tft.fillRect(0, 0,240,320,TFT_WHITE);
    //tft.clearDisplay() ;
+
    if ( (count/50)%2 )
     tft.fillCircle(100, 100,50,TFT_RED);
    else
     tft.fillCircle(100, 100,50,TFT_BLUE);
 
-   if ( old_x != g_x || old_y != g_y )
+    tft.drawLine( 0,0,100,100,TFT_BLACK) ;
+
+
+// texte
+if ( old_x != g_x || old_y != g_y )
     {
-    old_x = g_x ; old_y = g_y ;
-    tft.fillRect(0, 200,240,120,TFT_WHITE);
-    tft.setCursor(50, 300) ;
     tft.setTextSize(2) ;
     char TmpChar[100] ;
-    tft.setTextColor(2) ;
+
+
+    tft.setCursor(50, 300) ;
+    tft.setTextColor(TFT_WHITE) ;
+    sprintf( TmpChar , "x:%03d y:%03d", old_x , old_y ) ;
+    tft.print(TmpChar);
+
+    tft.setCursor(50, 300) ;
+    tft.setTextColor(TFT_BLACK) ;
     sprintf( TmpChar , "x:%03d y:%03d", g_x , g_y ) ;
     tft.print(TmpChar);
+
+    old_x = g_x ; old_y = g_y ;
     }
    tft.endWrite();
    //tft.powerSaveOff() ;
