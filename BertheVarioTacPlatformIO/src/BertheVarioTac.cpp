@@ -11,6 +11,7 @@
 
 char g_NumVersion[] = "20240920a" ;
 
+/*
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
 void setup()
@@ -26,3 +27,4 @@ void loop()
 // put your main code here, to run repeatedly:
 Serial.println("hello from ESP32-2432S028") ;
 }
+*/
