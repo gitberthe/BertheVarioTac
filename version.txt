@@ -1,2 +1,5 @@
+le 20240921a :
+ - reorganisation CScreen
+
 le 20240920a :
- - debut du projest BartheVarioTac
+ - debut du projet BartheVarioTac

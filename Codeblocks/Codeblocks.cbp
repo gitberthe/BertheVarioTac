@@ -34,9 +34,13 @@
 		</Compiler>
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/Touch_button_ILI9341_LovyanGFX.cpp" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/User_Setup.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/lv_conf.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/User_Setup.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/lv_conf.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/main.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

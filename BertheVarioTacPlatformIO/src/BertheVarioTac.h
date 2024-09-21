@@ -4,10 +4,16 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 20/09/2024
+/// \date modification : 21/09/2024
 ///
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // includes globaux
 #include <Arduino.h>
+
+
+////////////////////////////////////////////////////////////////////////////////
+// includes du logiciel
+#include "Screen/CScreen.h"
+#include "GlobalVar/CGlobalVar.h"
