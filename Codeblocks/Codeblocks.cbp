@@ -36,8 +36,14 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CLGFX.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CLGFX.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CText2Screen.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CText2Screen.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/User_Setup.h" />

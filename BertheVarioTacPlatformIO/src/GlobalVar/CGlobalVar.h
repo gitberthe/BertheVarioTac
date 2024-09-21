@@ -12,8 +12,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Variable globale du projet
-class CGlobalVar : public CScreen
+class CGlobalVar
 {
+public :
+    CScreen m_Screen ;
+
+    static void BeepError() ;
 } ;
 
 extern CGlobalVar g_GlobalVar ;

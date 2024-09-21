@@ -11,10 +11,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 // includes globaux
 #include <Arduino.h>
+#include <vector>
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // includes du logiciel
 #include "Screen/CTouchButtons.h"
+#include "Screen/CLGFX.h"
+#include "Screen/CAutoPages.h"
+#include "Screen/CText2Screen.h"
 #include "Screen/CScreen.h"
 #include "GlobalVar/CGlobalVar.h"
