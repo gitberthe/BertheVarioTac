@@ -25,30 +25,53 @@ g_GlobalVar.InitScreen() ;
 /// \brief
 void loop()
 {
-lv_timer_handler(); /* let the GUI do its work */
-delay( 5 );
+g_GlobalVar.HandleTouchScreen() ;
 
+/*
 // berthe
 static int count = 0 ;
 count++ ;
 static int old_x= 0 ;
 static int old_y= 0 ;
+*/
 
 //if ( count % 100 )
 //    return  ;
 
 //tft.waitDMA() ;
-//tft.waitDisplay() ;
+g_tft.waitDisplay() ;
+
+g_GlobalVar.AfficheButtons() ;
+
+delay( 5 );
+
+static int count = 0 ;
+count++ ;
+
+if ( count%60 )
+    return ;
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
 g_tft.startWrite();
 //tft.beginTransaction();
 
+if ( g_GlobalVar.IsButtonPressed( 0 ) )
+    g_tft.fillCircle(100, 100,50,TFT_BLUE) ;
+else if ( g_GlobalVar.IsButtonPressed( 1 ) )
+    g_tft.fillCircle(100, 100,50,TFT_WHITE) ;
+else if ( g_GlobalVar.IsButtonPressed( 2 ) )
+    g_tft.fillCircle(100, 100,50,TFT_RED) ;
+
+g_GlobalVar.RazButtons() ;
+
+g_tft.endWrite();
+
 //tft.clearClipRect()  ;
 //tft.fillRect(0, 0,240,320,TFT_WHITE);
 //tft.clearDisplay() ;
 
+/*
 if ( (count/50)%2 )
     g_tft.fillCircle(100, 100,50,TFT_RED);
 else
@@ -82,7 +105,7 @@ g_tft.print(TmpChar);
 //g_GlobalVar.m_Pressed = false ;
 
 g_tft.endWrite();
-
+*/
    //tft.powerSaveOff() ;
    //tft.wakeup() ;
    //tft.endTransaction();

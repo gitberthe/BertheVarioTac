@@ -38,6 +38,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/User_Setup.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/lv_conf.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/main.cpp" />

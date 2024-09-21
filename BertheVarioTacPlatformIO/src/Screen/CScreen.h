@@ -113,14 +113,18 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Ecran de l'application
-class CScreen
+class CScreen : public CTouchButtons
 {
 public :
     void InitScreen() ;
+    void HandleTouchScreen() ;
 
-    int   m_XTouch = -1 ;
-    int   m_YTouch = -1 ;
-    bool  m_Pressed = false ;
+    int   m_XTouch = -1 ;       ///< coordonnees du touch
+    int   m_YTouch = -1 ;       ///< coordonnees du touch
+    bool  m_Pressed = false ;   ///< si est appuyé
+
+    const int m_Largeur = 240 ;  ///< dimensions de l'écran
+    const int m_Hauteur = 320 ;  ///< dimensions de l'écran
 } ;
 
 extern LGFX g_tft;

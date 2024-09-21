@@ -22,49 +22,49 @@ static lv_color_t buf2[ screenWidth * 10 ];
 /// \brief Display flushing
 void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p )
 {
-   //uint32_t w = ( area->x2 - area->x1 + 1 );
-   //uint32_t h = ( area->y2 - area->y1 + 1 );
+//uint32_t w = ( area->x2 - area->x1 + 1 );
+//uint32_t h = ( area->y2 - area->y1 + 1 );
 
-   /*g_tft.startWrite();
-   g_tft.setAddrWindow( area->x1, area->y1, w, h );
-   //g_tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
-   //g_tft.writePixels((lgfx::rgb565_t *)&color_p->full, w * h);
-   g_tft.fillRect(0, 0,240,320,TFT_WHITE);
-   g_tft.endWrite();*/
+/*g_tft.startWrite();
+g_tft.setAddrWindow( area->x1, area->y1, w, h );
+//g_tft.pushColors( ( uint16_t * )&color_p->full, w * h, true );
+//g_tft.writePixels((lgfx::rgb565_t *)&color_p->full, w * h);
+g_tft.fillRect(0, 0,240,320,TFT_WHITE);
+g_tft.endWrite();*/
 
-   //if ( sync_berthe )
-   lv_disp_flush_ready( disp );
+//if ( sync_berthe )
+lv_disp_flush_ready( disp );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Read the touchpad
+/// \brief lit le touch par et met a jour g_GlobalVar.
 void my_touchpad_read( lv_indev_drv_t * indev_driver, lv_indev_data_t * data )
 {
-   uint16_t touchX, touchY;
-   bool touched = g_tft.getTouch( &touchX, &touchY);
-   if( !touched )
-   {
-      data->state = LV_INDEV_STATE_REL;
-      g_GlobalVar.m_Pressed = false ;
-   }
-   else
-   {
-      data->state = LV_INDEV_STATE_PR;
+uint16_t touchX, touchY;
+bool touched = g_tft.getTouch( &touchX, &touchY);
+if( !touched )
+    {
+    data->state = LV_INDEV_STATE_REL;
+    g_GlobalVar.m_Pressed = false ;
+    }
+else
+    {
+    data->state = LV_INDEV_STATE_PR;
 
-      /*Set the coordinates*/
-      data->point.x = touchX;
-      data->point.y = touchY;
+    /*Set the coordinates*/
+    data->point.x = touchX;
+    data->point.y = touchY;
 
-      //Serial.print( "Data x " );
-      //Serial.println( touchX );
-      g_GlobalVar.m_XTouch = touchX ;
+    //Serial.print( "Data x " );
+    //Serial.println( touchX );
+    g_GlobalVar.m_XTouch = touchX ;
 
-      //Serial.print( "Data y " );
-      //Serial.println( touchY );
-      g_GlobalVar.m_YTouch = touchY ;
+    //Serial.print( "Data y " );
+    //Serial.println( touchY );
+    g_GlobalVar.m_YTouch = touchY ;
 
-      g_GlobalVar.m_Pressed = true ;
-   }
+    g_GlobalVar.m_Pressed = true ;
+    }
 }
 
 /*
@@ -106,36 +106,54 @@ void lv_example_get_started_1(void)
 /// \brief Initialise l'ecran et le touch pad
 void CScreen::InitScreen()
 {
-   g_tft.begin();
-   g_tft.setRotation(7);
-   g_tft.setBrightness(255);
-   uint16_t calData[] = { 239, 3926, 233, 265, 3856, 3896, 3714, 308};
-   g_tft.setTouchCalibrate(calData);
+g_tft.begin();
+g_tft.setRotation(7);
+g_tft.setBrightness(255/2);
+uint16_t calData[] = { 317,3787,3847,3813,331,232,3860,238 };
 
-   // touch_calibrate();//屏幕校准
-   lv_init();
-   lv_disp_draw_buf_init( &draw_buf, buf1, buf2, screenWidth * 10 );
+/*
+// procedure de calibration à faire une fois
+g_tft.calibrateTouch( calData , TFT_WHITE , TFT_BLACK ) ;
+for ( int ic = 0 ; ic < 8 ; ic++ )
+   {
+   Serial.print( calData[ic] ) ;
+   Serial.print( "," ) ;
+   }
+*/
 
-   // Initialize the display
-   static lv_disp_drv_t disp_drv;
-   lv_disp_drv_init(&disp_drv);
+g_tft.setTouchCalibrate(calData);
 
-   // Change the following line to your display resolution
-   disp_drv.hor_res = 320;
-   disp_drv.ver_res = 240;
-   disp_drv.flush_cb = my_disp_flush;
-   disp_drv.draw_buf = &draw_buf;
-   lv_disp_drv_register(&disp_drv);
+// touch_calibrate();//屏幕校准
+lv_init();
+lv_disp_draw_buf_init( &draw_buf, buf1, buf2, screenWidth * 10 );
 
-   // Initialize the (dummy) input device driver
-   static lv_indev_drv_t indev_drv;
-   lv_indev_drv_init(&indev_drv);
-   indev_drv.type = LV_INDEV_TYPE_POINTER;
-   indev_drv.read_cb = my_touchpad_read;
-   lv_indev_drv_register(&indev_drv);
+// Initialize the display
+static lv_disp_drv_t disp_drv;
+lv_disp_drv_init(&disp_drv);
 
-   //lv_example_get_started_1();
+// Change the following line to your display resolution
+disp_drv.hor_res = 320;
+disp_drv.ver_res = 240;
+disp_drv.flush_cb = my_disp_flush;
+disp_drv.draw_buf = &draw_buf;
+lv_disp_drv_register(&disp_drv);
 
-   // berthe
-   g_tft.fillRect(0, 0,240,320,TFT_WHITE);
+// Initialize the (dummy) input device driver
+static lv_indev_drv_t indev_drv;
+lv_indev_drv_init(&indev_drv);
+indev_drv.type = LV_INDEV_TYPE_POINTER;
+indev_drv.read_cb = my_touchpad_read;
+lv_indev_drv_register(&indev_drv);
+
+//lv_example_get_started_1();
+
+// berthe
+g_tft.fillRect(0, 0,240,320,TFT_WHITE);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief A appeler souvent pour le touch screen
+void CScreen::HandleTouchScreen()
+{
+lv_timer_handler(); /* let the GUI do its work */
 }

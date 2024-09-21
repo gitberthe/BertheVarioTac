@@ -15,5 +15,6 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // includes du logiciel
+#include "Screen/CTouchButtons.h"
 #include "Screen/CScreen.h"
 #include "GlobalVar/CGlobalVar.h"
