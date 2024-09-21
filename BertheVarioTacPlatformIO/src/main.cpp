@@ -8,7 +8,6 @@
 ///
 
 #include "BertheVarioTac.h"
-
 CGlobalVar g_GlobalVar ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +15,10 @@ CGlobalVar g_GlobalVar ;
 void setup()
 {
 Serial.begin(115200);
+Serial1.begin(9600 ,SERIAL_8N1 , pinGpsRXD , pinGpsTXD );
+
+// tache de mise a jour % cpu
+perfmon_start() ;
 
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
@@ -27,6 +30,13 @@ void loop()
 {
 static int count = 0 ;
 
+// test gps
+while (Serial1.available()>0)
+    {
+    char c = Serial1.read() ;
+    Serial.print( c ) ;
+    }
+
 // traitement de touch pad
 g_GlobalVar.m_Screen.HandleTouchScreen() ;
 
@@ -36,13 +46,12 @@ g_tft.waitDisplay() ;
 // affichage des boutons tactiles
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
-// a 20hz
-delay( 5 );
+// a 40hz
+delay( 25 );
 
-
-// a 4 hz
+// a 2 hz
 count++ ;
-if ( count%50 )
+if ( count%20 )
     return ;
 
 //tft.sleep() ;

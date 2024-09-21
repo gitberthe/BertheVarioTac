@@ -17,6 +17,10 @@ class CGlobalVar
 public :
     CScreen m_Screen ;
 
+    int     m_PercentCore0 ;    ///< pourcentage utilisation core 0
+    int     m_PercentCore1 ;    ///< pourcentage utilisation core 1
+
+
     static void BeepError() ;
 } ;
 

@@ -36,6 +36,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/esp32_perfmon.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/perfmon.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CLGFX.cpp" />

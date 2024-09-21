@@ -13,7 +13,12 @@
 // define des champs a afficher par page
 #define PAGE_VZ_VZ  0
 
-#define PAGE_SYS_SYS  0
+#define PAGE_SYS_CPU0_TXT  0
+#define PAGE_SYS_CPU1_TXT  1
+#define PAGE_SYS_CPU0_VAL  2
+#define PAGE_SYS_CPU1_VAL  3
+#define PAGE_SYS_FMEM_TXT  4
+#define PAGE_SYS_FMEM_VAL  5
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief /// \brief Definition des pages ecran
@@ -31,10 +36,12 @@ public :
     const int m_Largeur = 240 ;  ///< dimensions de l'écran
     const int m_Hauteur = 320 ;  ///< dimensions de l'écran
 
+    void ScreenRaz() ;
+
 private :
     CAutoPages::EtatsAuto EcranVz() ;
     CAutoPages::EtatsAuto EcranSys() ;
-    void ScreenRaz() ;
+
 
     std::vector<CText2Screen>   m_T2SPageVzArr ;    ///< tableau des champs page Vz
     std::vector<CText2Screen>   m_T2SPageSysArr ; ///< tableau des champs page Sys

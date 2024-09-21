@@ -16,17 +16,18 @@ CText2Screen::CText2Screen()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
-void CText2Screen::SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite )
+/// \brief Parametrage des variables
+void CText2Screen::SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite , bool Const )
 {
 m_x = x ;
 m_y = y ;
 m_Taille = taille ;
 m_Unite = Unite ;
+m_Const = Const ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Affichage sans flick.
 void CText2Screen::Affiche(const char* pChar)
 {
 g_tft.setCursor( m_x , m_y ) ;
@@ -38,14 +39,15 @@ if ( m_Taille == TXT_MOYEN )
 else
     g_tft.setTextSize(6) ;
 
-// effacement ancien texte
-if ( m_TextePrincipal != pChar )
+// effacement ancien texte si pas constant
+if ( ! m_Const && m_TextePrincipal != pChar )
     {
     g_tft.setCursor( m_x , m_y ) ;
     g_tft.setTextColor(TFT_WHITE) ;
     g_tft.print(m_TextePrincipal.c_str());
     }
 
+// nouveau text
 g_tft.setCursor( m_x , m_y ) ;
 g_tft.setTextColor(TFT_BLACK) ;
 g_tft.print(pChar);

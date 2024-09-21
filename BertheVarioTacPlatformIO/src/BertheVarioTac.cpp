@@ -10,21 +10,3 @@
 #include "BertheVarioTac.h"
 
 char g_NumVersion[] = "20240921a" ;
-
-/*
-////////////////////////////////////////////////////////////////////////////////
-/// \brief
-void setup()
-{
-// put your setup code here, to run once:
-Serial.begin(115200) ;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/// \brief
-void loop()
-{
-// put your main code here, to run repeatedly:
-Serial.println("hello from ESP32-2432S028") ;
-}
-*/

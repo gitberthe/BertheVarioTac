@@ -20,7 +20,7 @@ class CText2Screen
 public :
     CText2Screen() ;
 
-    void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' ) ;
+    void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' , bool Const = false ) ;
     void Affiche( const char * pChar ) ;
 
 private :
@@ -29,6 +29,7 @@ private :
     uint16_t    m_x = 0 ;
     uint16_t    m_y = 0 ;
     uint16_t    m_Taille = TXT_MOYEN ;
+    bool        m_Const = false ;
 } ;
 
 #endif
