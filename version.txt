@@ -1,5 +1,5 @@
 le 20240922b :
- - ok pages ihm sans bug caarte SD.
+ - ok pages ihm sans bug carte SD.
 
 le 20240921a :
  - trame gps fonctionnelle avec carte SD.
