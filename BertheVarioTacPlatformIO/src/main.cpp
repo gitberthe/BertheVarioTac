@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 22/09/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -19,14 +19,14 @@ Serial.begin(115200);
 // tache de mise a jour % cpu
 perfmon_start() ;
 
-// Init BUS I2C
-g_GlobalVar.InitI2C() ;
-
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
 
 // init sdcard
 g_GlobalVar.InitSDCard() ;
+
+// Init BUS I2C
+g_GlobalVar.InitI2C() ;
 
 // lecture fichier de configuration
 g_GlobalVar.m_Config.LectureFichier() ;
@@ -40,6 +40,9 @@ g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
 // init port serie GPS
 g_GlobalVar.InitGps() ;
 
+// init capteur de pression
+//g_GlobalVar.m_BMP180Pression.InitBMP180() ;
+
 // lancement tache gps
 g_GlobalVar.LanceTacheGps(true) ;
 }
@@ -48,6 +51,18 @@ g_GlobalVar.LanceTacheGps(true) ;
 /// \brief boucle sans fin
 void loop()
 {
+/*while ( true )
+    {
+    g_tft.setTextSize(6) ;
+    g_tft.setCursor( 10 , 10 ) ;
+    g_tft.setTextColor(TFT_RED) ;
+
+    if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
+        g_tft.print( "ok" );
+    else
+        g_tft.print( "fail" );
+
+    } */
 static int count = 0 ;
 
 // traitement de touch pad

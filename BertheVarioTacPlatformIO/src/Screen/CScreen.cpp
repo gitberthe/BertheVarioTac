@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 22/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -13,8 +13,13 @@
 /// \brief Constructeur
 CScreen::CScreen()
 {
-m_T2SPageVzArr.resize(1) ;
-m_T2SPageVzArr[PAGE_VZ_VZ].SetPos( 0 , 0 , TXT_GROS ) ;
+m_T2SPageVzArr.resize(6) ;
+m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].SetPos(   5 , 50 , TXT_MOYEN , '\'' ) ;
+m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(   0 , 250, TXT_MOYEN , 'm' ) ;
+m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 140 , 250, TXT_MOYEN , 'k') ;
+m_T2SPageVzArr[PAGE_VZ_CAP_DIZ].SetPos  ( 120 , 10 , TXT_MOYEN ) ;
+m_T2SPageVzArr[PAGE_VZ_CAP_LET].SetPos  ( 150 , 10 , TXT_MOYEN ) ;
+m_T2SPageVzArr[PAGE_VZ_VZ].SetPos       ( 50 , 180 , TXT_GROS ) ;
 
 m_T2SPageSysArr.resize(6) ;
 // cpu
@@ -48,12 +53,27 @@ CAutoPages::EtatsAuto CScreen::EcranVz()
 static int count = 0 ;
 count++ ;
 
+// affichage VZ
 if ( count%2 )
     m_T2SPageVzArr[PAGE_VZ_VZ].Affiche("-0.5") ;
 else
     m_T2SPageVzArr[PAGE_VZ_VZ].Affiche(" 0.3") ;
 
-g_tft.fillCircle(100, 100,50,TFT_BLUE) ;
+// affichage vitesse sol
+char TmpChar[20] ;
+sprintf( TmpChar , "%4.1f" , g_GlobalVar.m_VitesseKmh ) ;
+m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar) ;
+
+// duree du vol
+if ( g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
+    sprintf( TmpChar , "%2dG" , g_GlobalVar.GetNbSat() ) ;
+else if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS )
+    sprintf( TmpChar , "%2dS" , g_GlobalVar.GetNbSat()) ;
+else if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL )
+    sprintf( TmpChar , "%2dV" , g_GlobalVar.GetNbSat()) ;
+else
+    sprintf( TmpChar , "%3d", g_GlobalVar.m_DureeVolMin ) ;
+m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
 // defilement autre ecran
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )

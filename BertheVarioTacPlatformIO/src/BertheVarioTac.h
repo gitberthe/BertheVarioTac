@@ -30,7 +30,7 @@
 ///////////////////
 // pour le debug //
 ///////////////////
-//#define GPS_DEBUG
+#define GPS_DEBUG
 
 //////////////////////////
 // includes du logiciel //
@@ -74,7 +74,9 @@
 ////////////////////////
 
 // GPS
-#define pinGpsRXD  (27)
+//#define pinGpsRXD  (27)
+//##define pinGpsRXD  (21)
+#define pinGpsRXD  (35)
 #define pinGpsTXD  (-1)
 
 // SDCARD
@@ -84,7 +86,7 @@
 #define SDCARD_SCK_PIN  18
 
 // SDA SCL
-#define VARIO_SDA_PIN 21
+#define VARIO_SDA_PIN 27
 #define VARIO_SCL_PIN 22
 
 ////////////////

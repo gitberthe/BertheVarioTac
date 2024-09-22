@@ -15,9 +15,15 @@
 #define ATTENTE_STABILITE_GPS   -2
 #define ATTENTE_VITESSE_VOL     -1
 
-// define des champs a afficher par page
-#define PAGE_VZ_VZ  0
+// define des champs a afficher page Vz
+#define PAGE_VZ_DUREE_VOL  0
+#define PAGE_VZ_ALTI_BARO  1
+#define PAGE_VZ_VIT_SOL    2
+#define PAGE_VZ_CAP_DIZ    3
+#define PAGE_VZ_CAP_LET    4
+#define PAGE_VZ_VZ         5
 
+// define des champs a afficher page Sys
 #define PAGE_SYS_CPU0_TXT  0
 #define PAGE_SYS_CPU1_TXT  1
 #define PAGE_SYS_CPU0_VAL  2
