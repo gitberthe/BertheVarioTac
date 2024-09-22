@@ -4,11 +4,16 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 22/09/2024
 ///
 
 #ifndef _CSCREEN_
 #define _CSCREEN_
+
+// define de mode G S V
+#define ATTENTE_MESSAGE_GPS     -3
+#define ATTENTE_STABILITE_GPS   -2
+#define ATTENTE_VITESSE_VOL     -1
 
 // define des champs a afficher par page
 #define PAGE_VZ_VZ  0

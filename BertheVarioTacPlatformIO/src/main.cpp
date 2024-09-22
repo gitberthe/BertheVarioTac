@@ -15,13 +15,33 @@ CGlobalVar g_GlobalVar ;
 void setup()
 {
 Serial.begin(115200);
-Serial1.begin(9600 ,SERIAL_8N1 , pinGpsRXD , pinGpsTXD );
 
 // tache de mise a jour % cpu
 perfmon_start() ;
 
+// Init BUS I2C
+g_GlobalVar.InitI2C() ;
+
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
+
+// init sdcard
+g_GlobalVar.InitSDCard() ;
+
+// lecture fichier de configuration
+g_GlobalVar.m_Config.LectureFichier() ;
+
+// lecture fichier terrains
+g_GlobalVar.m_TerrainArr.LireFichierTerrains() ;
+
+// lecture fichier zones aeriennes
+g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
+
+// init port serie GPS
+g_GlobalVar.InitGps() ;
+
+// lancement tache gps
+g_GlobalVar.LanceTacheGps(true) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,13 +49,6 @@ g_tft.InitScreen() ;
 void loop()
 {
 static int count = 0 ;
-
-// test gps
-while (Serial1.available()>0)
-    {
-    char c = Serial1.read() ;
-    Serial.print( c ) ;
-    }
 
 // traitement de touch pad
 g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -46,12 +59,12 @@ g_tft.waitDisplay() ;
 // affichage des boutons tactiles
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
-// a 40hz
-delay( 25 );
+// a 100hz
+delay( 10 );
 
-// a 2 hz
+// a 3 hz
 count++ ;
-if ( count%20 )
+if ( count%33 )
     return ;
 
 //tft.sleep() ;

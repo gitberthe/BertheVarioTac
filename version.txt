@@ -1,4 +1,7 @@
 le 20240921a :
+ - trame gps fonctionnelle avec carte SD.
+ 
+le 20240921a :
  - reorganisation CScreen
 
 le 20240920a :
