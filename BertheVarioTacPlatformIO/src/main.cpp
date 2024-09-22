@@ -22,6 +22,13 @@ perfmon_start() ;
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
 
+// affichage numero de firmware
+g_GlobalVar.m_Screen.ScreenRaz() ;
+g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setTextSize(3) ;
+g_tft.setCursor( 40 , 60 ) ;
+g_tft.print(g_NumVersion);
+
 // init sdcard
 g_GlobalVar.InitSDCard() ;
 
@@ -45,6 +52,8 @@ g_GlobalVar.InitGps() ;
 
 // lancement tache gps
 g_GlobalVar.LanceTacheGps(true) ;
+
+g_GlobalVar.m_Screen.ScreenRaz() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +84,7 @@ g_tft.waitDisplay() ;
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
 // a 50hz
+//delay( 20 );
 delay( 20 );
 
 // a 2.5 hz
@@ -84,7 +94,7 @@ if ( count%20 )
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
-g_tft.startWrite();
+//g_tft.startWrite(); // bug avec carte SD si utilisation
 //tft.beginTransaction();
 
 // sequencement des pages
@@ -93,7 +103,7 @@ g_GlobalVar.m_Screen.SequencementPages() ;
 // raz de l'etat des boutons tactiles
 g_GlobalVar.m_Screen.RazButtons() ;
 
-g_tft.endWrite();
+//g_tft.endWrite(); // bug avec carte SD si utilisation
 
 //tft.clearClipRect()  ;
 //tft.fillRect(0, 0,240,320,TFT_WHITE);

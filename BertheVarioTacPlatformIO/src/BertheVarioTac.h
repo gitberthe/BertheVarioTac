@@ -193,3 +193,5 @@
 //////////////////////////
 #include "GlobalVar/CNumTaskArr.h"
 #include "GlobalVar/CGlobalVar.h"
+
+extern char g_NumVersion[] ;

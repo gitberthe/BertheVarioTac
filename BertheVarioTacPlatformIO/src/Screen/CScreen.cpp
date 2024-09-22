@@ -159,11 +159,21 @@ return ECRAN_0_Vz ;
 CAutoPages::EtatsAuto CScreen::EcranHisto()
 {
 static int ivol = 0 ;
+static int lastivol = -1 ;
 int y = 20 ;
 
 // lecture des histo
 if ( IsPageChanged() )
+    {
     g_GlobalVar.m_HistoVol.LectureFichiers() ;
+    lastivol = -1 ;
+    }
+
+if ( lastivol != ivol )
+    {
+    lastivol = ivol ;
+    ScreenRaz() ;
+    }
 
 g_tft.setTextSize(2) ;
 
@@ -200,7 +210,6 @@ sprintf( TmpCharDistMax , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_Dis
 char TmpCharTV[20] ;
 sprintf( TmpCharTV , " %3d'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeVol ) ;
 
-ScreenRaz() ;
 
 // nom fch igc
 g_tft.setCursor(0, y);
@@ -260,21 +269,44 @@ g_tft.print(TmpCharTV);
 fin_histo :
 
 // defilement autre ecran
-g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Igc", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+
+// si changement de numero histo vol
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    ResetTimeOut() ;
+    ivol++ ;
+    if ( ivol >= g_GlobalVar.m_HistoVol.m_HistoDir.size() )
+        ivol = g_GlobalVar.m_HistoVol.m_HistoDir.size() - 1 ;
+    //g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
     return ECRAN_1_Histo ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    }
+
+// si changement d'ecran
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    ResetTimeOut() ;
+    ivol-- ;
+    if ( ivol < 0 )
+        ivol = 0 ;
+    //g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
+    return ECRAN_1_Histo ;
+    }
+
+// si changement d'ecran
+if ( g_GlobalVar.BoutonCentre() )
+    {
+    g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
     return ECRAN_2a_ListeIgc ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
-    return ECRAN_1_Histo ;
+    }
 
 return ECRAN_1_Histo ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Permet de modifier les champs de fichier de configuration
 CAutoPages::EtatsAuto CScreen::EcranListeIgcFch()
 {
 static std::vector<std::string> VecNomIgc ;
@@ -282,36 +314,41 @@ static std::vector<int> VecTempsIgc ;
 
 // lecture de fichier
 if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
     g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
 
-int TotalMin = 0 ;
-int y_cursor ;
-for ( int ifch = 0 ; ifch < VecNomIgc.size() ; ifch++ )
-    TotalMin += VecTempsIgc[ifch] ;
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "Arc" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "TMo",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 
-char TmpChar[25] ;
-ScreenRaz() ;
 
-g_tft.setTextSize(2) ;
+    int TotalMin = 0 ;
+    int y_cursor ;
+    for ( int ifch = 0 ; ifch < VecNomIgc.size() ; ifch++ )
+        TotalMin += VecTempsIgc[ifch] ;
 
-int ivec = 0 ;
-y_cursor = 10 ;
-for ( ; ivec < VecNomIgc.size() ; ivec++ )
-    {
-    sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , VecTempsIgc[ivec] ) ;
-    y_cursor += 16 ;
-    g_tft.setCursor( 0, y_cursor );
+    char TmpChar[25] ;
+
+    g_tft.setTextSize(2) ;
+
+    int ivec = 0 ;
+    y_cursor = 10 ;
+    for ( ; ivec < VecNomIgc.size() ; ivec++ )
+        {
+        sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , VecTempsIgc[ivec] ) ;
+        y_cursor += 16 ;
+        g_tft.setCursor( 0, y_cursor );
+        g_tft.print( TmpChar ) ;
+        }
+
+    sprintf( TmpChar , "tot. igc:%03dm", TotalMin ) ;
+    g_tft.setCursor( 0, y_cursor + 25 );
     g_tft.print( TmpChar ) ;
     }
 
-sprintf( TmpChar , "tot. igc:%03dm", TotalMin ) ;
-g_tft.setCursor( 0, y_cursor + 25 );
-g_tft.print( TmpChar ) ;
-
 // defilement autre ecran
-g_GlobalVar.m_Screen.SetText( "Arc" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "TMo", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     return ECRAN_2b_ConfirmArchIgc ;
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
@@ -328,6 +365,9 @@ CAutoPages::EtatsAuto CScreen::EcranTmaAll()
 {
 // tri par nom
 g_GlobalVar.m_ZonesAerAll.TriZonesNom() ;
+
+if ( IsPageChanged() )
+    ScreenRaz() ;
 
 // construction du tableau des zones
 std::vector<CZoneAer*> VecZonesMod ;
@@ -355,7 +395,7 @@ sprintf( TmpTitre , "%2d B. Cen. Mo." , g_GlobalVar.m_ZonesAerAll.GetNbZones() )
 
 g_tft.setTextSize(2) ;
 
-ScreenRaz() ;
+
 
 g_tft.setCursor( 0, 20 );
 g_tft.print( TmpTitre ) ;
@@ -386,9 +426,9 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
         }
     }
 
-g_GlobalVar.m_Screen.SetText( "TMo" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Mod" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Cfg", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "TMo" , 2 ) ;
+g_GlobalVar.m_Screen.SetText( "Mod" , 2 ) ;
 
 // si changement d'ecran
 if ( g_GlobalVar.BoutonDroit() )
@@ -413,36 +453,66 @@ return ECRAN_3a_TmaAll ;
 /// \brief
 CAutoPages::EtatsAuto CScreen::EcranCfgFch()
 {
-static char TmpMod[100] = {0} ;
+static char TmpModChar[100] = {0} ;
 std::string Name ;
 std::string Value ; ;
 
-static int iChamps = -1 ;
 static bool ChampsModified = false ;
+static int m_LastiChamps = -2 ;
+static bool CfgFileEnMod = false ;
 
 // à l'entree dans la page on a rien modifier
 if ( IsPageChanged() )
     {
-    m_CfgFileEnMod = false ;
+    m_CfgFileiChamps = -1 ;
     ChampsModified = false ;
+    m_LastiChamps = -2 ;
     }
 
-// sortie
-if ( iChamps == -1 )
+// texte bouton
+if ( CfgFileEnMod )
     {
-    strcpy( TmpMod , "" ) ;
+    g_GlobalVar.m_Screen.SetText( "Dec" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Val", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Inc" , 2 ) ;
+    }
+else
+    {
+    if ( m_CfgFileiChamps != -1 )
+        {
+        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mod" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        }
+    else
+        {
+        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "TDe" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        }
+    }
+
+// selection du champs
+if ( m_CfgFileiChamps == -1 )
+    {
+    strcpy( TmpModChar , "" ) ;
     Name = " Editeur Cfg\nBoutons <GCD>" ;
     }
 else
-    g_GlobalVar.m_Config.GetChar( iChamps , Name , Value ) ;
+    g_GlobalVar.m_Config.GetChar( m_CfgFileiChamps , Name , Value ) ;
 
-g_tft.setTextSize(2) ;
+// changement de champ
+if ( m_LastiChamps != m_CfgFileiChamps )
+    {
+    m_LastiChamps = m_CfgFileiChamps ;
+    ScreenRaz() ;
 
-ScreenRaz() ;
+    g_tft.setTextSize(2) ;
+    }
 
 // Mod
 g_tft.setCursor(0, 20);
-g_tft.print(TmpMod) ;
+g_tft.print(TmpModChar) ;
 // NomVar
 g_tft.setCursor(0, 60);
 g_tft.print(Name.c_str()) ;
@@ -454,7 +524,7 @@ bool BoutonCent = g_GlobalVar.BoutonCentre() ;
 bool BoutonGau  = g_GlobalVar.BoutonGauche() ;
 bool BoutonDroi = g_GlobalVar.BoutonDroit() ;
 // sortie ecran
-if ( BoutonCent && !m_CfgFileEnMod && iChamps == -1 )
+if ( BoutonCent && !CfgFileEnMod && m_CfgFileiChamps == -1 )
     {
     if ( ChampsModified )
         {
@@ -465,20 +535,21 @@ if ( BoutonCent && !m_CfgFileEnMod && iChamps == -1 )
     }
 
 // modification du mode modif/edition
-if ( BoutonCent && iChamps != -1 )
+if ( BoutonCent && m_CfgFileiChamps != -1 )
     {
-    m_CfgFileEnMod = !m_CfgFileEnMod ;
-    if ( m_CfgFileEnMod )
-        strcpy( TmpMod , "Modification" ) ;
+    ScreenRaz() ;
+    CfgFileEnMod = !CfgFileEnMod ;
+    if ( CfgFileEnMod )
+        strcpy( TmpModChar , "Modification" ) ;
     else
-        strcpy( TmpMod , "Edition" ) ;
+        strcpy( TmpModChar , "Edition" ) ;
     }
 
 // decrementation de variable
-if ( BoutonGau && m_CfgFileEnMod )
+if ( BoutonGau && CfgFileEnMod )
     {
     ChampsModified = true ;
-    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[iChamps] ;
+    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[m_CfgFileiChamps] ;
     if ( pLine->m_Type == TYPE_VAR_FLOAT )
         {
         float * pVal = (float*) pLine->m_pVar ;
@@ -500,10 +571,10 @@ if ( BoutonGau && m_CfgFileEnMod )
     }
 
 // incrementation de variable
-if ( BoutonDroi && m_CfgFileEnMod )
+if ( BoutonDroi && CfgFileEnMod )
     {
     ChampsModified = true ;
-    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[iChamps] ;
+    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[m_CfgFileiChamps] ;
     if ( pLine->m_Type == TYPE_VAR_FLOAT )
         {
         float * pVal = (float*) pLine->m_pVar ;
@@ -524,45 +595,22 @@ if ( BoutonDroi && m_CfgFileEnMod )
         }
     }
 
-// texte bouton
-if ( m_CfgFileEnMod )
-    {
-    g_GlobalVar.m_Screen.SetText( "Dec" , 0 ) ;
-    g_GlobalVar.m_Screen.SetText( "Val", 1 ) ;
-    g_GlobalVar.m_Screen.SetText( "Inc" , 2 ) ;
-    }
-else
-    {
-    if ( iChamps != -1 )
-        {
-        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
-        g_GlobalVar.m_Screen.SetText( "VMo" , 1 ) ;
-        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
-        }
-    else
-        {
-        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
-        g_GlobalVar.m_Screen.SetText( "TDe" , 1 ) ;
-        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
-        }
-    }
-
 // defilement
-if (  BoutonGau && !m_CfgFileEnMod )
+if (  BoutonGau && !CfgFileEnMod )
     {
-    if ( iChamps > -1 )
-        iChamps-- ;
+    if ( m_CfgFileiChamps > -1 )
+        m_CfgFileiChamps-- ;
     else
-        iChamps = g_GlobalVar.m_Config.m_LinesVect.size()-1 ;
+        m_CfgFileiChamps = g_GlobalVar.m_Config.m_LinesVect.size()-1 ;
     }
 
-if ( BoutonDroi && !m_CfgFileEnMod  )
+if ( BoutonDroi && !CfgFileEnMod  )
     {
     int size = (g_GlobalVar.m_Config.m_LinesVect.size()-1) ;
-    if ( iChamps < size )
-        iChamps++ ;
+    if ( m_CfgFileiChamps < size )
+        m_CfgFileiChamps++ ;
     else
-        iChamps = -1 ;
+        m_CfgFileiChamps = -1 ;
     }
 
 return ECRAN_4_CfgFch ;
@@ -582,7 +630,8 @@ g_GlobalVar.m_ZonesAerAll.m_Mutex.RelacherMutex() ;
 
 g_tft.setTextSize(2) ;
 
-ScreenRaz() ;
+if ( IsPageChanged() )
+    ScreenRaz() ;
 
 // nom zone
 g_tft.setCursor(0,90);
@@ -606,10 +655,16 @@ return ECRAN_5_TmaDessous ;
 /// \brief
 CAutoPages::EtatsAuto CScreen::EcranTmaMod()
 {
-static int NumTmaCtr = -1 ;
+static int NumTma = -1 ;
+static int LastNumTma = -2 ;
 
 // tri par nom
 g_GlobalVar.m_ZonesAerAll.TriZonesNom() ;
+
+if ( IsPageChanged() )
+    {
+    LastNumTma = -2 ;
+    }
 
 // construction du tableau des zones
 std::vector<CZoneAer*> VecAffZones ;
@@ -630,17 +685,20 @@ for ( long iz = 0 ; iz < NbZones ; iz++ )
 
 // selection des zones de meme nom que selectionnee
 std::vector<CZoneAer *> VecZone2Mod ;
-if ( NumTmaCtr >= 0 && NumTmaCtr < VecAffZones.size() )
+if ( NumTma >= 0 && NumTma < VecAffZones.size() )
     {
-    CZoneAer * pZone = VecAffZones[NumTmaCtr] ;
+    CZoneAer * pZone = VecAffZones[NumTma] ;
     for ( long iz = 0 ; iz < VecAffZones.size() ; iz++ )
         if ( VecAffZones[iz]->m_NomAff == pZone->m_NomAff )
             VecZone2Mod.push_back( VecAffZones[iz] ) ;
     }
 
 g_tft.setTextSize(2) ;
-
-ScreenRaz() ;
+if ( LastNumTma != NumTma )
+    {
+    LastNumTma = NumTma ;
+    ScreenRaz() ;
+    }
 
 // titre
 if ( VecZone2Mod.size() == 0 )
@@ -654,11 +712,11 @@ else
     {
     // num tma/ctr
     g_tft.setCursor(0, 15);
-    g_tft.print(NumTmaCtr);
+    g_tft.print(NumTma);
     g_tft.print(":");
     // nom
     //g_tft.setCursor(0, 35);
-    CZoneAer * pZone = VecAffZones[NumTmaCtr] ;
+    CZoneAer * pZone = VecAffZones[NumTma] ;
     g_tft.print(pZone->m_NomAff.c_str());
     // activation
     g_tft.setCursor(0, 60);
@@ -700,7 +758,11 @@ else
 
 
 g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "Inv", 1 ) ;
+if ( VecZone2Mod.size() == 0 )
+    g_GlobalVar.m_Screen.SetText( "Ret", 1 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "Inv", 1 ) ;
+
 g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
 
 // si changement d'ecran
@@ -728,18 +790,18 @@ if ( BCentre && VecZone2Mod.size() != 0 )
 // decrementation numero de zone
 if ( g_GlobalVar.BoutonGauche() )
     {
-    NumTmaCtr-- ;
-    if ( NumTmaCtr < -1 )
-        NumTmaCtr = NbZones - 1 ;
+    NumTma-- ;
+    if ( NumTma < -1 )
+        NumTma = NbZones - 1 ;
     }
 
 // incrementation numero de zone
 if ( g_GlobalVar.BoutonDroit() )
     {
     int Size = VecAffZones.size()-1 ;
-    NumTmaCtr++ ;
-    if ( NumTmaCtr > Size )
-        NumTmaCtr = 0 ;
+    NumTma++ ;
+    if ( NumTma > Size )
+        NumTma = 0 ;
     }
 
 return ECRAN_3b_TmaMod ;
@@ -752,7 +814,8 @@ CAutoPages::EtatsAuto CScreen::EcranConfimeArchIgcFch()
 // titre
 char TmpChar[] = "\n\n   Confirme\n   Archivage\n     Igc\n  Bouton GD" ;
 
-ScreenRaz() ;
+if ( IsPageChanged() )
+    ScreenRaz() ;
 
 g_tft.setTextSize(2) ;
 

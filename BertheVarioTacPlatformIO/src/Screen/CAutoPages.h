@@ -31,12 +31,14 @@ public :
         FIN
         } ;
 
-    void SequencementPages() ;
+    void      SequencementPages() ;
     EtatsAuto GetEtatAuto() const   ///< renvoi l'etat de l'automate d'affichage
                 { return m_EtatAuto ; } ;
 
     bool IsPageChanged() const
         { return m_PageChanged ; } ;
+    void ResetTimeOut()
+        { m_MillisEcran0 = millis() ; } ;
 
 protected :
 
@@ -64,11 +66,11 @@ protected :
             CAutoPages::EtatsAuto (CAutoPages::*m_pFunction)() ;
         } ;
 
-    bool m_CfgFileEnMod = false ;
+    int m_CfgFileiChamps = -1 ;
 
 private :
-    EtatsAuto        m_EtatAuto = ECRAN_0_Vz ;  ///< etat courant de l'automate
-    CEtatAutoFunc    m_Automate[FIN] ;       ///< l'automate
+    EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;  ///< etat courant de l'automate
+    CEtatAutoFunc   m_Automate[FIN] ;       ///< l'automate
     bool            m_PageChanged = false ; ///< si l'on vient de changer de page
     const int       m_SecondesRetourEcran0 = 15;///< auto retour ecran 0
     unsigned long   m_MillisEcran0 ;            ///< time out de retour ecran 1 vers 0

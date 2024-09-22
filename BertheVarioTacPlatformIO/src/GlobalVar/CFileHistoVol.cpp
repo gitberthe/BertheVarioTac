@@ -18,7 +18,6 @@ char * TmpChar = new char [5000] ;
 // dextruction dernier histo
 m_HistoDir.clear() ;
 
-// ouverture directorie histo
 File HistoDir = SD.open(HISTO_DIR) ;
 if ( !HistoDir )
     {
@@ -32,6 +31,7 @@ while( true )
     {
     // ouverture fichier
     m_File = HistoDir.openNextFile() ;
+    Serial.println( m_File.name() ) ;
 
     // si fin de liste
     if ( ! m_File )

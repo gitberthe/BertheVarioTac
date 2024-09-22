@@ -9,4 +9,4 @@
 
 #include "BertheVarioTac.h"
 
-char g_NumVersion[] = "20240922a" ;
+char g_NumVersion[] = "20240922b" ;

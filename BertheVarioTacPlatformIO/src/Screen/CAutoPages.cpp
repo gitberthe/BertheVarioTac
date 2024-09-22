@@ -53,9 +53,14 @@ if ( m_EtatAuto != NextStep )
 else
     {
     m_PageChanged = false ;
+    // pas de retour Vz si sortie modification champs
+    if ( m_CfgFileiChamps != -1 || m_EtatAuto == ECRAN_3b_TmaMod )
+        m_MillisEcran0 = millis() ;
+    // si page pas Vz
     if ( m_EtatAuto != ECRAN_0_Vz )
         {
-        if( (millis()-m_MillisEcran0)/1000 > m_SecondesRetourEcran0 && ! m_CfgFileEnMod )
+        // si time out
+        if( (millis()-m_MillisEcran0)/1000 > m_SecondesRetourEcran0 )
             {
             ScreenRaz() ;
             ScreenRazButtons() ;
