@@ -50,13 +50,22 @@ public :
     const int m_Hauteur = 320 ;  ///< dimensions de l'écran
 
     void ScreenRaz() ;
+    void ScreenRazButtons()
+        { RazButtons() ; }  ;
 
 private :
     CAutoPages::EtatsAuto EcranVz() ;
+    CAutoPages::EtatsAuto EcranHisto() ;
+    CAutoPages::EtatsAuto EcranListeIgcFch() ;
+    CAutoPages::EtatsAuto EcranTmaAll() ;
+    CAutoPages::EtatsAuto EcranCfgFch() ;
+    CAutoPages::EtatsAuto EcranTmaDessous() ;
     CAutoPages::EtatsAuto EcranSys() ;
 
+    CAutoPages::EtatsAuto EcranTmaMod() ;
+    CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;
 
-    std::vector<CText2Screen>   m_T2SPageVzArr ;    ///< tableau des champs page Vz
+    std::vector<CText2Screen>   m_T2SPageVzArr ;  ///< tableau des champs page Vz
     std::vector<CText2Screen>   m_T2SPageSysArr ; ///< tableau des champs page Sys
 } ;
 

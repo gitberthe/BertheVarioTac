@@ -27,13 +27,13 @@ m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240, 3 , 'm' ) ;
 // page sys
 m_T2SPageSysArr.resize(6) ;
 // cpu
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 4   , 35 , 3 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 4   , 60 , 3 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 160 , 35 , 3 , '%' ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 160 , 60 , 3 , '%' ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 4   , 35 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 4   , 60 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 160 , 35 , 2 , '%' ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 160 , 60 , 2 , '%' ) ;
 // free memory
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 4   , 85 , 3 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos(  90 , 85 , 3 , 'o' ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 4   , 85 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 110 , 85 , 2 , 'o' ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,17 +118,673 @@ m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar) ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche("9999") ;
 
 // defilement autre ecran
+// si activation / desactivation beep attente Gps / Vitesse
+if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
+     g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
+     g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
+    g_GlobalVar.m_Screen.SetText( "Son" , 0 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "His", 1 ) ;
+// si attente de vol
+if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
+     g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
+     g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
+    g_GlobalVar.m_Screen.SetText( "Vol" , 2 ) ;
+// si vol en cours
+else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
+    g_GlobalVar.m_Screen.SetText( "Vol" , 2 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+// desactivation son
+if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+    {
+    if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
+         g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
+         g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
+        g_GlobalVar.m_BeepAttenteGVZone = ! g_GlobalVar.m_BeepAttenteGVZone ;
+    return ECRAN_0_Vz ;
+    }
+// page suivante
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    return ECRAN_1_Histo ;
+//else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
+//    return ECRAN_0_Vz ;
+
+return ECRAN_0_Vz ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranHisto()
+{
+static int ivol = 0 ;
+int y = 20 ;
+
+// lecture des histo
+if ( IsPageChanged() )
+    g_GlobalVar.m_HistoVol.LectureFichiers() ;
+
+g_tft.setTextSize(2) ;
+
+// si pas de fichiers histo
+if ( g_GlobalVar.m_HistoVol.m_HistoDir.size() == 0 )
+    {
+    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.print("0 histo");
+    goto fin_histo ;
+    }
+
+char TmpCharNomFchIgc[20] ;
+sprintf( TmpCharNomFchIgc , "%s", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_NomIgc ) ;
+
+char TmpCharAltiDeco[20] ;
+sprintf( TmpCharAltiDeco , "%4dm", (int)g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_ZDeco ) ;
+
+char TmpCharAltiMax[20] ;
+sprintf( TmpCharAltiMax , "%4dm", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_ZMax ) ;
+
+char TmpCharVzMax[20] ;
+sprintf( TmpCharVzMax , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_VzMax ) ;
+
+char TmpCharVzMin[20] ;
+sprintf( TmpCharVzMin , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_VzMin ) ;
+
+char TmpCharVsMax[20] ;
+sprintf( TmpCharVsMax , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_VsMax ) ;
+
+char TmpCharDistMax[20] ;
+sprintf( TmpCharDistMax , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_DistanceKm ) ;
+
+// temps de vol
+char TmpCharTV[20] ;
+sprintf( TmpCharTV , " %3d'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeVol ) ;
+
+ScreenRaz() ;
+
+// nom fch igc
+g_tft.setCursor(0, y);
+g_tft.print(TmpCharNomFchIgc);
+
+// alti decollage
+y += 40 ;
+g_tft.setCursor(0, y);
+g_tft.print("Z deco:");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharAltiDeco);
+
+// alti max
+y += 20 ;
+g_tft.setCursor(0, y);
+g_tft.print("Z max :");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharAltiMax);
+
+// Vz max
+y += 20 ;
+g_tft.setCursor(0, y);
+g_tft.print("Vz max:");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharVzMax);
+
+// Vz min
+y += 20 ;
+g_tft.setCursor(0, y);
+g_tft.print("Vz min:");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharVzMin);
+
+// distance max
+y += 20 ;
+g_tft.setCursor(0, y);
+g_tft.print("Dist. :");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharDistMax);
+
+// Vs max
+y += 20 ;
+g_tft.setCursor(0, y);
+g_tft.print("Vs max:");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharVsMax);
+
+// Dure vol
+y += 20 ;
+g_tft.setCursor(0,y);
+g_tft.print("t vol :");
+g_tft.setCursor(110, y);
+g_tft.print(TmpCharTV);
+
+
+// fin de la fonction
+fin_histo :
+
+// defilement autre ecran
+g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Igc", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+    return ECRAN_1_Histo ;
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    return ECRAN_2a_ListeIgc ;
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
+    return ECRAN_1_Histo ;
+
+return ECRAN_1_Histo ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranListeIgcFch()
+{
+static std::vector<std::string> VecNomIgc ;
+static std::vector<int> VecTempsIgc ;
+
+// lecture de fichier
+if ( IsPageChanged() )
+    g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
+
+int TotalMin = 0 ;
+int y_cursor ;
+for ( int ifch = 0 ; ifch < VecNomIgc.size() ; ifch++ )
+    TotalMin += VecTempsIgc[ifch] ;
+
+char TmpChar[25] ;
+ScreenRaz() ;
+
+g_tft.setTextSize(2) ;
+
+int ivec = 0 ;
+y_cursor = 10 ;
+for ( ; ivec < VecNomIgc.size() ; ivec++ )
+    {
+    sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , VecTempsIgc[ivec] ) ;
+    y_cursor += 16 ;
+    g_tft.setCursor( 0, y_cursor );
+    g_tft.print( TmpChar ) ;
+    }
+
+sprintf( TmpChar , "tot. igc:%03dm", TotalMin ) ;
+g_tft.setCursor( 0, y_cursor + 25 );
+g_tft.print( TmpChar ) ;
+
+// defilement autre ecran
+g_GlobalVar.m_Screen.SetText( "Arc" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "TMo", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
+if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+    return ECRAN_2b_ConfirmArchIgc ;
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    return ECRAN_3a_TmaAll ;
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
+    return ECRAN_2b_ConfirmArchIgc ;
+
+return ECRAN_2a_ListeIgc ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranTmaAll()
+{
+// tri par nom
+g_GlobalVar.m_ZonesAerAll.TriZonesNom() ;
+
+// construction du tableau des zones
+std::vector<CZoneAer*> VecZonesMod ;
+const int NbZones = g_GlobalVar.m_ZonesAerAll.GetNbZones() ;
+CZoneAer ** pZoneArr = g_GlobalVar.m_ZonesAerAll.GetZoneArr() ;
+
+// ajout vecteur des zones activables
+for ( long iz = 0 ; iz < NbZones ; iz++ )
+    {
+    CZoneAer * pZone = pZoneArr[iz] ;
+    if ( pZone->m_DansFchActivation )
+        VecZonesMod.push_back( pZone ) ;
+    }
+// ajout vecteur des zones activables
+for ( long iz = 0 ; iz < NbZones ; iz++ )
+    {
+    CZoneAer * pZone = pZoneArr[iz] ;
+    if ( !pZone->m_DansFchActivation )
+        VecZonesMod.push_back( pZone ) ;
+    }
+
+// titre
+char TmpTitre[15] ;
+sprintf( TmpTitre , "%2d B. Cen. Mo." , g_GlobalVar.m_ZonesAerAll.GetNbZones() ) ;
+
+g_tft.setTextSize(2) ;
+
+ScreenRaz() ;
+
+g_tft.setCursor( 0, 20 );
+g_tft.print( TmpTitre ) ;
+
+// zones active
+long xcol = 0 ;
+long yligne = 15 ;
+for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
+    {
+    if ( !VecZonesMod[iz]->m_DansFchActivation )
+        continue ;
+    g_tft.setCursor(0+xcol, 40 + yligne );
+
+    if ( VecZonesMod[iz]->m_Activee )
+        g_tft.print( VecZonesMod[iz]->m_NomAff.c_str() ) ;
+    else
+        {
+        char TmpChar[25] ;
+        sprintf( TmpChar , "-%s" ,  VecZonesMod[iz]->m_NomAff.c_str() ) ;
+        TmpChar[9] = 0 ;
+        g_tft.print( TmpChar  ) ;
+        }
+    yligne += 17 ;
+    if ( iz == 8 )
+        {
+        xcol = 110 ;
+        yligne = 15 ;
+        }
+    }
+
+g_GlobalVar.m_Screen.SetText( "TMo" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Cfg", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "TMo" , 2 ) ;
+
+// si changement d'ecran
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    return ECRAN_3b_TmaMod ;
+    }
+
+// si changement d'ecran
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    return ECRAN_3b_TmaMod ;
+    }
+
+// si changement modification zone
+if ( g_GlobalVar.BoutonCentre() )
+    return ECRAN_4_CfgFch ;
+
+return ECRAN_3a_TmaAll ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranCfgFch()
+{
+static char TmpMod[100] = {0} ;
+std::string Name ;
+std::string Value ; ;
+
+static int iChamps = -1 ;
+static bool ChampsModified = false ;
+
+// à l'entree dans la page on a rien modifier
+if ( IsPageChanged() )
+    {
+    m_CfgFileEnMod = false ;
+    ChampsModified = false ;
+    }
+
+// sortie
+if ( iChamps == -1 )
+    {
+    strcpy( TmpMod , "" ) ;
+    Name = " Editeur Cfg\nBoutons <GCD>" ;
+    }
+else
+    g_GlobalVar.m_Config.GetChar( iChamps , Name , Value ) ;
+
+g_tft.setTextSize(2) ;
+
+ScreenRaz() ;
+
+// Mod
+g_tft.setCursor(0, 20);
+g_tft.print(TmpMod) ;
+// NomVar
+g_tft.setCursor(0, 60);
+g_tft.print(Name.c_str()) ;
+// ValNomVar
+g_tft.setCursor(0, 140);
+g_tft.print(Value.c_str()) ;
+
+bool BoutonCent = g_GlobalVar.BoutonCentre() ;
+bool BoutonGau  = g_GlobalVar.BoutonGauche() ;
+bool BoutonDroi = g_GlobalVar.BoutonDroit() ;
+// sortie ecran
+if ( BoutonCent && !m_CfgFileEnMod && iChamps == -1 )
+    {
+    if ( ChampsModified )
+        {
+        g_GlobalVar.m_Config.EcritureFichier() ;
+        g_GlobalVar.m_Config.LectureFichier() ;
+        }
+    return ECRAN_5_TmaDessous ;
+    }
+
+// modification du mode modif/edition
+if ( BoutonCent && iChamps != -1 )
+    {
+    m_CfgFileEnMod = !m_CfgFileEnMod ;
+    if ( m_CfgFileEnMod )
+        strcpy( TmpMod , "Modification" ) ;
+    else
+        strcpy( TmpMod , "Edition" ) ;
+    }
+
+// decrementation de variable
+if ( BoutonGau && m_CfgFileEnMod )
+    {
+    ChampsModified = true ;
+    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[iChamps] ;
+    if ( pLine->m_Type == TYPE_VAR_FLOAT )
+        {
+        float * pVal = (float*) pLine->m_pVar ;
+        *pVal -= 0.05 ;
+        }
+    else if ( pLine->m_Type == TYPE_VAR_INT )
+        {
+        int *pVal = (int*) pLine->m_pVar ;
+        int inc = 10 ;
+        if ( abs(*pVal) <= 60 )
+            inc = 1 ;
+        *pVal -= inc ;
+        }
+    else if ( pLine->m_Type == TYPE_VAR_BOOL )
+        {
+        bool *pVal = (bool*) pLine->m_pVar ;
+        *pVal = !*pVal ;
+        }
+    }
+
+// incrementation de variable
+if ( BoutonDroi && m_CfgFileEnMod )
+    {
+    ChampsModified = true ;
+    CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[iChamps] ;
+    if ( pLine->m_Type == TYPE_VAR_FLOAT )
+        {
+        float * pVal = (float*) pLine->m_pVar ;
+        *pVal += 0.05 ;
+        }
+    else if ( pLine->m_Type == TYPE_VAR_INT )
+        {
+        int *pVal = (int*) pLine->m_pVar ;
+        int inc = 10 ;
+        if ( abs(*pVal) <= 60 )
+            inc = 1 ;
+        *pVal += inc ;
+        }
+    else if ( pLine->m_Type == TYPE_VAR_BOOL )
+        {
+        bool *pVal = (bool*) pLine->m_pVar ;
+        *pVal = !*pVal ;
+        }
+    }
+
+// texte bouton
+if ( m_CfgFileEnMod )
+    {
+    g_GlobalVar.m_Screen.SetText( "Dec" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Val", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Inc" , 2 ) ;
+    }
+else
+    {
+    if ( iChamps != -1 )
+        {
+        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "VMo" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        }
+    else
+        {
+        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "TDe" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        }
+    }
+
+// defilement
+if (  BoutonGau && !m_CfgFileEnMod )
+    {
+    if ( iChamps > -1 )
+        iChamps-- ;
+    else
+        iChamps = g_GlobalVar.m_Config.m_LinesVect.size()-1 ;
+    }
+
+if ( BoutonDroi && !m_CfgFileEnMod  )
+    {
+    int size = (g_GlobalVar.m_Config.m_LinesVect.size()-1) ;
+    if ( iChamps < size )
+        iChamps++ ;
+    else
+        iChamps = -1 ;
+    }
+
+return ECRAN_4_CfgFch ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranTmaDessous()
+{
+std::string NomZone = "" ;
+
+// zone au dessus
+g_GlobalVar.m_ZonesAerAll.m_Mutex.PrendreMutex() ;
+ if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone )
+    NomZone = g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous ;
+g_GlobalVar.m_ZonesAerAll.m_Mutex.RelacherMutex() ;
+
+g_tft.setTextSize(2) ;
+
+ScreenRaz() ;
+
+// nom zone
+g_tft.setCursor(0,90);
+g_tft.print( "Tma Dessus:\n" );
+g_tft.print( NomZone.c_str() );
+
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Sys", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
-    return ECRAN_0_Vz ;
+    return ECRAN_5_TmaDessous ;
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     return ECRAN_6_Sys ;
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
-    return ECRAN_0_Vz ;
+    return ECRAN_5_TmaDessous ;
 
-return ECRAN_0_Vz ;
+return ECRAN_5_TmaDessous ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranTmaMod()
+{
+static int NumTmaCtr = -1 ;
+
+// tri par nom
+g_GlobalVar.m_ZonesAerAll.TriZonesNom() ;
+
+// construction du tableau des zones
+std::vector<CZoneAer*> VecAffZones ;
+const int NbZones = g_GlobalVar.m_ZonesAerAll.GetNbZones() ;
+CZoneAer ** pZoneArr = g_GlobalVar.m_ZonesAerAll.GetZoneArr() ;
+
+// construction vecteur des zones a afficher
+for ( long iz = 0 ; iz < NbZones ; iz++ )
+    {
+    if ( pZoneArr[iz]->m_DansFchActivation )
+        VecAffZones.push_back( pZoneArr[iz] ) ;
+    }
+for ( long iz = 0 ; iz < NbZones ; iz++ )
+    {
+    if ( !pZoneArr[iz]->m_DansFchActivation )
+        VecAffZones.push_back( pZoneArr[iz] ) ;
+    }
+
+// selection des zones de meme nom que selectionnee
+std::vector<CZoneAer *> VecZone2Mod ;
+if ( NumTmaCtr >= 0 && NumTmaCtr < VecAffZones.size() )
+    {
+    CZoneAer * pZone = VecAffZones[NumTmaCtr] ;
+    for ( long iz = 0 ; iz < VecAffZones.size() ; iz++ )
+        if ( VecAffZones[iz]->m_NomAff == pZone->m_NomAff )
+            VecZone2Mod.push_back( VecAffZones[iz] ) ;
+    }
+
+g_tft.setTextSize(2) ;
+
+ScreenRaz() ;
+
+// titre
+if ( VecZone2Mod.size() == 0 )
+    {
+    g_tft.setCursor(10, 70);
+    g_tft.print("Ret  ^^^ Cent.");
+    g_tft.setCursor(5, 90);
+    g_tft.print("<Mod. B. G.D.>");
+    }
+else
+    {
+    // num tma/ctr
+    g_tft.setCursor(0, 15);
+    g_tft.print(NumTmaCtr);
+    g_tft.print(":");
+    // nom
+    //g_tft.setCursor(0, 35);
+    CZoneAer * pZone = VecAffZones[NumTmaCtr] ;
+    g_tft.print(pZone->m_NomAff.c_str());
+    // activation
+    g_tft.setCursor(0, 60);
+    g_tft.print( "Active:");
+    if ( pZone->m_Activee )
+        g_tft.print( "1");
+    else
+        g_tft.print( "0");
+    if ( pZone->m_DansFchActivation )
+        g_tft.print( " mod.");
+    else
+        g_tft.print( " const");
+    // altibasse
+    g_tft.setCursor(0, 80);
+    g_tft.print( "A bas : ");
+    g_tft.print( pZone->m_AltiBasse );
+
+    // periode
+    g_tft.setCursor(0,100);
+    g_tft.print( "p.de. : ");
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_PeriodeDebutJour : -1 );
+    g_tft.print( "-" );
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_PeriodeDebutMois : -1 );
+    g_tft.setCursor(0,120);
+    g_tft.print( "p.fi. : ");
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_PeriodeFinJour : -1 );
+    g_tft.print( "-" );
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_PeriodeFinMois : -1 );
+
+    // altisemaine
+    g_tft.setCursor(0,140);
+    g_tft.print( "A sem. : ");
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_AltiBassePeriodeSemaine : -1 );
+    // altiweekend
+    g_tft.setCursor(0,160);
+    g_tft.print( "A week : ");
+    g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_AltiBassePeriodeWeekEnd : -1 );
+    }
+
+
+g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Inv", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+
+// si changement d'ecran
+bool BCentre = g_GlobalVar.BoutonCentre() ;
+if ( BCentre && VecZone2Mod.size() == 0 )
+    {
+    return ECRAN_3a_TmaAll ;
+    }
+
+// si modification activation
+if ( BCentre && VecZone2Mod.size() != 0 )
+    {
+    for ( long iz = 0 ; iz < VecZone2Mod.size() ; iz++ )
+        {
+        CZoneAer * pZone = VecZone2Mod[iz] ;
+        if ( pZone->m_DansFchActivation )
+            {
+            pZone->m_Activee = !pZone->m_Activee ;
+            g_GlobalVar.m_ZonesAerAll.EcritureFichierZonesActive() ;
+            }
+        }
+    return ECRAN_3a_TmaAll ;
+    }
+
+// decrementation numero de zone
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    NumTmaCtr-- ;
+    if ( NumTmaCtr < -1 )
+        NumTmaCtr = NbZones - 1 ;
+    }
+
+// incrementation numero de zone
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    int Size = VecAffZones.size()-1 ;
+    NumTmaCtr++ ;
+    if ( NumTmaCtr > Size )
+        NumTmaCtr = 0 ;
+    }
+
+return ECRAN_3b_TmaMod ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CAutoPages::EtatsAuto CScreen::EcranConfimeArchIgcFch()
+{
+// titre
+char TmpChar[] = "\n\n   Confirme\n   Archivage\n     Igc\n  Bouton GD" ;
+
+ScreenRaz() ;
+
+g_tft.setTextSize(2) ;
+
+// titre
+g_tft.setCursor( 0, 20 );
+g_tft.print( TmpChar ) ;
+
+// si changement d'ecran
+g_GlobalVar.m_Screen.SetText( "Con" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Can", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "Con" , 2 ) ;
+
+if ( g_GlobalVar.BoutonCentre() )
+    {
+    return ECRAN_2a_ListeIgc ;
+    }
+
+// si changement d'ecran
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    g_GlobalVar.ArchiveIgc() ;
+    return ECRAN_2a_ListeIgc ;
+    }
+
+// si confirme delete igc
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    g_GlobalVar.ArchiveIgc() ;
+    return ECRAN_2a_ListeIgc ;
+    }
+
+return ECRAN_2b_ConfirmArchIgc ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

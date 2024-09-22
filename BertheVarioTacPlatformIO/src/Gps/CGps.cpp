@@ -264,6 +264,9 @@ void CGps::TacheGpsIgc(void *param)
  Serial.println("tache igc lancee");
 #endif
 
+// pour gestion bouton
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
+
 // init fichier IGC
 g_GlobalVar.InitCurentIgc() ;
 
