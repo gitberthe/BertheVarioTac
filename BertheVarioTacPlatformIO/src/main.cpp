@@ -74,12 +74,12 @@ g_tft.waitDisplay() ;
 // affichage des boutons tactiles
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
-// a 100hz
-delay( 10 );
+// a 50hz
+delay( 20 );
 
-// a 3 hz
+// a 2.5 hz
 count++ ;
-if ( count%33 )
+if ( count%20 )
     return ;
 
 //tft.sleep() ;

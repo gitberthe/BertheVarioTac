@@ -19,9 +19,11 @@
 #define PAGE_VZ_DUREE_VOL  0
 #define PAGE_VZ_ALTI_BARO  1
 #define PAGE_VZ_VIT_SOL    2
-#define PAGE_VZ_CAP_DIZ    3
+#define PAGE_VZ_CAP_DEG    3
 #define PAGE_VZ_CAP_LET    4
 #define PAGE_VZ_VZ         5
+#define PAGE_VZ_FIN_TER    6
+#define PAGE_VZ_RECULADE   7
 
 // define des champs a afficher page Sys
 #define PAGE_SYS_CPU0_TXT  0

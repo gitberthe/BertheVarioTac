@@ -16,11 +16,10 @@ void CTouchButtons::AfficheButtons()
 uint16_t ColorFond  = TFT_WHITE ;
 uint16_t ColorTexte = TFT_BLACK ;
 
-const int HauteurBoutons = 40 ;
-const int Marge = 5 ;
+const int HauteurBoutons = 50 ;
+const int Marge = 10 ;
 
 // pour tous les boutons
-char TmpChar[25] ;
 g_tft.startWrite();
 int ib = 0 ;
 for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , ib++ )
@@ -38,9 +37,17 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
         }
 
     // cerclage boutons
-    g_tft.drawRect( x + Marge , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons + Marge,
-                    g_GlobalVar.m_Screen.m_Largeur/m_NbButtons - 2 * Marge , HauteurBoutons - 2 * Marge , ColorDouble ) ;
+    g_tft.fillRect( x + 10 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons + 10 , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons -20 , HauteurBoutons -20 , ColorFond ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
+                    g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , Marge , ColorDouble ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
+                    Marge , HauteurBoutons , ColorDouble ) ;
+    g_tft.fillRect( x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons - Marge , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
+                    Marge , HauteurBoutons , ColorDouble ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - Marge ,
+                    g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , Marge , ColorDouble ) ;
     g_tft.drawRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , HauteurBoutons , ColorTexte ) ;
+
 
     // position du bouton
     g_tft.setCursor( g_GlobalVar.m_Screen.m_Largeur / m_NbButtons * ib + 23  , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons / 2 - 5 ) ;
@@ -48,8 +55,7 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
 
     // texte du boutons
     g_tft.setTextSize(2) ;
-    sprintf( TmpChar , "B%02d", ib ) ;
-    g_tft.print(TmpChar);
+    g_tft.print(m_Intitule[ib]);
     }
 g_tft.endWrite();
 }
@@ -62,4 +68,18 @@ for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
     m_PressedArr[ib] = false ;
 
 delay( 100 ) ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief positionne le texte des boutons
+void CTouchButtons::SetText( const char * Txt3 , int ib )
+{
+int len = strlen(Txt3 ) ;
+for ( int ic = 0 ; ic < 4 ; ic++ )
+    {
+    if ( ic < len )
+        m_Intitule[ib][ic] = Txt3[ic] ;
+    else
+        m_Intitule[ib][ic] = 0 ;
+    }
 }

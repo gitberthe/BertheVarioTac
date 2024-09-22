@@ -4,14 +4,11 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 22/09/2024
 ///
 
 #ifndef _TXT2SCREEN_
 #define _TXT2SCREEN_
-
-#define TXT_MOYEN 0
-#define TXT_GROS  1
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Du tete a afficher qui ne flick pas.
@@ -28,7 +25,7 @@ private :
     char        m_Unite = ' ' ;
     uint16_t    m_x = 0 ;
     uint16_t    m_y = 0 ;
-    uint16_t    m_Taille = TXT_MOYEN ;
+    uint16_t    m_Taille = 3 ;
     bool        m_Const = false ;
 } ;
 

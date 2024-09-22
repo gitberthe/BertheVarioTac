@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 22/09/2024
 ///
 
 #ifndef _TOUCHBUTTONS_
@@ -18,12 +18,14 @@ public :
     void AfficheButtons() ;
     bool IsButtonPressed( int ib ) const
         { return m_PressedArr[ib] ; } ;
+    void SetText( const char * Txt3 , int ib ) ;
     void RazButtons() ;
 
 
 private :
     int  m_NbButtons = 3 ;  ///< bombre de boutons a afficher
     bool m_PressedArr[3] ;  ///< si boutons pressés
+    char m_Intitule[3][4] ; ///< texte de bouton
 } ;
 
 #endif

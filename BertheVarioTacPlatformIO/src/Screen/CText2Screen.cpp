@@ -30,14 +30,11 @@ m_Const = Const ;
 /// \brief Affichage sans flick.
 void CText2Screen::Affiche(const char* pChar)
 {
+// position de depart
 g_tft.setCursor( m_x , m_y ) ;
 
-
 // texte
-if ( m_Taille == TXT_MOYEN )
-    g_tft.setTextSize(3) ;
-else
-    g_tft.setTextSize(6) ;
+g_tft.setTextSize(m_Taille) ;
 
 // effacement ancien texte si pas constant
 if ( ! m_Const && m_TextePrincipal != pChar )
@@ -55,10 +52,10 @@ g_tft.print(pChar);
 m_TextePrincipal = pChar ;
 
 // unite
-if ( m_Taille == TXT_MOYEN )
+/*if ( m_Taille == TXT_MOYEN )
     g_tft.setTextSize(3) ;
 else
-    g_tft.setTextSize(6) ;
+    g_tft.setTextSize(6) ;*/
 if ( m_Unite != ' ' )
     g_tft.print(m_Unite);
 }
