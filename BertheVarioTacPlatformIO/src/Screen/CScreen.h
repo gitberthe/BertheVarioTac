@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #ifndef _CSCREEN_
@@ -42,10 +42,6 @@ public :
 
     void HandleTouchScreen() ;
 
-    int   m_XTouch = -1 ;       ///< coordonnees du touch
-    int   m_YTouch = -1 ;       ///< coordonnees du touch
-    bool  m_Pressed = false ;   ///< si est appuyé
-
     const int m_Largeur = 240 ;  ///< dimensions de l'écran
     const int m_Hauteur = 320 ;  ///< dimensions de l'écran
 
@@ -61,6 +57,7 @@ private :
     CAutoPages::EtatsAuto EcranCfgFch() ;
     CAutoPages::EtatsAuto EcranTmaDessous() ;
     CAutoPages::EtatsAuto EcranSys() ;
+    CAutoPages::EtatsAuto EcranWifi() ;
 
     CAutoPages::EtatsAuto EcranTmaMod() ;
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;

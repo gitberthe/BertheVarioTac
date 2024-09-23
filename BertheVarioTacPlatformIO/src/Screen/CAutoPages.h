@@ -4,12 +4,14 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #ifndef _CAUTOPAGE_
 #define _CAUTOPAGE_
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Automate de sequencement des pages.
 class CAutoPages
 {
 public :
@@ -27,18 +29,22 @@ public :
         ECRAN_4_CfgFch ,
         ECRAN_5_TmaDessous ,
         ECRAN_6_Sys ,
+        ECRAN_7_Wifi ,
         ERREUR ,
         FIN
         } ;
 
     void      SequencementPages() ;
-    EtatsAuto GetEtatAuto() const   ///< renvoi l'etat de l'automate d'affichage
+    EtatsAuto GetEtatAuto() const   ///< renvoie l'etat de l'automate d'affichage
                 { return m_EtatAuto ; } ;
+    void      SetLastEtatAuto() ;
 
-    bool IsPageChanged() const
+    bool IsPageChanged() const      ///< renvoie si l'on vien de chabger de page
         { return m_PageChanged ; } ;
-    void ResetTimeOut()
+    void ResetTimeOut()             ///< remet le time out page Vz à zero lors de configuration Cfg file ou Tma
         { m_MillisEcran0 = millis() ; } ;
+    bool IsWifiMode() const         ///< si l'on est en mode wifi
+        { return m_WifiMode ; } ;
 
 protected :
 
@@ -49,6 +55,7 @@ protected :
     virtual EtatsAuto EcranCfgFch() = 0 ;
     virtual EtatsAuto EcranTmaDessous() = 0 ;
     virtual EtatsAuto EcranSys() = 0 ;
+    virtual EtatsAuto EcranWifi() = 0 ;
 
     virtual EtatsAuto EcranTmaMod() = 0 ;
     virtual EtatsAuto EcranConfimeArchIgcFch() = 0 ;
@@ -66,10 +73,12 @@ protected :
             CAutoPages::EtatsAuto (CAutoPages::*m_pFunction)() ;
         } ;
 
-    int m_CfgFileiChamps = -1 ;
+    int     m_CfgFileiChamps = -1 ; ///< lors du deplacement dans les variables cfg file
+    bool    m_WifiMode = false ;    ///< loars du mode wifi
 
 private :
-    EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;  ///< etat courant de l'automate
+    EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;   ///< etat courant de l'automate
+    EtatsAuto       m_LastEtatAuto = ECRAN_0_Vz ;   ///< pour le retour en arriere
     CEtatAutoFunc   m_Automate[FIN] ;       ///< l'automate
     bool            m_PageChanged = false ; ///< si l'on vient de changer de page
     const int       m_SecondesRetourEcran0 = 15;///< auto retour ecran 0

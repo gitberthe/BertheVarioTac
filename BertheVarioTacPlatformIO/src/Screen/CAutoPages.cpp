@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -26,6 +26,15 @@ m_Automate[ECRAN_3b_TmaMod].m_pFunction = & CAutoPages::EcranTmaMod ;
 m_Automate[ECRAN_4_CfgFch].m_pFunction  = & CAutoPages::EcranCfgFch ;
 m_Automate[ECRAN_5_TmaDessous].m_pFunction= & CAutoPages::EcranTmaDessous ;
 m_Automate[ECRAN_6_Sys].m_pFunction     = & CAutoPages::EcranSys ;
+m_Automate[ECRAN_7_Wifi].m_pFunction     = & CAutoPages::EcranWifi ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief pour le retour en arriere a l'ecran Vz
+void CAutoPages::SetLastEtatAuto()
+{
+g_GlobalVar.m_Screen.ScreenRaz() ;
+m_EtatAuto = ECRAN_0_Vz ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,6 +50,9 @@ EtatsAuto NextStep = (this->*pFunction)() ;
 // si changement de page
 if ( m_EtatAuto != NextStep )
     {
+    // pour le retour en arriere
+    m_LastEtatAuto = m_EtatAuto ;
+
     // pour retour automatique vers Vz_0
     m_MillisEcran0 = millis() ;
 
@@ -52,10 +64,13 @@ if ( m_EtatAuto != NextStep )
 // si meme page alors retour automatique ecran Vz si time out
 else
     {
+    // pas de changement de page
     m_PageChanged = false ;
-    // pas de retour Vz si sortie modification champs
-    if ( m_CfgFileiChamps != -1 || m_EtatAuto == ECRAN_3b_TmaMod )
+
+    // pas de retour Vz si modification tma ou wifi
+    if ( m_CfgFileiChamps != -1 || m_EtatAuto == ECRAN_3b_TmaMod || m_EtatAuto == ECRAN_7_Wifi )
         m_MillisEcran0 = millis() ;
+
     // si page pas Vz
     if ( m_EtatAuto != ECRAN_0_Vz )
         {

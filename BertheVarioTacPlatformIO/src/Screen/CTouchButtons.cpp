@@ -34,6 +34,7 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
         {
         ColorDouble = ColorTexte ;
         m_PressedArr[ib] = true ;
+        m_Pressed = false ;
         }
 
     // cerclage boutons
@@ -58,6 +59,13 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     g_tft.print(m_Intitule[ib]);
     }
 g_tft.endWrite();
+
+// si reste de l'ecran presse
+if ( g_GlobalVar.m_Screen.m_Pressed )
+    {
+    m_Pressed = false ;
+    g_GlobalVar.m_Screen.SetLastEtatAuto() ;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +75,7 @@ void CTouchButtons::RazButtons()
 for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
     m_PressedArr[ib] = false ;
 
-delay( 100 ) ;
+//delay( 100 ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

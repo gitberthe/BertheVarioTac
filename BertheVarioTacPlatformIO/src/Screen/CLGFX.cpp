@@ -44,8 +44,8 @@ uint16_t touchX, touchY;
 bool touched = g_tft.getTouch( &touchX, &touchY);
 if( !touched )
     {
-    data->state = LV_INDEV_STATE_REL;
-    g_GlobalVar.m_Screen.m_Pressed = false ;
+    data->state = LV_INDEV_STATE_REL;    
+    //g_GlobalVar.m_Screen.SetPressed(false) ;
     }
 else
     {
@@ -57,13 +57,13 @@ else
 
     //Serial.print( "Data x " );
     //Serial.println( touchX );
-    g_GlobalVar.m_Screen.m_XTouch = touchX ;
+    g_GlobalVar.m_Screen.SetX( touchX );
 
     //Serial.print( "Data y " );
     //Serial.println( touchY );
-    g_GlobalVar.m_Screen.m_YTouch = touchY ;
+    g_GlobalVar.m_Screen.SetY( touchY ) ;
 
-    g_GlobalVar.m_Screen.m_Pressed = true ;
+    g_GlobalVar.m_Screen.SetPressed( true ) ;
     }
 }
 

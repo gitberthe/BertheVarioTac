@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -20,7 +20,7 @@ m_T2SPageVzArr[PAGE_VZ_CAP_DEG].SetPos  ( 110 , 100 , 3 , 'd') ;
 m_T2SPageVzArr[PAGE_VZ_CAP_LET].SetPos  ( 200 , 100 , 3 ) ;
 m_T2SPageVzArr[PAGE_VZ_VZ].SetPos       ( 35 , 160 , 6 ) ;
 m_T2SPageVzArr[PAGE_VZ_FIN_TER].SetPos  ( 5 ,    5 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos ( 80 ,  65 , 3 ) ;
+m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos ( 80 ,  60 , 3 ) ;
 m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 140 , 240, 3 , 'k') ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240, 3 , 'm' ) ;
 
@@ -57,6 +57,9 @@ CAutoPages::EtatsAuto CScreen::EcranVz()
 char TmpChar[50] ;
 static int count = 0 ;
 count++ ;
+
+if ( IsPageChanged() )
+    ScreenRaz() ;
 
 // nom/finesse du site le plus proche
 float FinesseTerrainMinimum = 99. ;
@@ -155,7 +158,7 @@ return ECRAN_0_Vz ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Historique des fichier Igc
 CAutoPages::EtatsAuto CScreen::EcranHisto()
 {
 static int ivol = 0 ;
@@ -264,7 +267,6 @@ g_tft.print("t vol :");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharTV);
 
-
 // fin de la fonction
 fin_histo :
 
@@ -319,7 +321,7 @@ if ( IsPageChanged() )
     g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
 
     // texte boutons
-    g_GlobalVar.m_Screen.SetText( "Arc" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Wif" , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "TMo",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 
@@ -350,7 +352,7 @@ if ( IsPageChanged() )
 
 // defilement autre ecran
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
-    return ECRAN_2b_ConfirmArchIgc ;
+    return ECRAN_7_Wifi ;
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     return ECRAN_3a_TmaAll ;
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
@@ -358,6 +360,41 @@ else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 
 return ECRAN_2a_ListeIgc ;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Permet de passer en mode wifi
+CAutoPages::EtatsAuto CScreen::EcranWifi()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "Ok" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Ok" , 2 ) ;
+
+    g_tft.setTextSize(2) ;
+    g_tft.setCursor( 10 , 50 ) ;
+    g_tft.print("Confirmer le Wifi ?") ;
+    }
+
+// si confirmation
+if ( g_GlobalVar.BoutonDroit() || g_GlobalVar.BoutonGauche() )
+    {
+    m_WifiMode = true ;
+    ScreenRaz() ;
+    return ECRAN_7_Wifi ;
+    }
+
+if ( g_GlobalVar.BoutonCentre() )
+    {
+    return ECRAN_2a_ListeIgc ;
+    }
+
+return ECRAN_7_Wifi ;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief

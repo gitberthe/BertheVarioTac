@@ -68,6 +68,7 @@
 #include "Gps/CHgt2Agl.h"
 #include "Gps/CPileVit.h"
 #include "BMP180/CBMP180Pression.h"
+#include "FileMgr/FileMgr.h"
 
 ////////////////////////
 // definition des pin //

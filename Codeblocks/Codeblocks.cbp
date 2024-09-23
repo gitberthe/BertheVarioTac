@@ -41,6 +41,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CSortArray.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CTerrainsConnu.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CTerrainsConnu.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/FileMgr/FileMgr.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/FileMgr/FileMgr.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Geometrie/CDroite2D.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Geometrie/CDroite2D.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Geometrie/CDroite3D.cpp" />

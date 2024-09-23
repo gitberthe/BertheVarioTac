@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -24,9 +24,13 @@ g_tft.InitScreen() ;
 
 // affichage numero de firmware
 g_GlobalVar.m_Screen.ScreenRaz() ;
+g_tft.setTextColor(TFT_RED) ;
+g_tft.setTextSize(2) ;
+g_tft.setCursor( 35 , 50 ) ;
+g_tft.print("BertheVarioTac");
 g_tft.setTextColor(TFT_BLACK) ;
 g_tft.setTextSize(3) ;
-g_tft.setCursor( 40 , 60 ) ;
+g_tft.setCursor( 40 , 100 ) ;
 g_tft.print(g_NumVersion);
 
 // init sdcard
@@ -73,6 +77,74 @@ void loop()
 
     } */
 static int count = 0 ;
+static bool WifiSetup = true ;
+
+// si mode wifi
+if ( g_GlobalVar.m_Screen.IsWifiMode() )
+    {
+    // si init wifi
+    if ( WifiSetup )
+        {
+        WifiSetup = false ;
+
+        // creation fichier de validation zones
+        g_GlobalVar.m_ZonesAerAll.Valid() ;
+
+        // liberation memoire
+        g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
+
+        // affichage
+        g_GlobalVar.m_Screen.ScreenRaz() ;
+        g_tft.setCursor( 10 , 50 ) ;
+        g_tft.print( "Connect to wifi" ) ;
+
+        // connection wifi
+        WiFi.begin( g_GlobalVar.m_Config.m_Ssid.c_str(), g_GlobalVar.m_Config.m_Passwd.c_str() );
+        while (WiFi.status() != WL_CONNECTED)
+            {
+            delay(500);
+            Serial.print(".");
+            }
+
+        #ifdef HTTP_DEBUG
+        Serial.println("");
+        Serial.print("Connected to ");
+        Serial.println(WIFI_SSID);
+        Serial.print("IP address: ");
+        Serial.println(WiFi.localIP());
+        #endif
+
+        // adresse wifi
+        char buf[50];
+        sprintf(buf, "IP: %d.%d.%d.%d", WiFi.localIP()[0], WiFi.localIP()[1], WiFi.localIP()[2], WiFi.localIP()[3] );
+        g_GlobalVar.m_Screen.ScreenRaz() ;
+        g_tft.setCursor( 10 , 50 ) ;
+        g_tft.print( buf ) ;
+        g_tft.setCursor( 50 , 100 ) ;
+        g_tft.print( "touch/reboot" ) ;
+
+        // creation init file manager
+        g_pfilemgr = new ESPFMfGK( 8080 ) ;
+
+        addFileSystems();
+        setupFilemanager();
+
+        // arret des autres taches
+        g_GlobalVar.StopAll() ;
+        }
+
+    g_pfilemgr->handleClient();
+
+    count++ ;
+    if ( !(count%100) )
+        {
+        g_GlobalVar.m_Screen.HandleTouchScreen() ;
+        if ( g_GlobalVar.m_Screen.IsPressed() )
+            g_GlobalVar.Reboot() ;
+        }
+
+    return ;
+    }
 
 // traitement de touch pad
 g_GlobalVar.m_Screen.HandleTouchScreen() ;

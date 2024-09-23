@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #ifndef _TOUCHBUTTONS_
@@ -21,6 +21,21 @@ public :
     void SetText( const char * Txt3 , int ib ) ;
     void RazButtons() ;
 
+    void SetX( int x )
+        { m_XTouch = x ; } ;
+    void SetY( int y )
+        { m_YTouch = y ; } ;
+    void SetPressed( bool pressed )
+        { m_Pressed = pressed ; } ;
+    bool IsPressed() const
+        { return m_Pressed ; } ;
+
+    friend class CLGFX ;
+
+protected :
+    int   m_XTouch = -1 ;       ///< coordonnees du touch
+    int   m_YTouch = -1 ;       ///< coordonnees du touch
+    bool  m_Pressed = false ;   ///< si est appuyé
 
 private :
     int  m_NbButtons = 3 ;  ///< bombre de boutons a afficher
