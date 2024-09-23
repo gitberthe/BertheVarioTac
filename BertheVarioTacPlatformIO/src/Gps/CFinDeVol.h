@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 24/08/2024
-/// \date modification : 24/08/2024
+/// \date modification : 23/09/2024
 ///
 
 #ifndef _FINDEVOL_
@@ -22,6 +22,7 @@ public :
     void InitFinDeVol() ;
     bool IsFlightEnd() ;
     bool IsFlightLocked() const ;
+    bool IsInFlight() const ;
 
 private :
     float GetDistance( float x , float y ) ;

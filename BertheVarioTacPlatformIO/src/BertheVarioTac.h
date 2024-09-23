@@ -15,7 +15,7 @@
 #include <esp32-hal-dac.h>
 #include <Wire.h>
 #include <Arduino.h>
-#include <ESP32Servo.h>
+//#include <ESP32Servo.h>
 #include <SPI.h>
 #include <SD.h>
 #include <WiFi.h>
@@ -76,8 +76,9 @@
 
 // GPS
 //#define pinGpsRXD  (27)
-//##define pinGpsRXD  (21)
-#define pinGpsRXD  (35)
+//#define pinGpsRXD  (21)
+//#define pinGpsRXD  (35)
+#define pinGpsRXD  (1)
 #define pinGpsTXD  (-1)
 
 // SDCARD

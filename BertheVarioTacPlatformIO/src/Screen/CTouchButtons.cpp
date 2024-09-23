@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -18,6 +18,15 @@ uint16_t ColorTexte = TFT_BLACK ;
 
 const int HauteurBoutons = 50 ;
 const int Marge = 10 ;
+
+// hinibition des boutons
+if ( g_GlobalVar.m_FinDeVol.IsInFlight() )
+    {
+    for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
+        m_PressedArr[ib] = false ;
+    g_tft.drawRect( 0 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur , HauteurBoutons , TFT_WHITE ) ;
+    return ;
+    }
 
 // pour tous les boutons
 g_tft.startWrite();

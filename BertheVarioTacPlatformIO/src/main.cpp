@@ -10,6 +10,19 @@
 #include "BertheVarioTac.h"
 CGlobalVar g_GlobalVar ;
 
+void AfficheEcranDebut()
+{
+g_GlobalVar.m_Screen.ScreenRaz() ;
+g_tft.setTextColor(TFT_RED) ;
+g_tft.setTextSize(2) ;
+g_tft.setCursor( 35 , 50 ) ;
+g_tft.print("BertheVarioTac");
+g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setTextSize(3) ;
+g_tft.setCursor( 40 , 100 ) ;
+g_tft.print(g_NumVersion);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
 void setup()
@@ -23,15 +36,7 @@ perfmon_start() ;
 g_tft.InitScreen() ;
 
 // affichage numero de firmware
-g_GlobalVar.m_Screen.ScreenRaz() ;
-g_tft.setTextColor(TFT_RED) ;
-g_tft.setTextSize(2) ;
-g_tft.setCursor( 35 , 50 ) ;
-g_tft.print("BertheVarioTac");
-g_tft.setTextColor(TFT_BLACK) ;
-g_tft.setTextSize(3) ;
-g_tft.setCursor( 40 , 100 ) ;
-g_tft.print(g_NumVersion);
+AfficheEcranDebut() ;
 
 // init sdcard
 g_GlobalVar.InitSDCard() ;
@@ -64,18 +69,29 @@ g_GlobalVar.m_Screen.ScreenRaz() ;
 /// \brief boucle sans fin
 void loop()
 {
-/*while ( true )
+/*analogReadResolution( 9 ) ;
+pinMode(21, INPUT); //Il faut déclarer le pin en entrée
+
+while ( true )
     {
+    g_GlobalVar.m_Screen.ScreenRaz() ;
+
+    int val = analogRead(21);
+
     g_tft.setTextSize(6) ;
     g_tft.setCursor( 10 , 10 ) ;
     g_tft.setTextColor(TFT_RED) ;
 
-    if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
+    char TmpChar[10] ;
+    sprintf( TmpChar , "%d" , val ) ;
+    g_tft.print( TmpChar ) ;
+    /*if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
         g_tft.print( "ok" );
     else
-        g_tft.print( "fail" );
+        g_tft.print( "fail" );*/
 
-    } */
+    //} // */
+
 static int count = 0 ;
 static bool WifiSetup = true ;
 

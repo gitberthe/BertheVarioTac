@@ -71,7 +71,6 @@ g_GlobalVar.m_VitesseKmh = 0 ;
 // affichage gps non pret
 g_GlobalVar.m_DureeVolMin = ATTENTE_MESSAGE_GPS ;
 
-#ifndef TERMIC_DEBUG
 // boucle d'attente premier GGA
 int iboucle = 0 ;
 while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
@@ -86,10 +85,6 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     // beep attente gps 'G'
     if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
         CGlobalVar::beeper( 1100 , 100 ) ;
-
-    #ifdef REBOOT_DEBUG
-     break ;
-    #endif
 
     // si pas de GGA attente
     if ( m_MillisPremierGGA == 0 )
@@ -118,15 +113,8 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     // toutes les 7s beep d'attente
     bool beep = !(iboucle%m_BeepSecondes) ;
 
-    #ifdef REBOOT_DEBUG
-     break ;
-    #endif
-
-
-    #ifndef TMA_DEBUG
     // temps pour zones periode aeriennes
-     g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
-    #endif // TMA_DEBUG
+    g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
 
     // declenchement du vol par bouton droit si ecran 0_Vz
     if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonDroit() )
@@ -181,17 +169,10 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     // si vitesse verticale depassee declenchement igc
     if ( fabs(g_GlobalVar.m_VitVertMS) >= g_GlobalVar.m_Config.m_vz_igc_ms )
         break ;
-
-    #ifdef SOUND_DEBUG
-     break ;
-    #endif
     }
-#endif
 
 // derniere configuration des zones
-#ifndef TMA_DEBUG
- g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
-#endif
+g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
 
 // mesure de temps de debut du vol
 g_GlobalVar.m_MillisDebutVol = millis() ;
@@ -229,8 +210,6 @@ while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
     {
     // a 1 hz
     delay( 1000 ) ;
-
-    // toutes les secondes
 
     // temps de vol en minutes
     unsigned long TempsCourant = millis() ;

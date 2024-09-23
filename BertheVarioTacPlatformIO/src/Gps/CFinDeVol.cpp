@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 24/08/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -88,6 +88,19 @@ if ( DistXY < 30. && DistAlti < 3. && VitesseHorPetite && VitesseVerPetite )
     CGlobalVar::BeepOk() ;
     return true ;
     }
+
+return false ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Si en vol cause vitesses sol et veritcale
+bool CFinDeVol::IsInFlight() const
+{
+if ( g_GlobalVar.m_VitesseKmh > VITESSE_FAIBLE )
+    return true ;
+
+if ( fabs(g_GlobalVar.m_VitVertMS) > 0.3 )
+    return true ;
 
 return false ;
 }

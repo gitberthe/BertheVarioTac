@@ -27,13 +27,13 @@ m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240, 3 , 'm' ) ;
 // page sys
 m_T2SPageSysArr.resize(6) ;
 // cpu
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 4   , 35 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 4   , 60 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 160 , 35 , 2 , '%' ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 160 , 60 , 2 , '%' ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10   , 35 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10   , 60 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 170 , 35 , 2 , '%' ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 170 , 60 , 2 , '%' ) ;
 // free memory
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 4   , 85 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 110 , 85 , 2 , 'o' ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10   , 85 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , 85 , 2 , 'o' ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +58,7 @@ char TmpChar[50] ;
 static int count = 0 ;
 count++ ;
 
+// nouvelle page
 if ( IsPageChanged() )
     ScreenRaz() ;
 
@@ -69,11 +70,11 @@ char TmpCharNomSite[Longueur+2] = "-----------" ;
 if ( pTerrain != NULL )
     {
     int inspp = 0 ;
-    // recopie nom de terrain 10 maximum
+    // recopie nom de terrain 11 maximum
     for ( ; inspp < Longueur && inspp < pTerrain->m_Nom.length() ; inspp++ )
         TmpCharNomSite[inspp] = pTerrain->m_Nom[inspp] ;
     TmpCharNomSite[inspp] = 0 ;
-    // 10 minimum
+    // 11 minimum
     int len = strlen(TmpCharNomSite) ;
     while( len < Longueur )
         {
@@ -108,16 +109,32 @@ m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche("360") ;
 m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche("SW") ;
 
 // affichage VZ
+float VitVert = g_GlobalVar.m_VitVertMS ;
 if ( count%2 )
-    m_T2SPageVzArr[PAGE_VZ_VZ].Affiche("-0.5-") ;
+    VitVert = -0.5 ;
 else
-    m_T2SPageVzArr[PAGE_VZ_VZ].Affiche(" 0.3 ") ;
+    VitVert = 0.3 ;
+bool SigneNeg = VitVert < 0. ;
+uint16_t color = TFT_WHITE ;
+if ( SigneNeg )
+    {
+    sprintf( TmpChar , "%2.1f-" , VitVert ) ;
+    color = TFT_BLUE ;
+    }
+else
+    sprintf( TmpChar , " %2.1f " , VitVert ) ;
+m_T2SPageVzArr[PAGE_VZ_VZ].Affiche(TmpChar) ;
+const int bordure = 5 ;
+g_tft.fillRect( bordure , 210 , g_GlobalVar.m_Screen.m_Largeur - 2 * bordure , 15 , color ) ;
+g_tft.fillRect( bordure , 135 , g_GlobalVar.m_Screen.m_Largeur - 2 * bordure , 15 , color ) ;
+g_tft.fillRect( bordure , 135 , 15 , 75 , color ) ;
+g_tft.fillRect( g_GlobalVar.m_Screen.m_Largeur - bordure -15 , 135 , 15 , 75 , color ) ;
 
 // affichage vitesse sol
 sprintf( TmpChar , "%4.1f" , g_GlobalVar.m_VitesseKmh ) ;
 m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar) ;
 
-// affichage altitdue
+// affichage altitude
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche("9999") ;
 
 // defilement autre ecran
@@ -183,7 +200,7 @@ g_tft.setTextSize(2) ;
 // si pas de fichiers histo
 if ( g_GlobalVar.m_HistoVol.m_HistoDir.size() == 0 )
     {
-    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.setCursor( 10 , 10 ) ;
     g_tft.print("0 histo");
     goto fin_histo ;
     }
@@ -215,54 +232,54 @@ sprintf( TmpCharTV , " %3d'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeV
 
 
 // nom fch igc
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print(TmpCharNomFchIgc);
 
 // alti decollage
 y += 40 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Z deco:");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharAltiDeco);
 
 // alti max
 y += 20 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Z max :");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharAltiMax);
 
 // Vz max
 y += 20 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Vz max:");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharVzMax);
 
 // Vz min
 y += 20 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Vz min:");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharVzMin);
 
 // distance max
 y += 20 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Dist. :");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharDistMax);
 
 // Vs max
 y += 20 ;
-g_tft.setCursor(0, y);
+g_tft.setCursor(10, y);
 g_tft.print("Vs max:");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharVsMax);
 
 // Dure vol
 y += 20 ;
-g_tft.setCursor(0,y);
+g_tft.setCursor(10,y);
 g_tft.print("t vol :");
 g_tft.setCursor(110, y);
 g_tft.print(TmpCharTV);
@@ -341,12 +358,12 @@ if ( IsPageChanged() )
         {
         sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , VecTempsIgc[ivec] ) ;
         y_cursor += 16 ;
-        g_tft.setCursor( 0, y_cursor );
+        g_tft.setCursor( 10, y_cursor );
         g_tft.print( TmpChar ) ;
         }
 
     sprintf( TmpChar , "tot. igc:%03dm", TotalMin ) ;
-    g_tft.setCursor( 0, y_cursor + 25 );
+    g_tft.setCursor( 10, y_cursor + 25 );
     g_tft.print( TmpChar ) ;
     }
 
@@ -397,7 +414,7 @@ return ECRAN_7_Wifi ;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Affiche les zones modifiables
 CAutoPages::EtatsAuto CScreen::EcranTmaAll()
 {
 // tri par nom
@@ -434,7 +451,7 @@ g_tft.setTextSize(2) ;
 
 
 
-g_tft.setCursor( 0, 20 );
+g_tft.setCursor( 10, 20 );
 g_tft.print( TmpTitre ) ;
 
 // zones active
@@ -444,7 +461,7 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     {
     if ( !VecZonesMod[iz]->m_DansFchActivation )
         continue ;
-    g_tft.setCursor(0+xcol, 40 + yligne );
+    g_tft.setCursor(10+xcol, 40 + yligne );
 
     if ( VecZonesMod[iz]->m_Activee )
         g_tft.print( VecZonesMod[iz]->m_NomAff.c_str() ) ;
@@ -533,7 +550,7 @@ else
 if ( m_CfgFileiChamps == -1 )
     {
     strcpy( TmpModChar , "" ) ;
-    Name = " Editeur Cfg\nBoutons <GCD>" ;
+    Name = "   Editeur Cfg\n   Boutons <GCD>" ;
     }
 else
     g_GlobalVar.m_Config.GetChar( m_CfgFileiChamps , Name , Value ) ;
