@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -80,7 +80,26 @@ ESP.restart();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Init GPIO35 en mesure de tension.
+void  CGlobalVar::InitBattery()
+{
+analogReadResolution( 12 ) ;
+pinMode(VoltageInPin, INPUT_PULLUP); //Il faut déclarer le pin en entrée
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Permet de lire la tension sur 4095 valeur, avec VMax à 303v,
+/// par l'intermediare d'un potentiometre diviseur de tension par 2.
+float CGlobalVar::GetBatteryVoltage() const
+{
+float val = analogRead(VoltageInPin);
+val = 3.3 * val / 4095. * 2. ;
+
+return val ;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Permet de purger les boutons pour ne pas redeclancher un vol
 void CGlobalVar::PurgeBoutons( unsigned long DelayMs )
 {
 unsigned long time = millis() ;

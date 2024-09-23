@@ -34,6 +34,9 @@ Serial.begin(115200);
 // tache de mise a jour % cpu
 perfmon_start() ;
 
+// init pin d'entree de tension
+g_GlobalVar.InitBattery() ;
+
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
 
@@ -121,30 +124,17 @@ g_GlobalVar.StopAll() ;
 /// \brief boucle sans fin
 void loop()
 {
-/*analogReadResolution( 9 ) ;
-pinMode(35, INPUT); //Il faut déclarer le pin en entrée
 
-while ( true )
+/* while ( true )
     {
     g_GlobalVar.m_Screen.ScreenRaz() ;
 
-    int val = analogRead(35);
-
-    g_tft.setTextSize(6) ;
-    g_tft.setCursor( 10 , 10 ) ;
-    g_tft.setTextColor(TFT_RED) ;
-
-    char TmpChar[10] ;
-    sprintf( TmpChar , "%d" , val ) ;
-    g_tft.print( TmpChar ) ;
-    } */
-
-    /*if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
+    if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
         g_tft.print( "ok" );
     else
         g_tft.print( "fail" );
 
-    //} // */
+    } // */
 
 static int count = 0 ;
 static bool WifiSetup = true ;

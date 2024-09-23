@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 23/09/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -64,6 +64,8 @@ public :
     char  m_LatChar[10] ;       ///< pour fichier igc
 
     void        InitI2C() ;
+    void        InitBattery() ;
+    float       GetBatteryVoltage() const ;
     static void BeepError(bool small = false) ;
     static void Reboot() ;
     static void BeepOk() ;

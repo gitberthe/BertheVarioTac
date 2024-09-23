@@ -81,6 +81,8 @@
 #define pinGpsRXD  (1)
 #define pinGpsTXD  (-1)
 
+#define VoltageInPin (35)
+
 // SDCARD
 #define SDCARD_CS_PIN   5
 #define SDCARD_MOSI_PIN 23
