@@ -10,6 +10,8 @@
 #include "BertheVarioTac.h"
 CGlobalVar g_GlobalVar ;
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Affiche le nom et le firmware
 void AfficheEcranDebut()
 {
 g_GlobalVar.m_Screen.ScreenRaz() ;
@@ -66,17 +68,67 @@ g_GlobalVar.m_Screen.ScreenRaz() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/// \brief init du Wifi
+void WifiInit()
+{
+// creation fichier de validation zones
+g_GlobalVar.m_ZonesAerAll.Valid() ;
+
+// liberation memoire
+g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
+
+// affichage
+g_GlobalVar.m_Screen.ScreenRaz() ;
+g_tft.setCursor( 10 , 50 ) ;
+g_tft.print( "Connect to wifi" ) ;
+
+// connection wifi
+WiFi.begin( g_GlobalVar.m_Config.m_Ssid.c_str(), g_GlobalVar.m_Config.m_Passwd.c_str() );
+while (WiFi.status() != WL_CONNECTED)
+    {
+    delay(500);
+    Serial.print(".");
+    }
+
+#ifdef HTTP_DEBUG
+Serial.println("");
+Serial.print("Connected to ");
+Serial.println(WIFI_SSID);
+Serial.print("IP address: ");
+Serial.println(WiFi.localIP());
+#endif
+
+// adresse wifi
+char buf[50];
+sprintf(buf, "IP: %d.%d.%d.%d", WiFi.localIP()[0], WiFi.localIP()[1], WiFi.localIP()[2], WiFi.localIP()[3] );
+g_GlobalVar.m_Screen.ScreenRaz() ;
+g_tft.setCursor( 10 , 50 ) ;
+g_tft.print( buf ) ;
+g_tft.setCursor( 50 , 100 ) ;
+g_tft.print( "touch/reboot" ) ;
+
+// creation init file manager
+g_pfilemgr = new ESPFMfGK( 8080 ) ;
+
+addFileSystems();
+setupFilemanager();
+
+// arret des autres taches
+g_GlobalVar.StopAll() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// \brief boucle sans fin
 void loop()
 {
 /*analogReadResolution( 9 ) ;
-pinMode(21, INPUT); //Il faut déclarer le pin en entrée
+pinMode(35, INPUT); //Il faut déclarer le pin en entrée
 
 while ( true )
     {
     g_GlobalVar.m_Screen.ScreenRaz() ;
 
-    int val = analogRead(21);
+    int val = analogRead(35);
 
     g_tft.setTextSize(6) ;
     g_tft.setCursor( 10 , 10 ) ;
@@ -85,10 +137,12 @@ while ( true )
     char TmpChar[10] ;
     sprintf( TmpChar , "%d" , val ) ;
     g_tft.print( TmpChar ) ;
+    } */
+
     /*if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
         g_tft.print( "ok" );
     else
-        g_tft.print( "fail" );*/
+        g_tft.print( "fail" );
 
     //} // */
 
@@ -102,55 +156,12 @@ if ( g_GlobalVar.m_Screen.IsWifiMode() )
     if ( WifiSetup )
         {
         WifiSetup = false ;
-
-        // creation fichier de validation zones
-        g_GlobalVar.m_ZonesAerAll.Valid() ;
-
-        // liberation memoire
-        g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
-
-        // affichage
-        g_GlobalVar.m_Screen.ScreenRaz() ;
-        g_tft.setCursor( 10 , 50 ) ;
-        g_tft.print( "Connect to wifi" ) ;
-
-        // connection wifi
-        WiFi.begin( g_GlobalVar.m_Config.m_Ssid.c_str(), g_GlobalVar.m_Config.m_Passwd.c_str() );
-        while (WiFi.status() != WL_CONNECTED)
-            {
-            delay(500);
-            Serial.print(".");
-            }
-
-        #ifdef HTTP_DEBUG
-        Serial.println("");
-        Serial.print("Connected to ");
-        Serial.println(WIFI_SSID);
-        Serial.print("IP address: ");
-        Serial.println(WiFi.localIP());
-        #endif
-
-        // adresse wifi
-        char buf[50];
-        sprintf(buf, "IP: %d.%d.%d.%d", WiFi.localIP()[0], WiFi.localIP()[1], WiFi.localIP()[2], WiFi.localIP()[3] );
-        g_GlobalVar.m_Screen.ScreenRaz() ;
-        g_tft.setCursor( 10 , 50 ) ;
-        g_tft.print( buf ) ;
-        g_tft.setCursor( 50 , 100 ) ;
-        g_tft.print( "touch/reboot" ) ;
-
-        // creation init file manager
-        g_pfilemgr = new ESPFMfGK( 8080 ) ;
-
-        addFileSystems();
-        setupFilemanager();
-
-        // arret des autres taches
-        g_GlobalVar.StopAll() ;
+        WifiInit() ;
         }
 
     g_pfilemgr->handleClient();
 
+    // si ecran pressé on reboot
     count++ ;
     if ( !(count%100) )
         {
@@ -171,13 +182,12 @@ g_tft.waitDisplay() ;
 // affichage des boutons tactiles
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
-// a 50hz
-//delay( 20 );
-delay( 20 );
+// a 10hz, 50hz ça plante l'affichage avec le Gps
+delay( 100 );
 
-// a 2.5 hz
+// a 2 hz
 count++ ;
-if ( count%20 )
+if ( count%5 )
     return ;
 
 //tft.sleep() ;
