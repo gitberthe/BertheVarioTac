@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 20/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #ifndef _CCONFIGFILE_
@@ -35,6 +35,7 @@ public :
 
     void GetChar( int iVec , std::string & Name , std::string & Value ) const ;
 
+    int   m_luminosite = 255/2 ;            ///< luminosite de l'ecran
     float m_coef_filtre_alti_baro = 0.4 ;   ///< coefficient de filtrage [0,1[ , 0.99 tres fort filtrage
     int   m_periode_integration_sec = 2 ;   ///< pour le calcul de la Vz
     int   m_vitesse_igc_kmh = 18 ;          ///< vitesse de declenchement enregistrement

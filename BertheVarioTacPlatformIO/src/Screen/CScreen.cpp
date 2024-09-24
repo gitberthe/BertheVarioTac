@@ -18,21 +18,21 @@ m_T2SPageVzArr.resize(8) ;
 m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].SetPos(  15 , 100 , 3 , '\'' ) ;
 m_T2SPageVzArr[PAGE_VZ_CAP_DEG].SetPos  ( 110 , 100 , 3 , 'd') ;
 m_T2SPageVzArr[PAGE_VZ_CAP_LET].SetPos  ( 200 , 100 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_VZ].SetPos       ( 35 , 160 , 6 ) ;
-m_T2SPageVzArr[PAGE_VZ_FIN_TER].SetPos  ( 5 ,    5 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos ( 75 ,  60 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 110 , 240, 3 , 'k') ;
-m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240, 3 , 'm' ) ;
+m_T2SPageVzArr[PAGE_VZ_VZ].SetPos       (  35 , 160 , 6 ) ;
+m_T2SPageVzArr[PAGE_VZ_FIN_TER].SetPos  (   5 ,  5  , 3 ) ;
+m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos (  75 , 60  , 3 ) ;
+m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 110 , 240 , 3 , 'k') ;
+m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240 , 3 , 'm' ) ;
 
 // page sys
 m_T2SPageSysArr.resize(6) ;
 // cpu
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10   , 35 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10   , 60 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10  , 35 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10  , 60 , 2 , ' ' , true ) ;
 m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 170 , 35 , 2 , '%' ) ;
 m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 170 , 60 , 2 , '%' ) ;
 // free memory
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10   , 85 , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10  , 85 , 2 , ' ' , true ) ;
 m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , 85 , 2 , 'o' ) ;
 }
 
@@ -570,7 +570,7 @@ return ECRAN_3a_TmaAll ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Modification du fichier configuration
 CAutoPages::EtatsAuto CScreen::EcranCfgFch()
 {
 static char TmpModChar[100] = {0} ;
@@ -589,12 +589,15 @@ if ( IsPageChanged() )
     m_LastiChamps = -2 ;
     }
 
+// on modifie la luminosite en direct
+g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite ) ;
+
 // texte bouton
 if ( CfgFileEnMod )
     {
-    g_GlobalVar.m_Screen.SetText( "Dec" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( " - " , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "Val", 1 ) ;
-    g_GlobalVar.m_Screen.SetText( "Inc" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( " + " , 2 ) ;
     }
 else
     {
@@ -607,7 +610,7 @@ else
     else
         {
         g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
-        g_GlobalVar.m_Screen.SetText( "TDe" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Tma" , 1 ) ;
         g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
         }
     }
@@ -688,6 +691,7 @@ if ( BoutonGau && CfgFileEnMod )
         bool *pVal = (bool*) pLine->m_pVar ;
         *pVal = !*pVal ;
         }
+    g_GlobalVar.m_Screen.ScreenRaz() ;
     }
 
 // incrementation de variable
@@ -713,6 +717,7 @@ if ( BoutonDroi && CfgFileEnMod )
         bool *pVal = (bool*) pLine->m_pVar ;
         *pVal = !*pVal ;
         }
+    g_GlobalVar.m_Screen.ScreenRaz() ;
     }
 
 // defilement

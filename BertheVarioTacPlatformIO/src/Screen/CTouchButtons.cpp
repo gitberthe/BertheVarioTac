@@ -69,7 +69,7 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     }
 g_tft.endWrite();
 
-// si reste de l'ecran presse
+// si reste de l'ecran presse retour Vz
 if ( g_GlobalVar.m_Screen.m_Pressed )
     {
     m_Pressed = false ;

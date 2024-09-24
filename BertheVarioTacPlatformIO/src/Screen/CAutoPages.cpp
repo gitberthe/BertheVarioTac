@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -17,15 +17,15 @@ CAutoPages::CAutoPages()
 for ( int ie = 0 ; ie < FIN ; ie++ )
     m_Automate[ie].m_pFunction = & CAutoPages::Erreur ;
 
-m_Automate[ECRAN_0_Vz].m_pFunction      = & CAutoPages::EcranVz ;
-m_Automate[ECRAN_1_Histo].m_pFunction   = & CAutoPages::EcranHisto ;
+m_Automate[ECRAN_0_Vz].m_pFunction       = & CAutoPages::EcranVz ;
+m_Automate[ECRAN_1_Histo].m_pFunction    = & CAutoPages::EcranHisto ;
 m_Automate[ECRAN_2a_ListeIgc].m_pFunction= & CAutoPages::EcranListeIgcFch ;
 m_Automate[ECRAN_2b_ConfirmArchIgc].m_pFunction= & CAutoPages::EcranConfimeArchIgcFch ;
-m_Automate[ECRAN_3a_TmaAll].m_pFunction = & CAutoPages::EcranTmaAll ;
-m_Automate[ECRAN_3b_TmaMod].m_pFunction = & CAutoPages::EcranTmaMod ;
-m_Automate[ECRAN_4_CfgFch].m_pFunction  = & CAutoPages::EcranCfgFch ;
+m_Automate[ECRAN_3a_TmaAll].m_pFunction  = & CAutoPages::EcranTmaAll ;
+m_Automate[ECRAN_3b_TmaMod].m_pFunction  = & CAutoPages::EcranTmaMod ;
+m_Automate[ECRAN_4_CfgFch].m_pFunction   = & CAutoPages::EcranCfgFch ;
 m_Automate[ECRAN_5_TmaDessous].m_pFunction= & CAutoPages::EcranTmaDessous ;
-m_Automate[ECRAN_6_Sys].m_pFunction     = & CAutoPages::EcranSys ;
+m_Automate[ECRAN_6_Sys].m_pFunction      = & CAutoPages::EcranSys ;
 m_Automate[ECRAN_7_Wifi].m_pFunction     = & CAutoPages::EcranWifi ;
 }
 
@@ -34,6 +34,15 @@ m_Automate[ECRAN_7_Wifi].m_pFunction     = & CAutoPages::EcranWifi ;
 void CAutoPages::SetLastEtatAuto()
 {
 g_GlobalVar.m_Screen.ScreenRaz() ;
+
+// ecran de configuration on sauvegarde
+if ( m_EtatAuto == ECRAN_4_CfgFch )
+    g_GlobalVar.m_Config.EcritureFichier() ;
+
+// ecran de modification Tma on sauvegarde
+if ( m_EtatAuto == ECRAN_3b_TmaMod )
+    g_GlobalVar.m_ZonesAerAll.EcritureFichierZonesActive() ;
+
 m_EtatAuto = ECRAN_0_Vz ;
 }
 

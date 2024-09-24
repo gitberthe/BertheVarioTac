@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -49,14 +49,17 @@ g_GlobalVar.InitSDCard() ;
 // Init BUS I2C
 g_GlobalVar.InitI2C() ;
 
-// lecture fichier de configuration
-g_GlobalVar.m_Config.LectureFichier() ;
-
 // lecture fichier terrains
 g_GlobalVar.m_TerrainArr.LireFichierTerrains() ;
 
 // lecture fichier zones aeriennes
 g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
+
+// lecture fichier de configuration
+g_GlobalVar.m_Config.LectureFichier() ;
+
+// reglage luminosite car initscreen en premier obligatoire pour SDCard
+g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
 // init port serie GPS
 g_GlobalVar.InitGps() ;
@@ -66,6 +69,12 @@ g_GlobalVar.InitGps() ;
 
 // lancement tache gps
 g_GlobalVar.LanceTacheGps(true) ;
+
+// lancement tache de calcul du cap magnetique
+//g_GlobalVar.m_Mpu9250.LancerTacheCalculCapMag() ;
+
+// lancement tache beep
+//g_GlobalVar.LanceTacheVarioBeep() ;
 
 g_GlobalVar.m_Screen.ScreenRaz() ;
 }

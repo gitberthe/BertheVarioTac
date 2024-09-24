@@ -44,7 +44,7 @@ uint16_t touchX, touchY;
 bool touched = g_tft.getTouch( &touchX, &touchY);
 if( !touched )
     {
-    data->state = LV_INDEV_STATE_REL;    
+    data->state = LV_INDEV_STATE_REL;
     //g_GlobalVar.m_Screen.SetPressed(false) ;
     }
 else
@@ -73,7 +73,7 @@ void CLGFX::InitScreen()
 {
 g_tft.begin();
 g_tft.setRotation(7);
-g_tft.setBrightness(255/3);
+g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 uint16_t calData[] = { 317,3787,3847,3813,331,232,3860,238 };
 
 /*
