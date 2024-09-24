@@ -92,8 +92,7 @@ int dutyCycle = 255/2 ;
 
 ledcWrite(ledChannel, dutyCycle);
 ledcSetup(ledChannel, freq, resolution);
-ledcAttachPin(ledPin, ledChannel);
-*/
+ledcAttachPin(ledPin, ledChannel);*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +150,6 @@ g_GlobalVar.StopAll() ;
 void loop()
 {
 //tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
-return ;
 /* while ( true )
     {
     g_GlobalVar.m_Screen.ScreenRaz() ;
