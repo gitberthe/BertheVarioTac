@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -20,8 +20,8 @@ m_T2SPageVzArr[PAGE_VZ_CAP_DEG].SetPos  ( 110 , 100 , 3 , 'd') ;
 m_T2SPageVzArr[PAGE_VZ_CAP_LET].SetPos  ( 200 , 100 , 3 ) ;
 m_T2SPageVzArr[PAGE_VZ_VZ].SetPos       ( 35 , 160 , 6 ) ;
 m_T2SPageVzArr[PAGE_VZ_FIN_TER].SetPos  ( 5 ,    5 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos ( 80 ,  60 , 3 ) ;
-m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 140 , 240, 3 , 'k') ;
+m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos ( 75 ,  60 , 3 ) ;
+m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 110 , 240, 3 , 'k') ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240, 3 , 'm' ) ;
 
 // page sys
@@ -88,7 +88,17 @@ else
 sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
 m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 
-// reculade
+// reculade/derive
+const float DeriveMilieu = 41. ;
+float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , 0 /*m_Mpu9250.m_CapMagnetique*/ ) ;
+if ( fabsf(DeriveAngle) >= 90. )
+    sprintf( TmpChar , " \\R/" ) ;
+else if ( DeriveAngle >= DeriveMilieu )
+    sprintf( TmpChar , "  %1d>>", ((int)(fabsf(DeriveAngle)/10)) ) ;
+else if ( DeriveAngle <= -DeriveMilieu )
+    sprintf( TmpChar , "<<%1d", ((int)(fabsf(DeriveAngle)/10)) ) ;
+else
+    sprintf( TmpChar , " ^%1d^", ((int)(fabsf(DeriveAngle)/10)) ) ;
 m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("<<5>>") ;
 
 // duree du vol
@@ -102,11 +112,31 @@ else
     sprintf( TmpChar , "%3d", g_GlobalVar.m_DureeVolMin ) ;
 m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
-// cap dizaines
-m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche("360") ;
+// cap lettres
+int Cap = g_GlobalVar.m_CapGpsDeg ;
+int CapMarge = 45/2 + 1 ;
+char TmpCharNomCap[] = "  " ;
+if ( Cap < CapMarge || Cap > (360-CapMarge) )
+    strcpy( TmpCharNomCap, "N " ) ;
+else if ( labs(Cap-45) < CapMarge )
+    strcpy( TmpCharNomCap, "NE" ) ;
+else if ( labs(Cap-90) < CapMarge )
+    strcpy( TmpCharNomCap, "E " ) ;
+else if ( labs(Cap-135) < CapMarge )
+    strcpy( TmpCharNomCap, "SE" ) ;
+else if ( labs(Cap-180) < CapMarge )
+    strcpy( TmpCharNomCap, "S " ) ;
+else if ( labs(Cap-225) < CapMarge )
+    strcpy( TmpCharNomCap, "SW" ) ;
+else if ( labs(Cap-270) < CapMarge )
+    strcpy( TmpCharNomCap, "W " ) ;
+else if ( labs(Cap-315) < CapMarge )
+    strcpy( TmpCharNomCap, "NW" ) ;
+m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche(TmpCharNomCap) ;
 
-// cap nom
-m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche("SW") ;
+// cap degres
+sprintf( TmpChar , "%3d", Cap ) ;
+m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche(TmpChar) ;
 
 // affichage VZ
 float VitVert = g_GlobalVar.m_VitVertMS ;
@@ -130,12 +160,35 @@ g_tft.fillRect( bordure , 135 , g_GlobalVar.m_Screen.m_Largeur - 2 * bordure , 1
 g_tft.fillRect( bordure , 135 , 15 , 75 , color ) ;
 g_tft.fillRect( g_GlobalVar.m_Screen.m_Largeur - bordure -15 , 135 , 15 , 75 , color ) ;
 
-// affichage vitesse sol
-sprintf( TmpChar , "%4.1f" , g_GlobalVar.m_VitesseKmh ) ;
+// affichage pour affichage vitesse/hauteur sol
+static bool AffichageVitesse = false ;
+static unsigned long TempsHauteurSol = millis() ;
+// si 5 secondes depassée
+if ( AffichageVitesse && ((millis()-TempsHauteurSol)/1000) >= 5 )
+    {
+    AffichageVitesse = !AffichageVitesse ;
+    TempsHauteurSol = millis() ;
+    }
+else if ( !AffichageVitesse && ((millis()-TempsHauteurSol)/1000) >= 2 )
+    {
+    AffichageVitesse = !AffichageVitesse ;
+    TempsHauteurSol = millis() ;
+    }
+if ( AffichageVitesse )
+    {
+    m_T2SPageVzArr[PAGE_VZ_VIT_SOL].ChangeUnit('k') ;
+    sprintf( TmpChar , "%6.1f" , g_GlobalVar.m_VitesseKmh ) ;
+    }
+else
+    {
+    m_T2SPageVzArr[PAGE_VZ_VIT_SOL].ChangeUnit('m') ;
+    sprintf( TmpChar , "%6d", (int)(g_GlobalVar.m_TerrainPosCur.m_AltiBaro-g_GlobalVar.m_AltitudeSolHgt) ) ;
+    }
 m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar) ;
 
 // affichage altitude
-m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche("9999") ;
+sprintf( TmpChar , "%4d", (int)g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
+m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche(TmpChar) ;
 
 // defilement autre ecran
 // si activation / desactivation beep attente Gps / Vitesse
@@ -171,6 +224,17 @@ else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
 //else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 //    return ECRAN_0_Vz ;
 
+// encadrements
+g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_BLACK ) ;
+g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_BLACK ) ;
+g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_BLACK ) ;
+g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_BLACK ) ;
+g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_BLACK ) ;
+g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_BLACK ) ;
+
+g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_BLACK ) ;
+g_tft.drawLine( 120 ,230 , 120 ,290 , TFT_BLACK ) ;
+
 return ECRAN_0_Vz ;
 }
 
@@ -181,6 +245,8 @@ CAutoPages::EtatsAuto CScreen::EcranHisto()
 static int ivol = 0 ;
 static int lastivol = -1 ;
 int y = 20 ;
+const int x1 = 30 ;
+const int x2 = 140 ;
 
 // lecture des histo
 if ( IsPageChanged() )
@@ -200,7 +266,7 @@ g_tft.setTextSize(2) ;
 // si pas de fichiers histo
 if ( g_GlobalVar.m_HistoVol.m_HistoDir.size() == 0 )
     {
-    g_tft.setCursor( 10 , 10 ) ;
+    g_tft.setCursor( 40 , 10 ) ;
     g_tft.print("0 histo");
     goto fin_histo ;
     }
@@ -232,56 +298,56 @@ sprintf( TmpCharTV , " %3d'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeV
 
 
 // nom fch igc
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print(TmpCharNomFchIgc);
 
 // alti decollage
 y += 40 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Z deco:");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharAltiDeco);
 
 // alti max
 y += 20 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Z max :");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharAltiMax);
 
 // Vz max
 y += 20 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Vz max:");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharVzMax);
 
 // Vz min
 y += 20 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Vz min:");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharVzMin);
 
 // distance max
 y += 20 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Dist. :");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharDistMax);
 
 // Vs max
 y += 20 ;
-g_tft.setCursor(10, y);
+g_tft.setCursor(x1, y);
 g_tft.print("Vs max:");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharVsMax);
 
 // Dure vol
 y += 20 ;
-g_tft.setCursor(10,y);
+g_tft.setCursor(x1,y);
 g_tft.print("t vol :");
-g_tft.setCursor(110, y);
+g_tft.setCursor(x2, y);
 g_tft.print(TmpCharTV);
 
 // fin de la fonction
@@ -399,7 +465,7 @@ if ( IsPageChanged() )
 // si confirmation
 if ( g_GlobalVar.BoutonDroit() || g_GlobalVar.BoutonGauche() )
     {
-    m_WifiMode = true ;
+    g_GlobalVar.m_ModeHttp = true ;
     ScreenRaz() ;
     return ECRAN_7_Wifi ;
     }

@@ -140,7 +140,7 @@ static int count = 0 ;
 static bool WifiSetup = true ;
 
 // si mode wifi
-if ( g_GlobalVar.m_Screen.IsWifiMode() )
+if ( g_GlobalVar.m_ModeHttp )
     {
     // si init wifi
     if ( WifiSetup )

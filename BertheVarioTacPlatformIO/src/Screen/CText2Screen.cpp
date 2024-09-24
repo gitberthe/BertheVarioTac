@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -56,6 +56,25 @@ m_TextePrincipal = pChar ;
     g_tft.setTextSize(3) ;
 else
     g_tft.setTextSize(6) ;*/
+
+m_XUnit = g_tft.getCursorX() ;
+m_YUnit = g_tft.getCursorY() ;
 if ( m_Unite != ' ' )
     g_tft.print(m_Unite);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+void CText2Screen::ChangeUnit( char c )
+{
+g_tft.setTextColor(TFT_WHITE) ;
+g_tft.setTextSize(m_Taille) ;
+
+g_tft.setCursor( m_XUnit , m_YUnit ) ;
+g_tft.print(m_Unite);
+m_Unite = c ;
+
+g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setCursor( m_XUnit , m_YUnit ) ;
+g_tft.print(m_Unite);
 }

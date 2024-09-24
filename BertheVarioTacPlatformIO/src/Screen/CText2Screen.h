@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #ifndef _TXT2SCREEN_
@@ -19,6 +19,7 @@ public :
 
     void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' , bool Const = false ) ;
     void Affiche( const char * pChar ) ;
+    void ChangeUnit( char c ) ;
 
 private :
     std::string m_TextePrincipal ;  ///< texte courant principal
@@ -27,6 +28,8 @@ private :
     uint16_t    m_y = 0 ;
     uint16_t    m_Taille = 3 ;
     bool        m_Const = false ;
+    int32_t     m_XUnit ;
+    int32_t     m_YUnit ;
 } ;
 
 #endif

@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -36,7 +36,7 @@ public :
     CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
     CBMP180Pression m_BMP180Pression ;///< capteur de pression
 
-    bool m_ModeHttp ;                  ///< si mode http
+    bool m_ModeHttp = false ;          ///< si mode http
     bool m_BeepAttenteGVZone = true ;  ///< beep d'attente Gps/Vitesse/Zone
 
     int         m_PercentCore0 ;    ///< pourcentage utilisation core 0
@@ -65,14 +65,18 @@ public :
 
     void        InitI2C() ;
     void        InitBattery() ;
+    float       GetDiffAngle( float AngleA , float AngleB ) ;
     float       GetBatteryVoltage() const ;
     static void BeepError(bool small = false) ;
     static void Reboot() ;
     static void BeepOk() ;
     static void beeper( int frequence , int DurationMs ) ;
 
-    static void  TacheRelanceIgc(void *param);
     static void  RelancerEnregistrementFichier() ;
+
+private :
+
+    static void  TacheRelanceIgc(void *param) ;
 } ;
 
 extern CGlobalVar g_GlobalVar ;

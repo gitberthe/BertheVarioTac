@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 24/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -16,6 +16,35 @@ CGlobalVar::CGlobalVar()
 strcpy(m_LatChar, "0000000") ;
 strcpy(m_LonChar, "00000000") ;
 m_TerrainPosCur.m_Nom = "pos-cur" ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Renvoie l'angle signe en degres entre A et B.
+float CGlobalVar::GetDiffAngle( float AngleA , float AngleB )
+{
+// coordonnes  cartersiennes vecteur angle
+float u1 = cosf(AngleA*T_PI/180.) ;
+float u2 = sinf(AngleA*T_PI/180.) ;
+float v1 = cosf(AngleB*T_PI/180.) ;
+float v2 = sinf(AngleB*T_PI/180.) ;
+
+// produit vectoriel
+float z3 = u1*v2 - u2*v1 ;
+
+// produit scalaire
+float & x1 = u1 ;
+float & x2 = u2 ;
+float & y1 = v1 ;
+float & y2 = v2 ;
+float produit_scalaire = x1*y1 + x2*y2 ;
+
+// angle entre les 2 vecteurs
+float Angle = acosf( produit_scalaire ) * 180./T_PI ;
+
+// signe de l'angle
+if ( z3 < 0. )
+    return Angle ;
+return -Angle ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,3 +1,6 @@
+le 20240924a :
+ - modification IHM.
+
 le 20240923c :
  - mesure de tension ok.
 

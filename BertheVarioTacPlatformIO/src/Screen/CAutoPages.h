@@ -43,8 +43,6 @@ public :
         { return m_PageChanged ; } ;
     void ResetTimeOut()             ///< remet le time out page Vz à zero lors de configuration Cfg file ou Tma
         { m_MillisEcran0 = millis() ; } ;
-    bool IsWifiMode() const         ///< si l'on est en mode wifi
-        { return m_WifiMode ; } ;
 
 protected :
 
@@ -74,7 +72,6 @@ protected :
         } ;
 
     int     m_CfgFileiChamps = -1 ; ///< lors du deplacement dans les variables cfg file
-    bool    m_WifiMode = false ;    ///< loars du mode wifi
 
 private :
     EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;   ///< etat courant de l'automate
