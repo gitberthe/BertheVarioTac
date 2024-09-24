@@ -75,7 +75,7 @@ protected :
 
 private :
     EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;   ///< etat courant de l'automate
-    EtatsAuto       m_LastEtatAuto = ECRAN_0_Vz ;   ///< pour le retour en arriere
+    //EtatsAuto       m_LastEtatAuto = ECRAN_0_Vz ;   ///< pour le retour en arriere
     CEtatAutoFunc   m_Automate[FIN] ;       ///< l'automate
     bool            m_PageChanged = false ; ///< si l'on vient de changer de page
     const int       m_SecondesRetourEcran0 = 15;///< auto retour ecran 0

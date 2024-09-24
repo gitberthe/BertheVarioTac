@@ -40,13 +40,13 @@ g_tft.setTextSize(m_Taille) ;
 if ( ! m_Const && m_TextePrincipal != pChar )
     {
     g_tft.setCursor( m_x , m_y ) ;
-    g_tft.setTextColor(TFT_WHITE) ;
+    g_tft.setTextColor(TFT_BLACK) ;
     g_tft.print(m_TextePrincipal.c_str());
     }
 
 // nouveau text
 g_tft.setCursor( m_x , m_y ) ;
-g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setTextColor(TFT_WHITE) ;
 g_tft.print(pChar);
 
 m_TextePrincipal = pChar ;
@@ -67,14 +67,14 @@ if ( m_Unite != ' ' )
 /// \brief
 void CText2Screen::ChangeUnit( char c )
 {
-g_tft.setTextColor(TFT_WHITE) ;
+g_tft.setTextColor(TFT_BLACK) ;
 g_tft.setTextSize(m_Taille) ;
 
 g_tft.setCursor( m_XUnit , m_YUnit ) ;
 g_tft.print(m_Unite);
 m_Unite = c ;
 
-g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setTextColor(TFT_WHITE) ;
 g_tft.setCursor( m_XUnit , m_YUnit ) ;
 g_tft.print(m_Unite);
 }

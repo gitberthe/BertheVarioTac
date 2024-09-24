@@ -60,15 +60,15 @@ EtatsAuto NextStep = (this->*pFunction)() ;
 if ( m_EtatAuto != NextStep )
     {
     // pour le retour en arriere
-    m_LastEtatAuto = m_EtatAuto ;
+    //m_LastEtatAuto = m_EtatAuto ;
 
     // pour retour automatique vers Vz_0
     m_MillisEcran0 = millis() ;
 
     // raz screen si changement ecran
-    ScreenRaz() ;
-    ScreenRazButtons() ;
+    //ScreenRaz() ;
     m_PageChanged = true ;
+    ScreenRazButtons() ;
     }
 // si meme page alors retour automatique ecran Vz si time out
 else
@@ -87,7 +87,7 @@ else
         if( (millis()-m_MillisEcran0)/1000 > m_SecondesRetourEcran0 )
             {
             ScreenRaz() ;
-            ScreenRazButtons() ;
+            //ScreenRazButtons() ;
             m_EtatAuto = ECRAN_0_Vz ;
             return ;
             }

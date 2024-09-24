@@ -19,7 +19,7 @@ g_tft.setTextColor(TFT_RED) ;
 g_tft.setTextSize(2) ;
 g_tft.setCursor( 35 , 50 ) ;
 g_tft.print("BertheVarioTac");
-g_tft.setTextColor(TFT_BLACK) ;
+g_tft.setTextColor(TFT_WHITE) ;
 g_tft.setTextSize(3) ;
 g_tft.setCursor( 40 , 100 ) ;
 g_tft.print(g_NumVersion);
@@ -198,7 +198,7 @@ if ( count%5 )
 g_GlobalVar.m_Screen.SequencementPages() ;
 
 // raz de l'etat des boutons tactiles
-g_GlobalVar.m_Screen.RazButtons() ;
+//g_GlobalVar.m_Screen.RazButtons() ;
 
 //g_tft.endWrite(); // bug avec carte SD si utilisation
 

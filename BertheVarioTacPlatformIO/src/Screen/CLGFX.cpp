@@ -113,7 +113,8 @@ lv_indev_drv_register(&indev_drv);
 //lv_example_get_started_1();
 
 // berthe
-g_tft.fillRect(0, 0,240,320,TFT_WHITE);
+g_tft.fillRect(0, 0,240,320,TFT_BLACK);
+g_tft.setTextColor(TFT_WHITE,TFT_BLACK) ;
 }
 /*
 ////////////////////////////////////////////////////////////////////////////////

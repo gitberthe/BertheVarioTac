@@ -92,7 +92,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         // pas de memorisation du depart de vol par bouton droit
         if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz )
             {
-            g_GlobalVar.m_Screen.RazButtons() ;
+            g_GlobalVar.m_Screen.RazButtons(2) ;
             }
         continue ;
         }

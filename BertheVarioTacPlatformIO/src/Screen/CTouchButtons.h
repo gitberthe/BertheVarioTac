@@ -16,10 +16,9 @@ class CTouchButtons
 {
 public :
     void AfficheButtons() ;
-    bool IsButtonPressed( int ib ) const
-        { return m_PressedArr[ib] ; } ;
+    bool IsButtonPressed( int ib ) ;
     void SetText( const char * Txt3 , int ib ) ;
-    void RazButtons() ;
+    void RazButtons( int button = -1 ) ;
 
     void SetX( int x )
         { m_XTouch = x ; } ;
@@ -38,9 +37,10 @@ protected :
     bool  m_Pressed = false ;   ///< si est appuyé
 
 private :
-    int  m_NbButtons = 3 ;  ///< bombre de boutons a afficher
-    bool m_PressedArr[3] ;  ///< si boutons pressés
-    char m_Intitule[3][4] ; ///< texte de bouton
+    unsigned long   m_TimePressed = 0 ;///< pour le rebond
+    int             m_NbButtons = 3 ;  ///< bombre de boutons a afficher
+    bool            m_PressedArr[3] ;  ///< si boutons pressés
+    char            m_Intitule[3][4] ; ///< texte de bouton
 } ;
 
 #endif

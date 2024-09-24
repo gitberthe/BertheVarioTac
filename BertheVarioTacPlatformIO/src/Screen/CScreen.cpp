@@ -25,15 +25,23 @@ m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 110 , 240 , 3 , 'k') ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240 , 3 , 'm' ) ;
 
 // page sys
-m_T2SPageSysArr.resize(6) ;
+m_T2SPageSysArr.resize(8) ;
+const int DeltaY = 20 ;
+int y = 35 ;
 // cpu
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10  , 35 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10  , 60 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 170 , 35 , 2 , '%' ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 170 , 60 , 2 , '%' ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 170 , y , 2 , '%' ) ;
+y += DeltaY ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 170 , y , 2 , '%' ) ;
 // free memory
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10  , 85 , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , 85 , 2 , 'o' ) ;
+y += DeltaY ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , y , 2 , 'o' ) ;
+// vbat
+y += DeltaY ;
+m_T2SPageSysArr[PAGE_SYS_VBAT_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
+m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].SetPos( 160 , y , 2 , 'v' ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +55,7 @@ lv_timer_handler(); /* let the GUI do its work */
 /// \brief Raz page blanche ecran
 void CScreen::ScreenRaz()
 {
-g_tft.fillRect( 0 , 0 , m_Largeur , m_Hauteur , TFT_WHITE ) ;
+g_tft.fillRect( 0 , 0 , m_Largeur , m_Hauteur , TFT_BLACK ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -145,11 +153,11 @@ if ( count%2 )
 else
     VitVert = 0.3 ;
 bool SigneNeg = VitVert < 0. ;
-uint16_t color = TFT_WHITE ;
+uint16_t color = TFT_BLACK ;
 if ( SigneNeg )
     {
     sprintf( TmpChar , "%2.1f-" , VitVert ) ;
-    color = TFT_BLUE ;
+    color = TFT_RED ;
     }
 else
     sprintf( TmpChar , " %2.1f " , VitVert ) ;
@@ -209,6 +217,7 @@ else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
     g_GlobalVar.m_Screen.SetText( "Vol" , 2 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+
 // desactivation son
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     {
@@ -220,20 +229,22 @@ if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     }
 // page suivante
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    {
     return ECRAN_1_Histo ;
+    }
 //else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 //    return ECRAN_0_Vz ;
 
 // encadrements
-g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_BLACK ) ;
-g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_BLACK ) ;
-g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_BLACK ) ;
-g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_BLACK ) ;
-g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_BLACK ) ;
-g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_BLACK ) ;
+g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
+g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
+g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
 
-g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_BLACK ) ;
-g_tft.drawLine( 120 ,230 , 120 ,290 , TFT_BLACK ) ;
+g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
+g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
 return ECRAN_0_Vz ;
 }
@@ -354,9 +365,15 @@ g_tft.print(TmpCharTV);
 fin_histo :
 
 // defilement autre ecran
-g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+if ( ivol <= 0 )
+    g_GlobalVar.m_Screen.SetText( "   " , 0 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "M-" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Igc", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+if ( ivol >= (g_GlobalVar.m_HistoVol.m_HistoDir.size() - 1) )
+    g_GlobalVar.m_Screen.SetText( "   " , 2 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "M+" , 2 ) ;
 
 // si changement de numero histo vol
 if ( g_GlobalVar.BoutonDroit() )
@@ -365,7 +382,6 @@ if ( g_GlobalVar.BoutonDroit() )
     ivol++ ;
     if ( ivol >= g_GlobalVar.m_HistoVol.m_HistoDir.size() )
         ivol = g_GlobalVar.m_HistoVol.m_HistoDir.size() - 1 ;
-    //g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
     return ECRAN_1_Histo ;
     }
 
@@ -376,7 +392,6 @@ if ( g_GlobalVar.BoutonGauche() )
     ivol-- ;
     if ( ivol < 0 )
         ivol = 0 ;
-    //g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
     return ECRAN_1_Histo ;
     }
 
@@ -435,11 +450,17 @@ if ( IsPageChanged() )
 
 // defilement autre ecran
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+    {
     return ECRAN_7_Wifi ;
+    }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    {
     return ECRAN_3a_TmaAll ;
+    }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
+    {
     return ECRAN_2b_ConfirmArchIgc ;
+    }
 
 return ECRAN_2a_ListeIgc ;
 }
@@ -510,36 +531,53 @@ for ( long iz = 0 ; iz < NbZones ; iz++ )
     }
 
 // titre
-char TmpTitre[15] ;
-sprintf( TmpTitre , "%2d B. Cen. Mo." , g_GlobalVar.m_ZonesAerAll.GetNbZones() ) ;
+char TmpTitre[25] ;
+sprintf( TmpTitre , "%2d Zones memoire" , g_GlobalVar.m_ZonesAerAll.GetNbZones() ) ;
 
+// taille texte et placement
 g_tft.setTextSize(2) ;
-
-
-
 g_tft.setCursor( 10, 20 );
 g_tft.print( TmpTitre ) ;
 
 // zones active
 long xcol = 0 ;
 long yligne = 15 ;
+char TmpChar[25] ;
 for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     {
     if ( !VecZonesMod[iz]->m_DansFchActivation )
         continue ;
     g_tft.setCursor(10+xcol, 40 + yligne );
 
+    // nom des zones
     if ( VecZonesMod[iz]->m_Activee )
-        g_tft.print( VecZonesMod[iz]->m_NomAff.c_str() ) ;
+        {
+        strcpy( TmpChar , VecZonesMod[iz]->m_NomAff.c_str() ) ;
+        // remplacement des espaces
+        int ic = 0 ;
+        while ( TmpChar[ic] != 0 )
+            {
+            if ( TmpChar[ic] == ' ' )
+                TmpChar[ic] = '_' ;
+            ic++ ;
+            }
+        }
     else
         {
-        char TmpChar[25] ;
         sprintf( TmpChar , "-%s" ,  VecZonesMod[iz]->m_NomAff.c_str() ) ;
         TmpChar[9] = 0 ;
-        g_tft.print( TmpChar  ) ;
+        // remplacement des espaces
+        int ic = 0 ;
+        while ( TmpChar[ic] != 0 )
+            {
+            if ( TmpChar[ic] == ' ' )
+                TmpChar[ic] = '_' ;
+            ic++ ;
+            }
         }
-    yligne += 17 ;
-    if ( iz == 8 )
+    g_tft.print( TmpChar ) ;
+    yligne += 19 ;
+    if ( iz == 10 )
         {
         xcol = 110 ;
         yligne = 15 ;
@@ -564,7 +602,9 @@ if ( g_GlobalVar.BoutonGauche() )
 
 // si changement modification zone
 if ( g_GlobalVar.BoutonCentre() )
+    {
     return ECRAN_4_CfgFch ;
+    }
 
 return ECRAN_3a_TmaAll ;
 }
@@ -603,15 +643,15 @@ else
     {
     if ( m_CfgFileiChamps != -1 )
         {
-        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mv-" , 0 ) ;
         g_GlobalVar.m_Screen.SetText( "Mod" , 1 ) ;
-        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        g_GlobalVar.m_Screen.SetText( "Mv+" , 2 ) ;
         }
     else
         {
-        g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Var" , 0 ) ;
         g_GlobalVar.m_Screen.SetText( "Tma" , 1 ) ;
-        g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+        g_GlobalVar.m_Screen.SetText( "Var" , 2 ) ;
         }
     }
 
@@ -619,7 +659,7 @@ else
 if ( m_CfgFileiChamps == -1 )
     {
     strcpy( TmpModChar , "" ) ;
-    Name = "   Editeur Cfg\n   Boutons <GCD>" ;
+    Name = "  Editeur Cfg file" ;
     }
 else
     g_GlobalVar.m_Config.GetChar( m_CfgFileiChamps , Name , Value ) ;
@@ -742,7 +782,7 @@ return ECRAN_4_CfgFch ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Indique la Tma desoous laquelle on est.
 CAutoPages::EtatsAuto CScreen::EcranTmaDessous()
 {
 std::string NomZone = "" ;
@@ -759,19 +799,17 @@ if ( IsPageChanged() )
     ScreenRaz() ;
 
 // nom zone
-g_tft.setCursor(0,90);
-g_tft.print( "Tma Dessus:\n" );
+g_tft.setCursor(20,50);
+g_tft.print( "Tma Dessus:\n\n" );
 g_tft.print( NomZone.c_str() );
 
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Sys", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
-    return ECRAN_5_TmaDessous ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    {
     return ECRAN_6_Sys ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
-    return ECRAN_5_TmaDessous ;
+    }
 
 return ECRAN_5_TmaDessous ;
 }
@@ -829,9 +867,9 @@ if ( LastNumTma != NumTma )
 if ( VecZone2Mod.size() == 0 )
     {
     g_tft.setCursor(10, 70);
-    g_tft.print("Ret  ^^^ Cent.");
+    g_tft.print("Ret Bou. Cent.");
     g_tft.setCursor(5, 90);
-    g_tft.print("<Mod. B. G.D.>");
+    g_tft.print("Mod. Bou. G.D.");
     }
 else
     {
@@ -882,13 +920,13 @@ else
     }
 
 
-g_GlobalVar.m_Screen.SetText( "Mov" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Mo-" , 0 ) ;
 if ( VecZone2Mod.size() == 0 )
     g_GlobalVar.m_Screen.SetText( "Ret", 1 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "Inv", 1 ) ;
 
-g_GlobalVar.m_Screen.SetText( "Mov" , 2 ) ;
+g_GlobalVar.m_Screen.SetText( "Mo+" , 2 ) ;
 
 // si changement d'ecran
 bool BCentre = g_GlobalVar.BoutonCentre() ;
@@ -993,17 +1031,19 @@ m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].Affiche( TmpChar ) ;
 m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].Affiche( "fmem:" ) ;
 sprintf( TmpChar , "%7d" , (int) esp_get_free_heap_size() ) ;
 m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].Affiche( TmpChar ) ;
+// vbat
+m_T2SPageSysArr[PAGE_SYS_VBAT_TXT].Affiche( "vbat:" ) ;
+sprintf( TmpChar , "%4.2f" , g_GlobalVar.GetBatteryVoltage() ) ;
+m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].Affiche( TmpChar ) ;
 
 // defilement autre ecran
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "Vz", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
-    return ECRAN_6_Sys ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+    {
     return ECRAN_0_Vz ;
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
-    return ECRAN_6_Sys ;
+    }
 
 return ECRAN_6_Sys ;
 }

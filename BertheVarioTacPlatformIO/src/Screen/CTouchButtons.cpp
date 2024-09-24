@@ -9,12 +9,22 @@
 
 #include "../BertheVarioTac.h"
 
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Renvoi si le bouton a ete appyue et le RAZ .
+bool CTouchButtons::IsButtonPressed( int ib )
+{
+bool ret = m_PressedArr[ib] ;
+m_PressedArr[ib] = false ;
+return ret ;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Lit la position du touch pad et active les boutons en consequence
 void CTouchButtons::AfficheButtons()
 {
-uint16_t ColorFond  = TFT_WHITE ;
-uint16_t ColorTexte = TFT_BLACK ;
+uint16_t ColorFond  = TFT_BLACK ;
+uint16_t ColorTexte = TFT_WHITE ;
 
 const int HauteurBoutons = 50 ;
 const int Marge = 10 ;
@@ -27,6 +37,10 @@ if ( g_GlobalVar.m_FinDeVol.IsInFlight() )
     g_tft.drawRect( 0 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur , HauteurBoutons , TFT_WHITE ) ;
     return ;
     }
+
+// anti-rebond
+if ( (millis()-m_TimePressed) < 600 )
+    return ;
 
 // pour tous les boutons
 g_tft.startWrite();
@@ -66,6 +80,13 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     // texte du boutons
     g_tft.setTextSize(2) ;
     g_tft.print(m_Intitule[ib]);
+
+    // pour attente
+    if ( m_PressedArr[ib] )
+        {
+        m_TimePressed = millis() ;
+        break ;
+        }
     }
 g_tft.endWrite();
 
@@ -79,11 +100,17 @@ if ( g_GlobalVar.m_Screen.m_Pressed )
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Remet les bouons à zero
-void CTouchButtons::RazButtons()
+void CTouchButtons::RazButtons( int button )
 {
-for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
-    m_PressedArr[ib] = false ;
-
+if ( button == -1 )
+    {
+    for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
+        m_PressedArr[ib] = false ;
+    m_TimePressed = millis() ;
+    }
+else
+    m_PressedArr[button] = false ;
+m_Pressed = false ;
 //delay( 100 ) ;
 }
 

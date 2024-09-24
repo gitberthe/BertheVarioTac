@@ -20,11 +20,11 @@ public :
     CMutex      m_MutexI2c ; ///< mutex d'accet au bus car trop de plantage nan alti baro / beeper / cap magnetique
     CMutex      m_MutexVariable ; ///< mutex de la variable globale pour lat/lon gps sous forme char entre tache gps / igc
 
-    bool BoutonGauche() const
+    bool BoutonGauche() 
         { return m_Screen.IsButtonPressed(0) ; } ;
-    bool BoutonCentre() const
+    bool BoutonCentre() 
         { return m_Screen.IsButtonPressed(1) ; } ;
-    bool BoutonDroit() const
+    bool BoutonDroit() 
         { return m_Screen.IsButtonPressed(2) ; } ;
     void PurgeBoutons( unsigned long DelayMs ) ;
 

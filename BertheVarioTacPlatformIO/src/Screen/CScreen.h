@@ -32,6 +32,8 @@
 #define PAGE_SYS_CPU1_VAL  3
 #define PAGE_SYS_FMEM_TXT  4
 #define PAGE_SYS_FMEM_VAL  5
+#define PAGE_SYS_VBAT_TXT  6
+#define PAGE_SYS_VBAT_VAL  7
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief /// \brief Definition des pages ecran
