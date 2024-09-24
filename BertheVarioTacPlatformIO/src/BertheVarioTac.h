@@ -21,6 +21,7 @@
 #include <WiFi.h>
 #include <FS.h>
 #include <ESPFMfGK.h>
+//#include <driver/dac.h>
 
 #include <math.h>
 #include <map>
@@ -30,7 +31,7 @@
 ///////////////////
 // pour le debug //
 ///////////////////
-#define GPS_DEBUG
+//#define GPS_DEBUG
 
 //////////////////////////
 // includes du logiciel //

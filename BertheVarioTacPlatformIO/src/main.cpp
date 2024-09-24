@@ -25,6 +25,12 @@ g_tft.setCursor( 40 , 100 ) ;
 g_tft.print(g_NumVersion);
 }
 
+//#include "AudioOutputI2S.h"
+//#include "WiFiMulti.h"
+//#include "Audio.h"
+#define BUZZER_PIN 26
+#define BUZZER_CHANNEL 0
+
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
 void setup()
@@ -77,6 +83,17 @@ g_GlobalVar.LanceTacheGps(true) ;
 //g_GlobalVar.LanceTacheVarioBeep() ;
 
 g_GlobalVar.m_Screen.ScreenRaz() ;
+
+/*const int freq = 4000; // 5000 Hz
+const int ledChannel = 0;
+const int resolution = 8; // Résolution de 8 bits
+const int ledPin = 26;
+int dutyCycle = 255/2 ;
+
+ledcWrite(ledChannel, dutyCycle);
+ledcSetup(ledChannel, freq, resolution);
+ledcAttachPin(ledPin, ledChannel);
+*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +150,8 @@ g_GlobalVar.StopAll() ;
 /// \brief boucle sans fin
 void loop()
 {
-
+//tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
+return ;
 /* while ( true )
     {
     g_GlobalVar.m_Screen.ScreenRaz() ;
