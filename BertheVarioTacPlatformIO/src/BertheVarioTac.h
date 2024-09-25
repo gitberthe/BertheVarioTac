@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 25/09/2024
 ///
 
 
@@ -172,26 +172,14 @@
 #define TEMPS_PRIORITY   5
 #define TEMPS_CORE       1
 
-// scan des boutons, basse priorite
-#define SCAN_BUTON_NUM_TASK     9
-#define SCAN_BUTTON_STACK_SIZE  1000
-#define SCAN_BUTTON_PRIORITY    0
-#define SCAN_BUTTON_CORE        1
-
-// watch dog, basse priorite
-#define WATCH_DOG_NUM_TASK   10
-#define WATCH_DOG_STACK_SIZE 1000
-#define WATCH_DOG_PRIORITY   0
-#define WATCH_DOG_CORE       1
-
 // relance pour cause faux depart de vol, tache fugitive.
-#define RELANCE_IGC_NUM_TASK   11
+#define RELANCE_IGC_NUM_TASK   9
 #define RELANCE_IGC_STACK_SIZE 3000
 #define RELANCE_IGC_PRIORITY   0
 #define RELANCE_IGC_CORE       1
 
 // nombre total de taches
-#define SIZE_TASK 12
+#define SIZE_TASK 10
 
 //////////////////////////
 // includes du logiciel //
@@ -199,4 +187,7 @@
 #include "GlobalVar/CNumTaskArr.h"
 #include "GlobalVar/CGlobalVar.h"
 
+
+void AfficheEcranDebut() ;
+void WifiInit() ;
 extern char g_NumVersion[] ;

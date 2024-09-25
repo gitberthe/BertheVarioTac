@@ -239,26 +239,13 @@ while ( pChar != NULL )
     //Serial.println( esp_get_free_heap_size() ) ;
     }
 
-
-// reduction du nombre de points : ceux plus proche du barycentre enlevés
-// distance minimale de DIST_METRE_4_ZONE entyre les points
-/*// pour gnuplot
-Serial.println( "--------------------------"  ) ;
-for ( long iv = 0 ; iv < VecPoly.size() ; iv ++ )
-    {
-    Serial.print(VecPoly[iv]->m_Lon, 5) ;
-    Serial.print( " " ) ;
-    Serial.println(VecPoly[iv]->m_Lat, 5) ;
-    }
-Serial.println( "--------------------------"   ) ; //*/
-
 CVecReduce VecReduce ;
 VecReduce.Set( VecPoly ) ;
 VecReduce.ReduceTo( DIST_METRE_4_ZONE ) ;
 
 /*// pour gnuplot
 Serial.println( "********************" ) ;
-for ( long iv = 0 ; iv < VecPoly.size() ; iv ++ )
+for ( int iv = 0 ; iv < VecPoly.size() ; iv ++ )
     {
     Serial.print(VecPoly[iv]->m_Lon , 5 ) ;
     Serial.print( " " ) ;
@@ -272,7 +259,8 @@ memcpy( pZone->m_PolygoneArr , & VecPoly[0] , VecPoly.size() * sizeof( CZoneAer:
 pZone->m_NbPts = VecPoly.size() ;
 
 // calcul de la surface et du barycentre
-pZone->m_Area = CPolygone::GetAreaSize( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
+//pZone->m_Area = CPolygone::GetAreaSize( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
+CPolygone::CalcBarycentre( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
 
 // calcul du rayon max
 pZone->m_RayonMetre = 0. ;
@@ -766,7 +754,7 @@ else
     }
 
 // pour toutes les zones activables recherche dedans si pas deja dedans une comme TMA
-for ( long iz = 0 ; iz < VecZoneInAreaActivee.size() && RetNbrIn != ZONE_DEDANS ; iz++ )
+for ( int iz = 0 ; iz < VecZoneInAreaActivee.size() && RetNbrIn != ZONE_DEDANS ; iz++ )
     {
     const CZoneAer & Zone = *VecZoneInAreaActivee[iz] ;
     int PlafondZone = Zone.GetAltiBasse() ;
@@ -820,7 +808,7 @@ m_Mutex.PrendreMutex() ;
 m_Mutex.RelacherMutex() ;
 
 // pour toutes les zones recherche frontiere XY
-for ( long iz = 0 ; iz < m_NbZones && RetNbrIn != ZONE_LIMITE_ALTI && RetNbrIn != ZONE_DEDANS ; iz++ )
+for ( int iz = 0 ; iz < m_NbZones && RetNbrIn != ZONE_LIMITE_ALTI && RetNbrIn != ZONE_DEDANS ; iz++ )
     {
     const CZoneAer & Zone = *m_ZonesArr[iz] ;
 

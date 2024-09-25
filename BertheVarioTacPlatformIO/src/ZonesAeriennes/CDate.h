@@ -5,7 +5,7 @@
 /// \brief Declaration CDate.
 ///
 /// \date 11/11/2021 : passage de julien vers gregorien
-/// \date 25/03/2024 : dernierre modification
+/// \date 25/09/2024 : dernierre modification
 ///
 
 #ifndef _CMJDATE_
@@ -23,11 +23,11 @@ class CDate
 {
 public:
     CDate(float JulianDayTU=TMJ_ORIGINE_1900);
-    CDate(long annee, long mois, long jour, float heure_tu)
+    CDate(int annee, int mois, int jour, float heure_tu)
             { SetDateTU(annee,mois,jour,heure_tu) ; } ;
 
-    void    GetDateTU( long & annee, long & mois, long & jour, float & heure_tu ) const ;
-    void    SetDateTU( long annee, long mois, long jour, float heure_tu ) ;
+    void    GetDateTU( int & annee, int & mois, int & jour, float & heure_tu ) const ;
+    void    SetDateTU( int annee, int mois, int jour, float heure_tu ) ;
     void    JulienVersGregorien() ;
 
     float GetT_1900_UT() const;
@@ -38,7 +38,7 @@ public:
     bool         IsWeekEnd() const;
     bool        IsBissextile() const ;
 
-    static long GetJJArrondiANbJour( long JJ , long NbJour ) ;
+    static int GetJJArrondiANbJour( int JJ , int NbJour ) ;
 
 protected:
 

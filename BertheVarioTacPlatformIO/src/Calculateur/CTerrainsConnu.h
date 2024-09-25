@@ -18,7 +18,7 @@
 class CLocTerrain
 {
 public :
-    float m_Lat = 0. ;      ///< longitude E+, O- en degres
+    float m_Lat = 0. ;      ///< latitude E+, O- en degres
     float m_Lon = 0. ;      ///< longitude N+, S- en degres
     float m_AltiBaro = 0. ; ///< altitude en metres
     std::string m_Nom = "undefine" ;    ///< nom de terrain 10 caracteres maximum

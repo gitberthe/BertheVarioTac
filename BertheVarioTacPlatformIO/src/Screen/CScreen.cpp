@@ -41,7 +41,7 @@ m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , y , 2 , 'o' ) ;
 // vbat
 y += DeltaY ;
 m_T2SPageSysArr[PAGE_SYS_VBAT_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].SetPos( 160 , y , 2 , 'v' ) ;
+m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].SetPos( 155 , y , 2 , 'v' ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -519,14 +519,14 @@ const int NbZones = g_GlobalVar.m_ZonesAerAll.GetNbZones() ;
 CZoneAer ** pZoneArr = g_GlobalVar.m_ZonesAerAll.GetZoneArr() ;
 
 // ajout vecteur des zones activables
-for ( long iz = 0 ; iz < NbZones ; iz++ )
+for ( int iz = 0 ; iz < NbZones ; iz++ )
     {
     CZoneAer * pZone = pZoneArr[iz] ;
     if ( pZone->m_DansFchActivation )
         VecZonesMod.push_back( pZone ) ;
     }
 // ajout vecteur des zones activables
-for ( long iz = 0 ; iz < NbZones ; iz++ )
+for ( int iz = 0 ; iz < NbZones ; iz++ )
     {
     CZoneAer * pZone = pZoneArr[iz] ;
     if ( !pZone->m_DansFchActivation )
@@ -543,8 +543,8 @@ g_tft.setCursor( 10, 20 );
 g_tft.print( TmpTitre ) ;
 
 // zones active
-long xcol = 0 ;
-long yligne = 15 ;
+int xcol = 0 ;
+int yligne = 15 ;
 char TmpChar[25] ;
 for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     {
@@ -838,12 +838,12 @@ const int NbZones = g_GlobalVar.m_ZonesAerAll.GetNbZones() ;
 CZoneAer ** pZoneArr = g_GlobalVar.m_ZonesAerAll.GetZoneArr() ;
 
 // construction vecteur des zones a afficher
-for ( long iz = 0 ; iz < NbZones ; iz++ )
+for ( int iz = 0 ; iz < NbZones ; iz++ )
     {
     if ( pZoneArr[iz]->m_DansFchActivation )
         VecAffZones.push_back( pZoneArr[iz] ) ;
     }
-for ( long iz = 0 ; iz < NbZones ; iz++ )
+for ( int iz = 0 ; iz < NbZones ; iz++ )
     {
     if ( !pZoneArr[iz]->m_DansFchActivation )
         VecAffZones.push_back( pZoneArr[iz] ) ;
@@ -854,7 +854,7 @@ std::vector<CZoneAer *> VecZone2Mod ;
 if ( NumTma >= 0 && NumTma < VecAffZones.size() )
     {
     CZoneAer * pZone = VecAffZones[NumTma] ;
-    for ( long iz = 0 ; iz < VecAffZones.size() ; iz++ )
+    for ( int iz = 0 ; iz < VecAffZones.size() ; iz++ )
         if ( VecAffZones[iz]->m_NomAff == pZone->m_NomAff )
             VecZone2Mod.push_back( VecAffZones[iz] ) ;
     }
@@ -941,7 +941,7 @@ if ( BCentre && VecZone2Mod.size() == 0 )
 // si modification activation
 if ( BCentre && VecZone2Mod.size() != 0 )
     {
-    for ( long iz = 0 ; iz < VecZone2Mod.size() ; iz++ )
+    for ( int iz = 0 ; iz < VecZone2Mod.size() ; iz++ )
         {
         CZoneAer * pZone = VecZone2Mod[iz] ;
         if ( pZone->m_DansFchActivation )
@@ -1020,6 +1020,8 @@ return ECRAN_2b_ConfirmArchIgc ;
 /// \brief Affichage des parametres systemes.
 CAutoPages::EtatsAuto CScreen::EcranSys()
 {
+if ( IsPageChanged() )
+    ScreenRaz() ;
 
 // % cpu 0
 char TmpChar[10] ;

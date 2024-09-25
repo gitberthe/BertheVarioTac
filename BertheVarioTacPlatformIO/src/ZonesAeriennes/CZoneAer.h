@@ -10,7 +10,7 @@
 #ifndef _ZONE_AR_
 #define _ZONE_AR_
 
-#define DIST_METRE_4_ZONE  100
+#define DIST_METRE_4_ZONE  100  ///< distance en metre pour le calcul/compression entre 2 points
 
 #define ALTI_BASSE           0
 #define ALTI_PERIODE_SEMAINE 1
@@ -75,7 +75,7 @@ public :
 private :
     st_coord_poly **m_PolygoneArr=NULL; ///< tableau des points de la zone
     int             m_NbPts = 0 ;       ///< nombre de points de la zone
-    float           m_Area = 0. ;       ///< surface pour les zones imbriquee ex : TAM 2.2
+    //float           m_Area = 0. ;       ///< surface pour les zones imbriquee ex : TAM 2.2
 
     st_coord_poly   m_Barycentre ;      ///< pour une recherche rapide
     float           m_RayonMetre ;      ///< pour une recherche rapide
@@ -85,7 +85,7 @@ private :
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Classe de reduction du nombre de points par suppression de ceux plus
-/// proche du barycentre.
+/// proche du barycentre et distance minimum.
 class CVecReduce
 {
 public :

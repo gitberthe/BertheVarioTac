@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 22/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -19,7 +19,7 @@ if ( m_Size == 0 )
     m_pAltiArr = new float[m_Size] ;
     m_pDistArr = new float[m_Size] ;
 
-    for ( long i = 0 ; i < m_Size ; i++ )
+    for ( int i = 0 ; i < m_Size ; i++ )
         {
         m_pAltiArr[i] = Alti ;
         m_pDistArr[i] = Dist ;

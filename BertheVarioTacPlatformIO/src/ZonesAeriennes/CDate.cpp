@@ -6,7 +6,7 @@
 ///
 /// \date 03/03/2016 : plus de librairie TRB.
 /// \date 11/11/2022 : passage de julien vers gregorien
-/// \date 22/09/2024 : derniere modification
+/// \date 25/09/2024 : derniere modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -43,7 +43,7 @@ return T;
 //////////////////////////////////////////////////////////////////////
 /// \brief positionne la date en jour julien (formulae p24)
 /// reforme le 1582 10 15.
-void CDate::SetDateTU( long annee, long mois, long jour, float heure_tu_0_24 )
+void CDate::SetDateTU( int annee, int mois, int jour, float heure_tu_0_24 )
 {
 /*ASSERT( mois >0 ) ;
 ASSERT( mois <13 ) ;
@@ -51,9 +51,9 @@ ASSERT( jour >-1 ) ;
 ASSERT( jour <33 ) ;
 ASSERT( heure_tu_0_24 >= 0. ) ;
 ASSERT( heure_tu_0_24 < 24. ) ;*/
-long y,m;
-long A=0;
-long B=0;
+int y,m;
+int A=0;
+int B=0;
 // positionnement de variables
 if (mois>2)
     {
@@ -67,9 +67,9 @@ else
     }
 
 if ( y >0 )
-    m_JD_TU=(long)(365.25*y) + (long)(30.6001*(m+1)) + jour + heure_tu_0_24/24. + 1720994.5 ;
+    m_JD_TU=(int)(365.25*y) + (int)(30.6001*(m+1)) + jour + heure_tu_0_24/24. + 1720994.5 ;
 else
-    m_JD_TU=(long)(365.25*y-0.75) + (long)(30.6001*(m+1)) + jour + heure_tu_0_24/24. + 1720994.5 ;
+    m_JD_TU=(int)(365.25*y-0.75) + (int)(30.6001*(m+1)) + jour + heure_tu_0_24/24. + 1720994.5 ;
 
 // calcul de la date avant/apres reforme du 1582 10 15
 float date=annee + (mois-1.)/12. + (jour-1.)/30. ;
@@ -78,8 +78,8 @@ if ( date < reforme )
     B=0;
 else
     {
-    A=(long)(y/100.);
-    B=2-A+(long)(A/4.);
+    A=(int)(y/100.);
+    B=2-A+(int)(A/4.);
     m_JD_TU += B ;
     }
 }
@@ -87,29 +87,29 @@ else
 //////////////////////////////////////////////////////////////////////
 /// \brief donne la date en jour julien (formulae p24)
 /// reforme le 1582 10 15.
-void CDate::GetDateTU( long &annee, long &mois, long &jour, float &heure_tu_0_24 ) const
+void CDate::GetDateTU( int &annee, int &mois, int &jour, float &heure_tu_0_24 ) const
 {
-long A;
+int A;
 float JJ = m_JD_TU + 0.5 ;
-long Z = (long) JJ ;
+int Z = (int) JJ ;
 float F = JJ - Z ;
 
 if ( Z < 2299161 )
     A=Z;
 else
     {
-    long a=(long)((Z-1867216.25)/36524.25);
-    A=Z+1+a-(long)(a/4.);
+    int a=(int)((Z-1867216.25)/36524.25);
+    A=Z+1+a-(int)(a/4.);
     }
 
-long B=A+1524;
-long C=(long)((B-122.1)/365.25);
-long D=(long)(365.25*C);
-long E=(long)((B-D)/30.6001);
+int B=A+1524;
+int C=(int)((B-122.1)/365.25);
+int D=(int)(365.25*C);
+int E=(int)((B-D)/30.6001);
 
 // jour
-heure_tu_0_24=B-D-(long)(30.6001*E)+F;
-jour=(long)heure_tu_0_24;
+heure_tu_0_24=B-D-(int)(30.6001*E)+F;
+jour=(int)heure_tu_0_24;
 heure_tu_0_24=heure_tu_0_24-jour;
 heure_tu_0_24 *=24. ;
 
@@ -142,7 +142,7 @@ static const char * TabNomJours[] = {"Dimanche","Lundi","Mardi","Mercredi",
 
 // Formule qui donne la position du jour de la semaine en prenant comme
 // on doit le dimanche pour premier jour.
-long l_Q = (long) (FLOOR(FMOD(m_JD_TU,7.)) + 2. ) ;
+int l_Q = (int) (FLOOR(FMOD(m_JD_TU,7.)) + 2. ) ;
 
 // correction pour le changement de jour a 12 H TU
 float ent ;
@@ -151,7 +151,7 @@ if ( MODF(m_JD_TU, &ent) >= 0.5 ) // retourne le reste
 
 // correspondance numerique pour l'ecriture des resultats.
 if ( l_Q > 7. )
-    l_Q -= (long) 7. ;
+    l_Q -= (int) 7. ;
 
 //ASSERT( l_Q < 8. ) ;
 //ASSERT( l_Q > 0. ) ;
@@ -166,7 +166,7 @@ bool CDate::IsWeekEnd() const
 {
 // Formule qui donne la position du jour de la semaine en prenant comme
 // on doit le dimanche pour premier jour.
-long l_Q = (long) (FLOOR(FMOD(m_JD_TU,7.)) + 2. ) ;
+int l_Q = (int) (FLOOR(FMOD(m_JD_TU,7.)) + 2. ) ;
 
 // correction pour le changement de jour a 12 H TU
 float ent ;
@@ -175,7 +175,7 @@ if ( MODF(m_JD_TU, &ent) >= 0.5 ) // retourne le reste
 
 // correspondance numerique pour l'ecriture des resultats.
 if ( l_Q > 7. )
-    l_Q -= (long) 7. ;
+    l_Q -= (int) 7. ;
 
 if ( l_Q == 1 || l_Q == 7 )
     return true ;
@@ -186,7 +186,7 @@ return false ;
 /// \brief retourne si l'annee est bissextile.
 bool CDate::IsBissextile() const
 {
-long annee,mois,jour;
+int annee,mois,jour;
 float heure_tu_0_24 ;
 GetDateTU( annee, mois, jour, heure_tu_0_24 ) ;
 
@@ -199,8 +199,8 @@ void CDate::JulienVersGregorien()
 {
 struct stDateDecalJour
     {
-    long m_Annee ;
-    long m_DecalJour ;
+    int m_Annee ;
+    int m_DecalJour ;
     } ;
 
 static stDateDecalJour DateDecalJourArr[] =
@@ -232,7 +232,7 @@ static stDateDecalJour DateDecalJourArr[] =
      {2500, 17} } ;
 
 CDate DateCompar ;
-for ( long id = 0 ; true ; id++ )
+for ( int id = 0 ; true ; id++ )
     {
     stDateDecalJour & DateBascule = DateDecalJourArr[id] ;
     DateCompar.SetDateTU( DateBascule.m_Annee , 3 , 1 , 0. ) ;
@@ -246,7 +246,7 @@ for ( long id = 0 ; true ; id++ )
 
 /////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoi le JJ de date arrondi a nb jours
-long CDate::GetJJArrondiANbJour( long JJ , long NbJours )
+int CDate::GetJJArrondiANbJour( int JJ , int NbJours )
 {
 JJ = JJ - JJ % NbJours ;
 return JJ ;

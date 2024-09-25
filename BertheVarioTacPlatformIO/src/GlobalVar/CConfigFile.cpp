@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 24/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -153,7 +153,7 @@ if (!file)
 // debut de fichier
 file.seek(0) ;
 
-for( long iv = 0 ; iv < m_LinesVect.size() ; iv++ )
+for( int iv = 0 ; iv < m_LinesVect.size() ; iv++ )
     {
     const st_line * pline = m_LinesVect[iv] ;
 
