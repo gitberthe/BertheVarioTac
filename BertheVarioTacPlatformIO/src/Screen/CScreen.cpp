@@ -415,14 +415,15 @@ return ECRAN_1_Histo ;
 /// \brief Permet de modifier les champs de fichier de configuration
 CAutoPages::EtatsAuto CScreen::EcranListeIgcFch()
 {
-static std::vector<std::string> VecNomIgc ;
-static std::vector<int> VecTempsIgc ;
+std::vector<std::string> VecNomIgc ;
+std::vector<int> VecTempsIgc ;
+
+g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
 
 // lecture de fichier
 if ( IsPageChanged() )
     {
     ScreenRaz() ;
-    g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
 
     // texte boutons
     g_GlobalVar.m_Screen.SetText( "Wif" , 0 ) ;
