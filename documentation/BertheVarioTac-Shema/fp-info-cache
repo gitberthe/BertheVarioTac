@@ -1,4 +1,4 @@
-23038424174235384
+23041878734621003
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -356,6 +356,20 @@ battery CR-3032 coin cell vertical
 0
 2
 2
+BertheShema
+NEO-6M
+
+
+0
+24
+24
+BertheShema
+carre_simple
+
+
+0
+0
+0
 Button_Switch_Keyboard
 SW_Cherry_MX_1.00u_PCB
 Cherry MX keyswitch, 1.00u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
@@ -63413,12 +63427,12 @@ Yellow 5381 Series LED
 2
 2
 Library
-NEO-6M
+carre_simple
 
 
 0
-24
-24
+0
+0
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet

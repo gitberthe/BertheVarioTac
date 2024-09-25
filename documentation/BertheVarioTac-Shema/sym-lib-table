@@ -1,4 +1,4 @@
 (sym_lib_table
   (version 7)
-  (lib (name "New_Library")(type "KiCad")(uri "${KIPRJMOD}/composants/New_Library.kicad_sym")(options "")(descr ""))
+  (lib (name "BertheLibrary")(type "KiCad")(uri "${KIPRJMOD}/composants/BertheLibrary.kicad_sym")(options "")(descr ""))
 )
