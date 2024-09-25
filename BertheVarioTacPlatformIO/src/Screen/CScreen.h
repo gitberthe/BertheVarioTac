@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #ifndef _CSCREEN_
@@ -52,6 +52,14 @@ public :
         { RazButtons() ; }  ;
 
 private :
+    /// \brief iteam de la page menu
+    struct StItem
+        {
+        int m_x , m_y ;
+        std::string           m_Intitule ;
+        CAutoPages::EtatsAuto m_Page ;
+        } ;
+
     CAutoPages::EtatsAuto EcranVz() ;
     CAutoPages::EtatsAuto EcranHisto() ;
     CAutoPages::EtatsAuto EcranListeIgcFch() ;
@@ -60,6 +68,7 @@ private :
     CAutoPages::EtatsAuto EcranTmaDessous() ;
     CAutoPages::EtatsAuto EcranSys() ;
     CAutoPages::EtatsAuto EcranWifi() ;
+    CAutoPages::EtatsAuto EcranMenu() ;
 
     CAutoPages::EtatsAuto EcranTmaMod() ;
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;

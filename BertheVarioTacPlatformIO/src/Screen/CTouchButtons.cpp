@@ -90,8 +90,10 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     }
 g_tft.endWrite();
 
-// si reste de l'ecran presse retour Vz
-if ( g_GlobalVar.m_Screen.m_Pressed )
+// si reste de l'ecran presse retour Vz (sauf si ecran menu)
+if ( g_GlobalVar.m_Screen.m_Pressed &&
+     g_GlobalVar.m_Screen.GetEtatAuto() != CAutoPages::ECRAN_0_Vz &&
+     g_GlobalVar.m_Screen.GetEtatAuto() != CAutoPages::ECRAN_8_Menu )
     {
     m_Pressed = false ;
     g_GlobalVar.m_Screen.SetLastEtatAuto() ;

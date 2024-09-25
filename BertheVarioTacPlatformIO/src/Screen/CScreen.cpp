@@ -218,8 +218,25 @@ else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 
+// encadrements
+g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
+g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
+g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
+g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
+
+g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
+g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
+
+// ecran menu
+if( g_GlobalVar.m_Screen.IsPressed() )
+    {
+    ScreenRaz() ;
+    return ECRAN_8_Menu ;
+    }
 // desactivation son
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+else if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     {
     if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
          g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
@@ -234,17 +251,6 @@ else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     }
 //else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 //    return ECRAN_0_Vz ;
-
-// encadrements
-g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
-g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
-g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
-
-g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
-g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
 return ECRAN_0_Vz ;
 }
@@ -1051,4 +1057,100 @@ if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     }
 
 return ECRAN_6_Sys ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Affichage des pages du logiciel. Accessible depuis ecran Vz
+CAutoPages::EtatsAuto CScreen::EcranMenu()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+    g_tft.setTextSize(2) ;
+
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+    }
+
+StItem ItemMenu ;
+static std::vector<StItem> VecMenu ;
+
+// construction menu
+const int largeur = 100 ;
+const int hauteur = 45 ;
+ItemMenu.m_x = 20 ;
+ItemMenu.m_y = 15 ;
+for ( int im = 0 ; im < 7 ; im++ )
+    {
+    switch ( im )
+        {
+        case 0 :
+            ItemMenu.m_Intitule = "Vz" ;
+            ItemMenu.m_Page = ECRAN_0_Vz ;
+            break ;
+        case 1 :
+            ItemMenu.m_Intitule = "His" ;
+            ItemMenu.m_Page = ECRAN_1_Histo ;
+            break ;
+        case 2 :
+            ItemMenu.m_Intitule = "Igc" ;
+            ItemMenu.m_Page = ECRAN_2a_ListeIgc ;
+            break ;
+        case 3 :
+            ItemMenu.m_Intitule = "Tma" ;
+            ItemMenu.m_Page = ECRAN_3a_TmaAll ;
+            break ;
+        case 4 :
+            ItemMenu.m_Intitule = "Cfg" ;
+            ItemMenu.m_Page = ECRAN_4_CfgFch ;
+            break ;
+        case 5 :
+            ItemMenu.m_Intitule = "Des" ;
+            ItemMenu.m_Page = ECRAN_5_TmaDessous ;
+            break ;
+        case 6 :
+            ItemMenu.m_Intitule = "Sys" ;
+            ItemMenu.m_Page = ECRAN_6_Sys ;
+            break ;
+        default :
+            ItemMenu.m_Intitule = "Def" ;
+            ItemMenu.m_Page = ECRAN_0_Vz ;
+        }
+
+    VecMenu.push_back( ItemMenu ) ;
+    ItemMenu.m_y += hauteur + 3 ;
+
+    // seconde colenne
+    if ( im == 4 )
+        {
+        ItemMenu.m_x = 130 ;
+        ItemMenu.m_y = 15 ;
+        }
+    }
+
+// affichage menu
+for ( int im = 0 ; im < VecMenu.size() ; im++ )
+    {
+    StItem & Item = VecMenu[im] ;
+    g_tft.setCursor( Item.m_x + largeur/2 - 15 , Item.m_y + hauteur/2 - 10 ) ;
+    g_tft.print( Item.m_Intitule.c_str() ) ;
+    g_tft.drawRect( Item.m_x , Item.m_y , largeur , hauteur ) ;
+    }
+
+// si bouton pressé
+for ( int im = 0 ; im < VecMenu.size() ; im++ )
+    {
+    StItem & Item = VecMenu[im] ;
+    if ( GetX() > Item.m_x && GetX() < (Item.m_x+largeur) &&
+         GetY() > Item.m_y && GetY() < (Item.m_y+hauteur) &&
+         IsPressed() )
+        {
+        const int bordure = 5 ;
+        g_tft.drawRect( Item.m_x + bordure , Item.m_y + bordure , largeur - 2 * bordure , hauteur -2 * bordure ) ;
+        return Item.m_Page ;
+        }
+    }
+
+return ECRAN_8_Menu ;
 }

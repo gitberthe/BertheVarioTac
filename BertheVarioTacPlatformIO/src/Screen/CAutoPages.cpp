@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -27,6 +27,7 @@ m_Automate[ECRAN_4_CfgFch].m_pFunction   = & CAutoPages::EcranCfgFch ;
 m_Automate[ECRAN_5_TmaDessous].m_pFunction= & CAutoPages::EcranTmaDessous ;
 m_Automate[ECRAN_6_Sys].m_pFunction      = & CAutoPages::EcranSys ;
 m_Automate[ECRAN_7_Wifi].m_pFunction     = & CAutoPages::EcranWifi ;
+m_Automate[ECRAN_8_Menu].m_pFunction     = & CAutoPages::EcranMenu ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +69,10 @@ if ( m_EtatAuto != NextStep )
     // raz screen si changement ecran
     //ScreenRaz() ;
     m_PageChanged = true ;
-    ScreenRazButtons() ;
+
+    unsigned long time = millis() ;
+    while( (millis()-time) < 200 )
+        ScreenRazButtons() ;
     }
 // si meme page alors retour automatique ecran Vz si time out
 else

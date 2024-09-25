@@ -1,3 +1,6 @@
+le 20240925c :
+ - ihm selection de pages.
+
 le 20240925b :
  - optimization int/long.
  

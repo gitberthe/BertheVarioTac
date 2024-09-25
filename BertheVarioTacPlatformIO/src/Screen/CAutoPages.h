@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #ifndef _CAUTOPAGE_
@@ -30,6 +30,7 @@ public :
         ECRAN_5_TmaDessous ,
         ECRAN_6_Sys ,
         ECRAN_7_Wifi ,
+        ECRAN_8_Menu ,
         ERREUR ,
         FIN
         } ;
@@ -54,6 +55,7 @@ protected :
     virtual EtatsAuto EcranTmaDessous() = 0 ;
     virtual EtatsAuto EcranSys() = 0 ;
     virtual EtatsAuto EcranWifi() = 0 ;
+    virtual EtatsAuto EcranMenu() = 0 ;
 
     virtual EtatsAuto EcranTmaMod() = 0 ;
     virtual EtatsAuto EcranConfimeArchIgcFch() = 0 ;

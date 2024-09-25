@@ -9,7 +9,7 @@
 
 #include "BertheVarioTac.h"
 
-char g_NumVersion[] = "20240925b" ;
+char g_NumVersion[] = "20240925c" ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Affiche le nom et le firmware

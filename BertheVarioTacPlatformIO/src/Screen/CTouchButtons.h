@@ -24,6 +24,10 @@ public :
         { m_XTouch = x ; } ;
     void SetY( int y )
         { m_YTouch = y ; } ;
+    int GetX() const
+        { return m_XTouch ; } ;
+    int GetY() const
+        { return m_YTouch ; } ;
     void SetPressed( bool pressed )
         { m_Pressed = pressed ; } ;
     bool IsPressed() const
@@ -34,7 +38,7 @@ public :
 protected :
     int   m_XTouch = -1 ;       ///< coordonnees du touch
     int   m_YTouch = -1 ;       ///< coordonnees du touch
-    bool  m_Pressed = false ;   ///< si est appuyé
+    bool  m_Pressed = false ;   ///< si est appuyé en milieu d'ecran
 
 private :
     unsigned long   m_TimePressed = 0 ;///< pour le rebond

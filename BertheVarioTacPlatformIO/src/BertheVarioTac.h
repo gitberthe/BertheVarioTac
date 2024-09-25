@@ -181,6 +181,7 @@
 // nombre total de taches
 #define SIZE_TASK 10
 
+
 //////////////////////////
 // includes du logiciel //
 //////////////////////////
@@ -188,6 +189,9 @@
 #include "GlobalVar/CGlobalVar.h"
 
 
+////////////////////////////
+// fonctions et variables //
+////////////////////////////
 void AfficheEcranDebut() ;
 void WifiInit() ;
 extern char g_NumVersion[] ;
