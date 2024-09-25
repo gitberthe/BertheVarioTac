@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 25/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -451,6 +451,9 @@ if ( IsPageChanged() )
 // defilement autre ecran
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     {
+    unsigned long time = millis() ;
+    while( (millis()-time) < 1000 )
+        g_GlobalVar.m_Screen.RazButtons() ;
     return ECRAN_7_Wifi ;
     }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )

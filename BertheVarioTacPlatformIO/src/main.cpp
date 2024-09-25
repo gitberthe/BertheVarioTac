@@ -35,7 +35,7 @@ g_tft.print(g_NumVersion);
 /// \brief setup ESP32-2432S028
 void setup()
 {
-Serial.begin(115200);
+//Serial.begin(115200);
 
 // tache de mise a jour % cpu
 perfmon_start() ;
