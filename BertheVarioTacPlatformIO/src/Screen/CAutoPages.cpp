@@ -34,7 +34,7 @@ m_Automate[ECRAN_8_Menu].m_pFunction     = & CAutoPages::EcranMenu ;
 /// \brief pour le retour en arriere a l'ecran Vz
 void CAutoPages::SetVzEtatAuto()
 {
-g_GlobalVar.m_Screen.ScreenRaz() ;
+m_PageChanged = true ;
 
 // ecran de configuration on sauvegarde
 if ( m_EtatAuto == ECRAN_4_CfgFch )
@@ -103,6 +103,7 @@ else
             {
             ScreenRaz() ;
             //ScreenRazButtons() ;
+            m_PageChanged = true ;
             m_EtatAuto = ECRAN_0_Vz ;
             return ;
             }

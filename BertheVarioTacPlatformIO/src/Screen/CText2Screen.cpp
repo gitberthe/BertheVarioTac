@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -28,7 +28,7 @@ m_Const = Const ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Affichage sans flick.
-void CText2Screen::Affiche(const char* pChar)
+void CText2Screen::Affiche(const char* pChar , int color )
 {
 // position de depart
 g_tft.setCursor( m_x , m_y ) ;
@@ -46,7 +46,7 @@ if ( ! m_Const && m_TextePrincipal != pChar )
 
 // nouveau text
 g_tft.setCursor( m_x , m_y ) ;
-g_tft.setTextColor(TFT_WHITE) ;
+g_tft.setTextColor(color) ;
 g_tft.print(pChar);
 
 m_TextePrincipal = pChar ;
@@ -61,6 +61,8 @@ m_XUnit = g_tft.getCursorX() ;
 m_YUnit = g_tft.getCursorY() ;
 if ( m_Unite != ' ' )
     g_tft.print(m_Unite);
+
+g_tft.setTextColor(TFT_WHITE) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

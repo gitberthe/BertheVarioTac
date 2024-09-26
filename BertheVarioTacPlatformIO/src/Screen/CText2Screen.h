@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #ifndef _TXT2SCREEN_
@@ -18,7 +18,7 @@ public :
     CText2Screen() ;
 
     void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' , bool Const = false ) ;
-    void Affiche( const char * pChar ) ;
+    void Affiche( const char * pChar , int color = TFT_WHITE ) ;
     void ChangeUnit( char c ) ;
 
 private :

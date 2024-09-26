@@ -69,8 +69,21 @@ static int count = 0 ;
 count++ ;
 
 // nouvelle page
-if ( IsPageChanged() )
+if ( IsPageChanged() || count == 1 )
+    {
     ScreenRaz() ;
+    // encadrements
+    g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
+    g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
+    g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
+    g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
+    g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
+    g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
+
+    g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
+    g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
+    }
+
 
 // nom/finesse du site le plus proche
 float FinesseTerrainMinimum = 99. ;
@@ -102,14 +115,25 @@ m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 const float DeriveMilieu = 41. ;
 float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , 0 /*m_Mpu9250.m_CapMagnetique*/ ) ;
 if ( fabsf(DeriveAngle) >= 90. )
+    {
     sprintf( TmpChar , " \\R/" ) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_RED) ;
+    }
 else if ( DeriveAngle >= DeriveMilieu )
+    {
     sprintf( TmpChar , "  %1d>>", ((int)(fabsf(DeriveAngle)/10)) ) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    }
 else if ( DeriveAngle <= -DeriveMilieu )
+    {
     sprintf( TmpChar , "<<%1d", ((int)(fabsf(DeriveAngle)/10)) ) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    }
 else
+    {
     sprintf( TmpChar , " ^%1d^", ((int)(fabsf(DeriveAngle)/10)) ) ;
-m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("<<5>>") ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    }
 
 // duree du vol
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
@@ -184,17 +208,21 @@ else if ( !AffichageVitesse && ((millis()-TempsHauteurSol)/1000) >= 2 )
     AffichageVitesse = !AffichageVitesse ;
     TempsHauteurSol = millis() ;
     }
+color = TFT_WHITE ;
 if ( AffichageVitesse )
     {
     m_T2SPageVzArr[PAGE_VZ_VIT_SOL].ChangeUnit('k') ;
     sprintf( TmpChar , "%6.1f" , g_GlobalVar.m_VitesseKmh ) ;
+    if ( g_GlobalVar.m_VitesseKmh < 5. )
+        color = TFT_RED ;
     }
 else
     {
     m_T2SPageVzArr[PAGE_VZ_VIT_SOL].ChangeUnit('m') ;
     sprintf( TmpChar , "%6d", (int)(g_GlobalVar.m_TerrainPosCur.m_AltiBaro-g_GlobalVar.m_AltitudeSolHgt) ) ;
+    color = TFT_BROWN ;
     }
-m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar) ;
+m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar,color) ;
 
 // affichage altitude
 sprintf( TmpChar , "%4d", (int)g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
@@ -222,17 +250,6 @@ else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
     }
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-
-// encadrements
-g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
-g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
-g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
-g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
-
-g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
-g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
 // ecran menu
 if( g_GlobalVar.m_Screen.IsCenterPressed() )
@@ -1091,7 +1108,7 @@ const int largeur = 100 ;
 const int hauteur = 45 ;
 ItemMenu.m_x = 20 ;
 ItemMenu.m_y = 15 ;
-for ( int im = 0 ; im < 7 ; im++ )
+for ( int im = 0 ; im < 8 ; im++ )
     {
     switch ( im )
         {
@@ -1122,6 +1139,10 @@ for ( int im = 0 ; im < 7 ; im++ )
         case 6 :
             ItemMenu.m_Intitule = "Sys" ;
             ItemMenu.m_Page = ECRAN_6_Sys ;
+            break ;
+        case 7 :
+            ItemMenu.m_Intitule = "Wif" ;
+            ItemMenu.m_Page = ECRAN_7_Wifi ;
             break ;
         default :
             ItemMenu.m_Intitule = "Def" ;
@@ -1156,8 +1177,11 @@ for ( int im = 0 ; im < VecMenu.size() ; im++ )
          GetY() > Item.m_y && GetY() < (Item.m_y+hauteur) &&
          IsCenterPressed() )
         {
-        const int bordure = 5 ;
-        g_tft.drawRect( Item.m_x + bordure , Item.m_y + bordure , largeur - 2 * bordure , hauteur -2 * bordure ) ;
+        const int bordure = 10 ;
+        g_tft.fillRect( Item.m_x , Item.m_y , largeur , bordure , TFT_WHITE ) ;
+        g_tft.fillRect( Item.m_x , Item.m_y + hauteur - bordure , largeur , bordure , TFT_WHITE ) ;
+        g_tft.fillRect( Item.m_x , Item.m_y , bordure , hauteur , TFT_WHITE ) ;
+        g_tft.fillRect( Item.m_x + largeur - bordure , Item.m_y , bordure , hauteur , TFT_WHITE ) ;
         return Item.m_Page ;
         }
     }

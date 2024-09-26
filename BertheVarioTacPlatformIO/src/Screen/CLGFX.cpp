@@ -4,7 +4,7 @@
 /// \brief Encapsulation de l'ecran bas niveau
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 21/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -16,7 +16,7 @@ static const uint32_t screenWidth  = 240;
 static const uint32_t screenHeight = 320;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf1[ screenWidth * 10 ];
-static lv_color_t buf2[ screenWidth * 10 ];
+//static lv_color_t buf2[ screenWidth * 10 ];
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Display flushing
@@ -90,7 +90,7 @@ g_tft.setTouchCalibrate(calData);
 
 // touch_calibrate();//屏幕校准
 lv_init();
-lv_disp_draw_buf_init( &draw_buf, buf1, buf2, screenWidth * 10 );
+lv_disp_draw_buf_init( &draw_buf, buf1, NULL , screenWidth * 10 );
 
 // Initialize the display
 static lv_disp_drv_t disp_drv;
