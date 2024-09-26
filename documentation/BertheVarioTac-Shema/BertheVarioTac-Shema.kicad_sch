@@ -1329,7 +1329,7 @@
   (symbol (lib_id "BertheLibrary:ESP32") (at 86.36 62.23 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b33d3ca8-af70-4f50-b38d-535d859e34a3)
-    (property "Reference" "ESP32-2432S_WROOM-32" (at 73.66 60.96 0)
+    (property "Reference" "ESP32-2432S028_WROOM-32" (at 73.66 60.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "~" (at 86.36 62.23 0)
@@ -1344,7 +1344,7 @@
     (instances
       (project "BertheVarioTac-Shema"
         (path "/20a72893-107a-4d28-9717-d104a5df1eab"
-          (reference "ESP32-2432S_WROOM-32") (unit 1)
+          (reference "ESP32-2432S028_WROOM-32") (unit 1)
         )
       )
     )
