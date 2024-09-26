@@ -10,9 +10,13 @@
 #include "../BertheVarioTac.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \file Arrete toutes les taches.
+/// \file Arrete toutes les taches sauf touch
 void CNumTaskArr::StopAll()
 {
 for ( int it = 0 ; it < SIZE_TASK ; it++ )
+    {
+    if ( it == TOUCH_NUM_TASK )
+        continue ;
     m_TaskArr[it].m_Run = false ;
+    }
 }

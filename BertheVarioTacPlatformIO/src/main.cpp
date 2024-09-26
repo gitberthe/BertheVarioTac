@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -69,6 +69,9 @@ g_GlobalVar.LanceTacheGps(true) ;
 
 g_GlobalVar.m_Screen.ScreenRaz() ;
 
+// lancement tache touch
+g_GlobalVar.m_Screen.LancerTacheTouch() ;
+
 /*const int freq = 4000; // 5000 Hz
 const int ledChannel = 0;
 const int resolution = 8; // Résolution de 8 bits
@@ -113,32 +116,22 @@ if ( g_GlobalVar.m_ModeHttp )
 
     // si ecran pressé on reboot
     count++ ;
-    if ( !(count%100) )
+    if ( !(count%1000) )
         {
-        g_GlobalVar.m_Screen.HandleTouchScreen() ;
-        if ( g_GlobalVar.m_Screen.IsPressed() )
+        if ( g_GlobalVar.m_Screen.IsCenterPressed() )
             g_GlobalVar.Reboot() ;
         }
 
     return ;
     }
 
-// traitement de touch pad
-g_GlobalVar.m_Screen.HandleTouchScreen() ;
 
-// attente ecran
-g_tft.waitDisplay() ;
-
-// affichage des boutons tactiles
-g_GlobalVar.m_Screen.AfficheButtons() ;
-
-// a 10hz, 50hz ça plante l'affichage avec le Gps
-delay( 100 );
-
-// a 2 hz
-count++ ;
-if ( count%5 )
-    return ;
+// 2hz
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ g_GlobalVar.m_Screen.AfficheButtons() ;
+ g_GlobalVar.m_Screen.SequencementPages() ;
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
+delay( 500 ) ;
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
@@ -146,7 +139,7 @@ if ( count%5 )
 //tft.beginTransaction();
 
 // sequencement des pages
-g_GlobalVar.m_Screen.SequencementPages() ;
+//g_GlobalVar.m_Screen.SequencementPages() ;
 
 // raz de l'etat des boutons tactiles
 //g_GlobalVar.m_Screen.RazButtons() ;

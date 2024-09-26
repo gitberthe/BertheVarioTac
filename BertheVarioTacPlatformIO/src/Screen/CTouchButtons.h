@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #ifndef _TOUCHBUTTONS_
@@ -16,6 +16,7 @@ class CTouchButtons
 {
 public :
     void AfficheButtons() ;
+    void HandleButtons() ;
     bool IsButtonPressed( int ib ) ;
     void SetText( const char * Txt3 , int ib ) ;
     void RazButtons( int button = -1 ) ;
@@ -30,8 +31,7 @@ public :
         { return m_YTouch ; } ;
     void SetPressed( bool pressed )
         { m_Pressed = pressed ; } ;
-    bool IsPressed() const
-        { return m_Pressed ; } ;
+    bool IsCenterPressed() ;
 
     friend class CLGFX ;
 
@@ -45,6 +45,11 @@ private :
     int             m_NbButtons = 3 ;  ///< bombre de boutons a afficher
     bool            m_PressedArr[3] ;  ///< si boutons pressés
     char            m_Intitule[3][4] ; ///< texte de bouton
+    bool            m_CenterPressed = false ;
+
+    const int m_HauteurBoutons = 50 ;
+    const int m_Marge = 10 ;
+
 } ;
 
 #endif

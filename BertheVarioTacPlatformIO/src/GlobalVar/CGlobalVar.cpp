@@ -199,9 +199,6 @@ g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = true ;
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
 g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
 
-// raz screen
-g_GlobalVar.m_Screen.ScreenRaz() ;
-
 // relance tache
 g_GlobalVar.LanceTacheGps(false) ;
 

@@ -4,12 +4,12 @@
 /// \brief Main du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "BertheVarioTac.h"
 
-char g_NumVersion[] = "20240925c" ;
+char g_NumVersion[] = "20240926a" ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Affiche le nom et le firmware
@@ -30,6 +30,8 @@ g_tft.print(g_NumVersion);
 /// \brief init du Wifi
 void WifiInit()
 {
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+
 // raz des boutons
 g_GlobalVar.m_Screen.RazButtons() ;
 
@@ -68,6 +70,8 @@ g_tft.setCursor( 10 , 50 ) ;
 g_tft.print( buf ) ;
 g_tft.setCursor( 50 , 100 ) ;
 g_tft.print( "touch/reboot" ) ;
+
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 // creation init file manager
 g_pfilemgr = new ESPFMfGK( 8080 ) ;

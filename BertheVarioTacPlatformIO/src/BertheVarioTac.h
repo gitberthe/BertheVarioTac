@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 26/09/2024
 ///
 
 
@@ -36,12 +36,12 @@
 //////////////////////////
 // includes du logiciel //
 //////////////////////////
+#include "GlobalVar/CMutex.h"
 #include "Screen/CTouchButtons.h"
 #include "Screen/CLGFX.h"
 #include "Screen/CAutoPages.h"
 #include "Screen/CText2Screen.h"
 #include "Screen/CScreen.h"
-#include "GlobalVar/CMutex.h"
 #include "GlobalVar/CFileHistoVol.h"
 #include "GlobalVar/CConfigFile.h"
 #include "Calculateur/CSortArray.h"
@@ -119,67 +119,61 @@
 // taches plus affichage //
 ///////////////////////////
 
-// son priorite tres haute non interruptible (bloque/bug les capteurs sans mutex)
-#define VARIOBEEP_NUM_TASK   0
-#define VARIOBEEP_STACK_SIZE 1000
-#define VARIOBEEP_PRIORITY   20
-#define VARIOBEEP_CORE       0
-
-// calcul general basse priorite
-#define CALCUL_NUM_TASK     2
-#define CALCUL_STACK_SIZE   3000
-#define CALCUL_PRIORITY     0
-#define CALCUL_CORE         1
-
-// simuvol basse priorite
-#define SIMUVOL_NUM_TASK     3
-#define SIMUVOL_STACK_SIZE   3000
-#define SIMUVOL_PRIORITY     0
-#define SIMUVOL_CORE         1
+// tache touch, basse priorite core 0 necessaire ou plantage
+#define TOUCH_NUM_TASK       0
+#define TOUCH_STACK_SIZE     3000
+#define TOUCH_PRIORITY       5
+#define TOUCH_CORE           0
 
 /////////////////////////////////////////////
 // taches plus temps reel                  //
 // FreeRtOs utilise le core 0 a 75% a vide //
 /////////////////////////////////////////////
 
+// son priorite tres haute non interruptible (bloque/bug les capteurs sans mutex)
+#define VARIOBEEP_NUM_TASK   1
+#define VARIOBEEP_STACK_SIZE 1000
+#define VARIOBEEP_PRIORITY   20
+#define VARIOBEEP_CORE       1
+
 // pression calcul Vz, priorite tres haute non interruptible
-#define MS5611_NUM_TASK   4
+#define MS5611_NUM_TASK   2
 #define MS5611_STACK_SIZE 2000
 #define MS5611_PRIORITY   20
 #define MS5611_CORE       1
 
 // acquisition cap magnetique, priorite haute non interruptible
-#define MPU9250_NUM_TASK   5
+#define MPU9250_NUM_TASK   3
 #define MPU9250_STACK_SIZE 2000
 #define MPU9250_PRIORITY   19
 #define MPU9250_CORE       1
 
 // acquisition gps, priorite haute non interruptible
-#define SERIAL_NUM_TASK         6
+#define SERIAL_NUM_TASK         4
 #define SERIAL_GPS_STACK_SIZE   3000
 #define SERIAL_GPS_PRIORITY     19
 #define SERIAL_GPS_CORE         1
 
 // ecriture igc, priorite moyenne
-#define IGC_NUM_TASK    7
+#define IGC_NUM_TASK    5
 #define IGC_STACK_SIZE  4000
 #define IGC_PRIORITY    10
 #define IGC_CORE        1
 
 // temps de vol / histo, basse priorite
-#define TEMPS_NUM_TASK   8
+#define TEMPS_NUM_TASK   6
 #define TEMPS_STACK_SIZE 4000
 #define TEMPS_PRIORITY   5
 #define TEMPS_CORE       1
 
 // relance pour cause faux depart de vol, tache fugitive.
-#define RELANCE_IGC_NUM_TASK   9
+#define RELANCE_IGC_NUM_TASK   7
 #define RELANCE_IGC_STACK_SIZE 3000
 #define RELANCE_IGC_PRIORITY   0
 #define RELANCE_IGC_CORE       1
 
 // nombre total de taches
-#define SIZE_TASK 10
+#define SIZE_TASK 8
 
 
 //////////////////////////

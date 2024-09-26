@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -48,7 +48,9 @@ m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].SetPos( 155 , y , 2 , 'v' ) ;
 /// \brief A appeler souvent pour le touch screen
 void CScreen::HandleTouchScreen()
 {
-lv_timer_handler(); /* let the GUI do its work */
+m_MutexTft.PrendreMutex() ;
+ lv_timer_handler(); /* let the GUI do its work */
+m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -206,15 +208,18 @@ if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
     g_GlobalVar.m_Screen.SetText( "Son" , 0 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "His", 1 ) ;
+// inutilise
+g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 // si attente de vol
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
-    g_GlobalVar.m_Screen.SetText( "Vol" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( "Vo+" , 2 ) ;
 // si vol en cours
 else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
-    g_GlobalVar.m_Screen.SetText( "Vol" , 2 ) ;
+    {
+    g_GlobalVar.m_Screen.SetText( "Vo-" , 2 ) ;
+    }
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 
@@ -230,7 +235,7 @@ g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
 g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
 // ecran menu
-if( g_GlobalVar.m_Screen.IsPressed() )
+if( g_GlobalVar.m_Screen.IsCenterPressed() )
     {
     ScreenRaz() ;
     return ECRAN_8_Menu ;
@@ -246,9 +251,8 @@ else if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     }
 // page suivante
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
-    {
-    return ECRAN_1_Histo ;
-    }
+    {}
+// le bouton 2 est gere par CGps
 //else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 //    return ECRAN_0_Vz ;
 
@@ -375,7 +379,7 @@ if ( ivol <= 0 )
     g_GlobalVar.m_Screen.SetText( "   " , 0 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "M-" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "Igc", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 if ( ivol >= (g_GlobalVar.m_HistoVol.m_HistoDir.size() - 1) )
     g_GlobalVar.m_Screen.SetText( "   " , 2 ) ;
 else
@@ -404,8 +408,8 @@ if ( g_GlobalVar.BoutonGauche() )
 // si changement d'ecran
 if ( g_GlobalVar.BoutonCentre() )
     {
-    g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
-    return ECRAN_2a_ListeIgc ;
+    //g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
+    //return ECRAN_2a_ListeIgc ;
     }
 
 return ECRAN_1_Histo ;
@@ -427,7 +431,7 @@ if ( IsPageChanged() )
 
     // texte boutons
     g_GlobalVar.m_Screen.SetText( "Wif" , 0 ) ;
-    g_GlobalVar.m_Screen.SetText( "TMo",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 
 
@@ -465,7 +469,7 @@ if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     {
-    return ECRAN_3a_TmaAll ;
+    //return ECRAN_3a_TmaAll ;
     }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
     {
@@ -595,7 +599,7 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     }
 
 g_GlobalVar.m_Screen.SetText( "Mod" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "Cfg", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "Mod" , 2 ) ;
 
 // si changement d'ecran
@@ -613,7 +617,7 @@ if ( g_GlobalVar.BoutonGauche() )
 // si changement modification zone
 if ( g_GlobalVar.BoutonCentre() )
     {
-    return ECRAN_4_CfgFch ;
+    //return ECRAN_4_CfgFch ;
     }
 
 return ECRAN_3a_TmaAll ;
@@ -660,7 +664,7 @@ else
     else
         {
         g_GlobalVar.m_Screen.SetText( "Var" , 0 ) ;
-        g_GlobalVar.m_Screen.SetText( "Tma" , 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "" , 1 ) ;
         g_GlobalVar.m_Screen.SetText( "Var" , 2 ) ;
         }
     }
@@ -696,7 +700,8 @@ g_tft.print(Value.c_str()) ;
 bool BoutonCent = g_GlobalVar.BoutonCentre() ;
 bool BoutonGau  = g_GlobalVar.BoutonGauche() ;
 bool BoutonDroi = g_GlobalVar.BoutonDroit() ;
-// sortie ecran
+
+/*// sortie ecran
 if ( BoutonCent && !CfgFileEnMod && m_CfgFileiChamps == -1 )
     {
     if ( ChampsModified )
@@ -704,8 +709,8 @@ if ( BoutonCent && !CfgFileEnMod && m_CfgFileiChamps == -1 )
         g_GlobalVar.m_Config.EcritureFichier() ;
         g_GlobalVar.m_Config.LectureFichier() ;
         }
-    return ECRAN_5_TmaDessous ;
-    }
+    //return ECRAN_5_TmaDessous ;
+    } */
 
 // modification du mode modif/edition
 if ( BoutonCent && m_CfgFileiChamps != -1 )
@@ -715,7 +720,11 @@ if ( BoutonCent && m_CfgFileiChamps != -1 )
     if ( CfgFileEnMod )
         strcpy( TmpModChar , "Modification" ) ;
     else
+        {
         strcpy( TmpModChar , "Edition" ) ;
+        if ( ChampsModified )
+            g_GlobalVar.m_Config.EcritureFichier() ;
+        }
     }
 
 // decrementation de variable
@@ -814,12 +823,12 @@ g_tft.print( "Tma Dessus:\n\n" );
 g_tft.print( NomZone.c_str() );
 
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "Sys", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+/*if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     {
     return ECRAN_6_Sys ;
-    }
+    }*/
 
 return ECRAN_5_TmaDessous ;
 }
@@ -981,7 +990,7 @@ return ECRAN_3b_TmaMod ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Confirmation archivage ficier Igc
 CAutoPages::EtatsAuto CScreen::EcranConfimeArchIgcFch()
 {
 // titre
@@ -1050,11 +1059,11 @@ m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].Affiche( TmpChar ) ;
 
 // defilement autre ecran
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "Vz", 1 ) ;
+g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     {
-    return ECRAN_0_Vz ;
+    //return ECRAN_0_Vz ;
     }
 
 return ECRAN_6_Sys ;
@@ -1145,7 +1154,7 @@ for ( int im = 0 ; im < VecMenu.size() ; im++ )
     StItem & Item = VecMenu[im] ;
     if ( GetX() > Item.m_x && GetX() < (Item.m_x+largeur) &&
          GetY() > Item.m_y && GetY() < (Item.m_y+hauteur) &&
-         IsPressed() )
+         IsCenterPressed() )
         {
         const int bordure = 5 ;
         g_tft.drawRect( Item.m_x + bordure , Item.m_y + bordure , largeur - 2 * bordure , hauteur -2 * bordure ) ;

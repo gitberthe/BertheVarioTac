@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #ifndef _CAUTOPAGE_
@@ -38,12 +38,15 @@ public :
     void      SequencementPages() ;
     EtatsAuto GetEtatAuto() const   ///< renvoie l'etat de l'automate d'affichage
                 { return m_EtatAuto ; } ;
-    void      SetLastEtatAuto() ;
+    //void      SetVzEtatAuto() ;
 
     bool IsPageChanged() const      ///< renvoie si l'on vien de chabger de page
         { return m_PageChanged ; } ;
     void ResetTimeOut()             ///< remet le time out page Vz à zero lors de configuration Cfg file ou Tma
         { m_MillisEcran0 = millis() ; } ;
+
+    CMutex m_MutexTft ;
+    void LancerTacheTouch() ;
 
 protected :
 
@@ -62,6 +65,8 @@ protected :
 
     virtual void ScreenRaz() = 0 ;
     virtual void ScreenRazButtons() = 0 ;
+
+    void SetVzEtatAuto() ;
     //virtual void ScreenOff() = 0 ;
 
     EtatsAuto Erreur() ;
@@ -80,8 +85,10 @@ private :
     //EtatsAuto       m_LastEtatAuto = ECRAN_0_Vz ;   ///< pour le retour en arriere
     CEtatAutoFunc   m_Automate[FIN] ;       ///< l'automate
     bool            m_PageChanged = false ; ///< si l'on vient de changer de page
-    const int       m_SecondesRetourEcran0 = 15;///< auto retour ecran 0
+    const int       m_SecondesRetourEcran0 = 12;///< auto retour ecran 0
     unsigned long   m_MillisEcran0 ;            ///< time out de retour ecran 1 vers 0
+
+    static void TacheTouch(void *param) ;
 
 } ;
 

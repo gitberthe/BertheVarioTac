@@ -1,3 +1,7 @@
+le 20240926a :
+ - shema electrique kicad.
+ - refonte ihm.
+
 le 20240925c :
  - ihm selection de pages.
 

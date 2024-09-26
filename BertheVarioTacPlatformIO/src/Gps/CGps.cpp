@@ -123,7 +123,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         if ( ! g_GlobalVar.IsGpsStable() )
             g_GlobalVar.m_BMP180Pression.SetAltiSolUndef() ;
 
-        // purge boutons pour eviter un arret vol dans la fouléé
+        // purge boutons pour eviter un arret vol dans la foulée
         g_GlobalVar.PurgeBoutons( 6000 ) ;
 
         break ;

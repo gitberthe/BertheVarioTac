@@ -32,7 +32,7 @@ m_Automate[ECRAN_8_Menu].m_pFunction     = & CAutoPages::EcranMenu ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief pour le retour en arriere a l'ecran Vz
-void CAutoPages::SetLastEtatAuto()
+void CAutoPages::SetVzEtatAuto()
 {
 g_GlobalVar.m_Screen.ScreenRaz() ;
 
@@ -56,6 +56,12 @@ CAutoPages::EtatsAuto (CAutoPages::*pFunction)() = m_Automate[m_EtatAuto].m_pFun
 EtatsAuto NextStep = (this->*pFunction)() ;
 
 //ScreenOff() ;
+// si centre de l'ecran presse
+if ( g_GlobalVar.m_Screen.IsCenterPressed() )
+    {
+    SetVzEtatAuto() ;
+    return ;
+    }
 
 // si changement de page
 if ( m_EtatAuto != NextStep )
@@ -72,7 +78,10 @@ if ( m_EtatAuto != NextStep )
 
     unsigned long time = millis() ;
     while( (millis()-time) < 200 )
+        {
         ScreenRazButtons() ;
+        delay(1) ;
+        }
     }
 // si meme page alors retour automatique ecran Vz si time out
 else
@@ -81,7 +90,9 @@ else
     m_PageChanged = false ;
 
     // pas de retour Vz si modification tma ou wifi
-    if ( m_CfgFileiChamps != -1 || m_EtatAuto == ECRAN_3b_TmaMod || m_EtatAuto == ECRAN_7_Wifi )
+    if ( (m_CfgFileiChamps != -1 && m_EtatAuto == ECRAN_4_CfgFch ) ||
+          m_EtatAuto == ECRAN_3b_TmaMod ||
+          m_EtatAuto == ECRAN_7_Wifi )
         m_MillisEcran0 = millis() ;
 
     // si page pas Vz
@@ -112,3 +123,31 @@ CGlobalVar::BeepError() ;
 
 return ERREUR ;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Fonction static qui lit les boutons
+void CAutoPages::LancerTacheTouch()
+{
+xTaskCreatePinnedToCore(TacheTouch, "Touch", TOUCH_STACK_SIZE , this, TOUCH_PRIORITY, NULL, TOUCH_CORE);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Fonction static qui affiche les ecrans
+void CAutoPages::TacheTouch(void *param)
+{
+while (g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Run)
+    {
+    // traitement de touch pad
+    g_GlobalVar.m_Screen.HandleTouchScreen() ;
+
+    // scan les boutons tactiles
+    g_GlobalVar.m_Screen.HandleButtons() ;
+
+    // a 10hz, 50hz ça plante l'affichage avec le Gps
+    delay( 100 );
+    }
+g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Stopped = true ;
+while( true )
+    vTaskDelete(NULL) ;
+}
+

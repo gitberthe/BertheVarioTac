@@ -4,14 +4,14 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/09/2024
+/// \date modification : 26/09/2024
 ///
 
 #include "../BertheVarioTac.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Renvoi si le bouton a ete appyue et le RAZ .
+/// \brief Renvoi si le bouton a ete appuye et le RAZ .
 bool CTouchButtons::IsButtonPressed( int ib )
 {
 bool ret = m_PressedArr[ib] ;
@@ -20,27 +20,64 @@ return ret ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Lit la position du touch pad et active les boutons en consequence
-void CTouchButtons::AfficheButtons()
+/// \brief si le centre de l'ecran est appuyé
+bool CTouchButtons::IsCenterPressed()
 {
-uint16_t ColorFond  = TFT_BLACK ;
-uint16_t ColorTexte = TFT_WHITE ;
+bool ret = m_CenterPressed ;
+m_CenterPressed = false ;
+return ret ;
+}
 
-const int HauteurBoutons = 50 ;
-const int Marge = 10 ;
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Lit la position du touch pad et active les boutons en consequence
+void CTouchButtons::HandleButtons()
+{
+// anti-rebond
+if ( (millis()-m_TimePressed) < 600 )
+    return ;
 
 // hinibition des boutons
 if ( g_GlobalVar.m_FinDeVol.IsInFlight() )
     {
     for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
         m_PressedArr[ib] = false ;
-    g_tft.drawRect( 0 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur , HauteurBoutons , TFT_WHITE ) ;
+    //g_tft.drawRect( 0 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur , HauteurBoutons , TFT_WHITE ) ;
+    //g_GlobalVar.m_Screen.m_MutexAffichage.RelacherMutex() ;
     return ;
     }
 
-// anti-rebond
-if ( (millis()-m_TimePressed) < 600 )
-    return ;
+// pour tous les boutons
+int ib = 0 ;
+for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , ib++ )
+    {
+    // verification zone clic
+    if ( g_GlobalVar.m_Screen.m_XTouch > x && g_GlobalVar.m_Screen.m_XTouch < (x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons) &&
+         g_GlobalVar.m_Screen.m_YTouch > (g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons) &&
+         g_GlobalVar.m_Screen.m_Pressed )
+        {
+        m_PressedArr[ib] = true ;
+        m_Pressed = false ;
+        m_CenterPressed = false ;
+        m_TimePressed = millis() ;
+        return ;
+        }
+    }
+
+// si toujours presse alors centre de l'ecran
+if ( m_Pressed )
+    {
+    m_CenterPressed = true ;
+    m_Pressed = false ;
+    m_TimePressed = millis() ;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Affiche la position du touch pad et active les boutons en consequence
+void CTouchButtons::AfficheButtons()
+{
+const uint16_t ColorFond  = TFT_BLACK ;
+const uint16_t ColorTexte = TFT_WHITE ;
 
 // pour tous les boutons
 g_tft.startWrite();
@@ -50,62 +87,39 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     // bord du boutons
     int ColorDouble = ColorFond ;
 
-    // verification zone clic
-    if ( g_GlobalVar.m_Screen.m_XTouch > x && g_GlobalVar.m_Screen.m_XTouch < (x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons) &&
-         g_GlobalVar.m_Screen.m_YTouch > (g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons) &&
-         g_GlobalVar.m_Screen.m_Pressed )
-        {
-        ColorDouble = ColorTexte ;
-        m_PressedArr[ib] = true ;
-        m_Pressed = false ;
-        }
-
     // cerclage boutons
-    g_tft.fillRect( x + 10 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons + 10 , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons -20 , HauteurBoutons -20 , ColorFond ) ;
-    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
-                    g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , Marge , ColorDouble ) ;
-    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
-                    Marge , HauteurBoutons , ColorDouble ) ;
-    g_tft.fillRect( x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons - Marge , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons ,
-                    Marge , HauteurBoutons , ColorDouble ) ;
-    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - Marge ,
-                    g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , Marge , ColorDouble ) ;
-    g_tft.drawRect( x , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , HauteurBoutons , ColorTexte ) ;
+    if ( m_PressedArr[ib] )
+        ColorDouble = ColorTexte ;
 
+    g_tft.fillRect( x + 10 , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons + 10 , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons -20 , m_HauteurBoutons -20 , ColorFond ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons ,
+                        g_GlobalVar.m_Screen.m_Largeur/m_NbButtons ,m_Marge , ColorDouble ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons ,
+                        m_Marge , m_HauteurBoutons , ColorDouble ) ;
+    g_tft.fillRect( x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons - m_Marge , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons ,
+                        m_Marge , m_HauteurBoutons , ColorDouble ) ;
+    g_tft.fillRect( x , g_GlobalVar.m_Screen.m_Hauteur - m_Marge ,
+                        g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , m_Marge , ColorDouble ) ;
+    g_tft.drawRect( x , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , m_HauteurBoutons , ColorTexte ) ;
 
     // position du bouton
-    g_tft.setCursor( g_GlobalVar.m_Screen.m_Largeur / m_NbButtons * ib + 23  , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons / 2 - 5 ) ;
+    g_tft.setCursor( g_GlobalVar.m_Screen.m_Largeur / m_NbButtons * ib + 23  , g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons / 2 - 5 ) ;
     g_tft.setTextColor(ColorTexte) ;
 
     // texte du boutons
     g_tft.setTextSize(2) ;
     g_tft.print(m_Intitule[ib]);
-
-    // pour attente
-    if ( m_PressedArr[ib] )
-        {
-        m_TimePressed = millis() ;
-        break ;
-        }
     }
 g_tft.endWrite();
-
-// si reste de l'ecran presse retour Vz (sauf si ecran menu)
-if ( g_GlobalVar.m_Screen.m_Pressed &&
-     g_GlobalVar.m_Screen.GetEtatAuto() != CAutoPages::ECRAN_0_Vz &&
-     g_GlobalVar.m_Screen.GetEtatAuto() != CAutoPages::ECRAN_8_Menu )
-    {
-    m_Pressed = false ;
-    g_GlobalVar.m_Screen.SetLastEtatAuto() ;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Remet les bouons à zero
+/// \brief Remet les boutons à zero
 void CTouchButtons::RazButtons( int button )
 {
 if ( button == -1 )
     {
+    m_CenterPressed = false ;
     for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
         m_PressedArr[ib] = false ;
     m_TimePressed = millis() ;
