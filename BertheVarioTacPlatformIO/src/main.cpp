@@ -139,8 +139,15 @@ delay( 250 ) ;
 if ( count%4 )
     return ;
 
+// si on n'est pas en ecran 0
+//if ( g_GlobalVar.m_EtatAuto != ECRAN_0_Vz )
+//    continue ;
+
 // calcul des zones aeriennes
 g_GlobalVar.m_ZonesAerAll.CalcZone() ;
+
+// calcul terrain le plus proche
+g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
