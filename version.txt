@@ -1,3 +1,6 @@
+le 20240927a :
+ - modification IHM zones hgt.
+
 le 20240926a :
  - shema electrique kicad.
  - refonte ihm.

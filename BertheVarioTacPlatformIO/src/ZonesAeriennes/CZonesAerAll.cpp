@@ -831,7 +831,6 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrIn != ZONE_LIMITE_ALTI && RetNbrIn !=
         {
         RetNbrLimite = ZONE_LIMITE_FRONTIERE ;
         // construction nom + altitude
-        char TmpChar[50] ;
         m_Plafond4Valid=Zone.GetAltiBasse() ;
         sprintf( TmpChar , "Bo %s al:%4dm" , Zone.m_NomAff.c_str() , m_Plafond4Valid ) ;
         RetStrLimite = TmpChar ;

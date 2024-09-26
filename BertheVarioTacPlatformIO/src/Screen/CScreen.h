@@ -36,7 +36,7 @@
 #define PAGE_SYS_VBAT_VAL  7
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief /// \brief Definition des pages ecran
+/// \brief Definition des pages ecran.
 class CScreen : public CTouchButtons , public CAutoPages
 {
 public :

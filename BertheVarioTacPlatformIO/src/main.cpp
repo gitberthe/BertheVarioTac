@@ -21,6 +21,7 @@ CGlobalVar g_GlobalVar ;
 void setup()
 {
 //Serial.begin(115200);
+Serial.begin(9600);
 
 // tache de mise a jour % cpu
 perfmon_start() ;
@@ -102,6 +103,8 @@ void loop()
 static int count = 0 ;
 static bool WifiSetup = true ;
 
+count++ ;
+
 // si mode wifi
 if ( g_GlobalVar.m_ModeHttp )
     {
@@ -115,7 +118,6 @@ if ( g_GlobalVar.m_ModeHttp )
     g_pfilemgr->handleClient();
 
     // si ecran pressé on reboot
-    count++ ;
     if ( !(count%1000) )
         {
         if ( g_GlobalVar.m_Screen.IsCenterPressed() )
@@ -126,12 +128,19 @@ if ( g_GlobalVar.m_ModeHttp )
     }
 
 
-// 2hz
+// 4hz
 g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
  g_GlobalVar.m_Screen.AfficheButtons() ;
  g_GlobalVar.m_Screen.SequencementPages() ;
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
-delay( 500 ) ;
+delay( 250 ) ;
+
+// 1hz
+if ( count%4 )
+    return ;
+
+// calcul des zones aeriennes
+g_GlobalVar.m_ZonesAerAll.CalcZone() ;
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;

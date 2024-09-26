@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 29/03/2024
-/// \date modification : 21/09/2024
+/// \date modification : 27/09/2024
 ///
 
 #include "esp32_perfmon.h"
@@ -69,10 +69,12 @@ static void perfmon_task(void *args)
         g_GlobalVar.m_PercentCore0 = cpu0 ;
         g_GlobalVar.m_PercentCore1 = cpu1 ;
 
-        /*Serial.print("cpu0:") ;
-        Serial.println(cpu0) ;
-        Serial.print("cpu1:") ;
-        Serial.println(cpu1) ;*/
+        #ifdef PERFMON_DEBUG
+         Serial.print("cpu0:") ;
+         Serial.println(cpu0) ;
+         Serial.print("cpu1:") ;
+         Serial.println(cpu1) ;
+        #endif
 		//ESP_LOGI(TAG, "Core 0 at %d%%", cpu0);
 		//ESP_LOGI(TAG, "Core 1 at %d%%", cpu1);
 		// TODO configurable delay

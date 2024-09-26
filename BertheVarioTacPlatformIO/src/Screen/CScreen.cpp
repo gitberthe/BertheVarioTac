@@ -75,9 +75,6 @@ if ( IsPageChanged() || count == 1 )
     // encadrements
     g_tft.drawLine( 0 , 90 , 240 , 90 , TFT_WHITE ) ;
     g_tft.drawLine( 0 ,130 , 240 ,130 , TFT_WHITE ) ;
-    g_tft.drawLine( 70 , 50 , 240-70  , 50 , TFT_WHITE ) ;
-    g_tft.drawLine( 70 , 50 , 70  , 90 , TFT_WHITE ) ;
-    g_tft.drawLine( 240-70 , 50 , 240-70  , 90 , TFT_WHITE ) ;
     g_tft.drawLine( 95 , 90 , 95 ,130 , TFT_WHITE ) ;
 
     g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
@@ -108,31 +105,105 @@ if ( pTerrain != NULL )
     }
 else
     FinesseTerrainMinimum = 99 ;
-sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
-m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 
 // reculade/derive
-const float DeriveMilieu = 41. ;
-float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , 0 /*m_Mpu9250.m_CapMagnetique*/ ) ;
-if ( fabsf(DeriveAngle) >= 90. )
+uint16_t color = TFT_WHITE ;
+const int x1 = 70 , x2 = 240-70;
+const int y1 = 50 , y2 = 90;
+
+// dans zone
+if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     {
-    sprintf( TmpChar , " \\R/" ) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_RED) ;
+    color = TFT_BLACK ;
+    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
+    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
+    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
+    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
+    g_tft.setTextColor(TFT_RED) ;
+    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.setTextSize( 2 ) ;
+    g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
+    if ( g_GlobalVar.m_BeepAttenteGVZone )
+        CGlobalVar::BeepError() ;
     }
-else if ( DeriveAngle >= DeriveMilieu )
+// limite zone alti
+else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
     {
-    sprintf( TmpChar , "  %1d>>", ((int)(fabsf(DeriveAngle)/10)) ) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    color = TFT_BLACK ;
+    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
+    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
+    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
+    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
+    g_tft.setTextColor(TFT_CYAN) ;
+    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.setTextSize( 2 ) ;
+    g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
     }
-else if ( DeriveAngle <= -DeriveMilieu )
+// limite zone frontiere
+else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
     {
-    sprintf( TmpChar , "<<%1d", ((int)(fabsf(DeriveAngle)/10)) ) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    color = TFT_BLACK ;
+    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
+    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
+    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
+    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
+    g_tft.setTextColor(TFT_YELLOW) ;
+    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.setTextSize( 2 ) ;
+    g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneEnLimite.c_str() ) ;
+    }
+// erreur hgt file
+else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
+    {
+    color = TFT_BLACK ;
+    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
+    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
+    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
+    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
+    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
+    g_tft.setTextColor(TFT_RED) ;
+    g_tft.setCursor( 0 , 0 ) ;
+    g_tft.setTextSize( 3 ) ;
+    g_tft.print("** Erreur  **** Hgt File *");
+    if ( g_GlobalVar.m_BeepAttenteGVZone )
+        CGlobalVar::BeepError() ;
     }
 else
     {
-    sprintf( TmpChar , " ^%1d^", ((int)(fabsf(DeriveAngle)/10)) ) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+    // nom terrain
+    sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
+    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
+
+    // reculade
+    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
+    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
+    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
+
+    const float DeriveMilieu = 41. ;
+    float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , 0 /*m_Mpu9250.m_CapMagnetique*/ ) ;
+    if ( fabsf(DeriveAngle) >= 90. )
+        {
+        sprintf( TmpChar , " \\R/" ) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_RED) ;
+        }
+    else if ( DeriveAngle >= DeriveMilieu )
+        {
+        sprintf( TmpChar , "  %1d>>", ((int)(fabsf(DeriveAngle)/10)) ) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+        }
+    else if ( DeriveAngle <= -DeriveMilieu )
+        {
+        sprintf( TmpChar , "<<%1d", ((int)(fabsf(DeriveAngle)/10)) ) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+        }
+    else
+        {
+        sprintf( TmpChar , " ^%1d^", ((int)(fabsf(DeriveAngle)/10)) ) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+        }
     }
 
 // duree du vol
@@ -179,7 +250,7 @@ if ( count%2 )
 else
     VitVert = 0.3 ;
 bool SigneNeg = VitVert < 0. ;
-uint16_t color = TFT_BLACK ;
+color = TFT_BLACK ;
 if ( SigneNeg )
     {
     sprintf( TmpChar , "%2.1f-" , VitVert ) ;
@@ -243,13 +314,14 @@ if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
     g_GlobalVar.m_Screen.SetText( "Vo+" , 2 ) ;
-// si vol en cours
-else if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
-    {
-    g_GlobalVar.m_Screen.SetText( "Vo-" , 2 ) ;
-    }
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+
+    // si vol en cours
+if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
+    g_GlobalVar.m_Screen.SetText( "Vo-" , 1 ) ;
+else
+    g_GlobalVar.m_Screen.SetText( "" , 1 ) ;
 
 // ecran menu
 if( g_GlobalVar.m_Screen.IsCenterPressed() )
