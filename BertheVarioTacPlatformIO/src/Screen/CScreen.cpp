@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 28/09/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -79,6 +79,8 @@ if ( IsPageChanged() || count == 1 )
 
     g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
     g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
+
+    g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
     }
 
 

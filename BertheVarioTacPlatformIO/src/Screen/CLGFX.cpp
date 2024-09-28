@@ -15,7 +15,8 @@ CLGFX g_tft;
 static const uint32_t screenWidth  = 240;
 static const uint32_t screenHeight = 320;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf1[ screenWidth * 10 ];
+const int size_buf = 1024 ;
+static lv_color_t buf1[ size_buf ];
 //static lv_color_t buf2[ screenWidth * 10 ];
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +91,7 @@ g_tft.setTouchCalibrate(calData);
 
 // touch_calibrate();//屏幕校准
 lv_init();
-lv_disp_draw_buf_init( &draw_buf, buf1, NULL , screenWidth * 10 );
+lv_disp_draw_buf_init( &draw_buf, buf1, NULL , size_buf );
 
 // Initialize the display
 static lv_disp_drv_t disp_drv;
@@ -115,6 +116,9 @@ lv_indev_drv_register(&indev_drv);
 // berthe
 g_tft.fillRect(0, 0,240,320,TFT_BLACK);
 g_tft.setTextColor(TFT_WHITE,TFT_BLACK) ;
+g_tft.setEpdMode(epd_mode_t::epd_fastest);
+//g_tft.setFont(&fonts::Font2);
+g_tft.setColorDepth( 8 ) ;
 }
 /*
 ////////////////////////////////////////////////////////////////////////////////
