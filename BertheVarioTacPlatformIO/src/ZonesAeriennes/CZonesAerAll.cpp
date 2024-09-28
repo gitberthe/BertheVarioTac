@@ -719,39 +719,49 @@ else
             }
 
         // si limite alti
-        if ( ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro-g_GlobalVar.m_Config.m_XYMargin) > m_Plafond4Valid) ||
-             ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro-g_GlobalVar.m_Config.m_XYMargin) > (g_GlobalVar.m_AltitudeSolHgt+300) ) )
+        /*Serial.print( g_GlobalVar.m_AltitudeSolHgt ) ;
+        Serial.print( "," ) ;
+        Serial.print( g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
+        Serial.print( "," ) ;
+        Serial.println( g_GlobalVar.m_Config.m_AltiMargin ) ;*/
+        if ( ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > m_Plafond4Valid) &&
+             ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt+300)) )
             {
             sprintf( TmpChar , "Al %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
             RetNbrLimite = ZONE_LIMITE_ALTI ;
             RetStrLimite = TmpChar ;
             }
         }
-    // si dedans
-    else if ( PlafondZone < g_GlobalVar.m_TerrainPosCur.m_AltiBaro )
-        {
-        m_Plafond4Valid = PlafondZone ;
-        sprintf( TmpChar , "In %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
-        RetNbrIn = ZONE_DEDANS ;
-        RetStrIn = TmpChar ;
-        }
-    // en dessous
+    ////////////////
+    // si pas corent
     else
         {
-        //const CZoneAer & ZoneDuDessus = *VecZoneInAreaNorm[1] ;
-        m_Plafond4Valid = pZone->GetAltiBasse() ;
-        sprintf( TmpChar , "Be %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
-        RetNbrIn = ZONE_DESSOUS ;
-        RetStrIn = TmpChar ;
-        }
+        // si dedans
+        if ( PlafondZone < g_GlobalVar.m_TerrainPosCur.m_AltiBaro )
+            {
+            m_Plafond4Valid = PlafondZone ;
+            sprintf( TmpChar , "In %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
+            RetNbrIn = ZONE_DEDANS ;
+            RetStrIn = TmpChar ;
+            }
+        // en dessous
+        else
+            {
+            //const CZoneAer & ZoneDuDessus = *VecZoneInAreaNorm[1] ;
+            m_Plafond4Valid = pZone->GetAltiBasse() ;
+            sprintf( TmpChar , "Be %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
+            RetNbrIn = ZONE_DESSOUS ;
+            RetStrIn = TmpChar ;
+            }
 
-    // si a la limite altitude
-    if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > PlafondZone )
-        {
-        m_Plafond4Valid = PlafondZone ;
-        sprintf( TmpChar , "Al %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
-        RetNbrLimite = ZONE_LIMITE_ALTI ;
-        RetStrLimite = TmpChar ;
+        // si limite altitude
+        if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > PlafondZone )
+            {
+            m_Plafond4Valid = PlafondZone ;
+            sprintf( TmpChar , "Al %s al:%4dm" , pZone->m_NomAff.c_str() , m_Plafond4Valid ) ;
+            RetNbrLimite = ZONE_LIMITE_ALTI ;
+            RetStrLimite = TmpChar ;
+            }
         }
     }
 

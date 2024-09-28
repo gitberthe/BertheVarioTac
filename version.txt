@@ -1,4 +1,7 @@
-le 20240927b :
+le 20240928a :
+ - correction bug zone limite alti XY
+
+ le 20240927b :
  - modification zone limite alti XY
 
 le 20240927a :

@@ -21,7 +21,9 @@ CGlobalVar g_GlobalVar ;
 void setup()
 {
 //Serial.begin(115200);
-Serial.begin(9600);
+#ifdef NO_GPS_DEBUG
+ Serial.begin(9600);
+#endif
 
 // tache de mise a jour % cpu
 perfmon_start() ;
@@ -53,14 +55,16 @@ g_GlobalVar.m_Config.LectureFichier() ;
 // reglage luminosite car initscreen en premier obligatoire pour SDCard
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
-// init port serie GPS
-g_GlobalVar.InitGps() ;
+#ifndef NO_GPS_DEBUG
+ // init port serie GPS
+ g_GlobalVar.InitGps() ;
 
-// init capteur de pression
-//g_GlobalVar.m_BMP180Pression.InitBMP180() ;
+ // init capteur de pression
+ //g_GlobalVar.m_BMP180Pression.InitBMP180() ;
 
-// lancement tache gps
-g_GlobalVar.LanceTacheGps(true) ;
+ // lancement tache gps
+ g_GlobalVar.LanceTacheGps(true) ;
+#endif // NO_GPS_DEBUG
 
 // lancement tache de calcul du cap magnetique
 //g_GlobalVar.m_Mpu9250.LancerTacheCalculCapMag() ;

@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 27/09/2024
+/// \date modification : 28/09/2024
 ///
 
 
@@ -32,7 +32,8 @@
 // pour le debug //
 ///////////////////
 //#define GPS_DEBUG
-#define PERFMON_DEBUG
+//#define PERFMON_DEBUG
+//#define NO_GPS_DEBUG
 
 //////////////////////////
 // includes du logiciel //
