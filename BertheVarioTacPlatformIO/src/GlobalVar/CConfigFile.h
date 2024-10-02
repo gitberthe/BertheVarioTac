@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 24/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _CCONFIGFILE_
@@ -59,13 +59,12 @@ public :
 
     void LectureFichier() ;
     void EcritureFichier() ;
+    void ConstructVect() ;
+    void FreeVect() ;
 
-    std::vector< st_line *>  m_LinesVect ; ///< vecteur des lignes
+    std::vector< st_line *>  m_LinesVect ; ///< vecteur des lignes champs/variable
 
     static void ReplaceCharIn( std::string & str , char cfind , char creplace ) ;
-
-private :
-    void FreeVect() ;
 } ;
 
 #endif

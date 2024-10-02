@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 22/03/2024
-/// \date modification : 08/08/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _FILE_HISTO_
@@ -26,13 +26,11 @@ public :
     float m_VsMax = 0. ;        ///< Vs Max
     float m_DistanceKm = 0. ;   ///< distance
     int   m_TempsDeVol = 0. ;   ///< temps de vol
-
-    float m_LastLat = 0. ;  ///< pour calcul de distance
-    float m_LastLon  = 0. ; ///< pour calcul de distance
 } ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Classe d'historique des vols sur fichiers en plus du vol courant.
+/// Contenue dans CGlobalVar.
 class CFilesHistoVols : public CHistoVol
 {
 public :
@@ -45,8 +43,10 @@ public :
 
     float PushHistoVol() ;
 
+    float m_LastLat = 0. ;  ///< pour calcul de distance
+    float m_LastLon  = 0. ; ///< pour calcul de distance
+
 private :
-    File  m_File ;  ///< lecture ecriture fichier histo
 } ;
 
 #endif

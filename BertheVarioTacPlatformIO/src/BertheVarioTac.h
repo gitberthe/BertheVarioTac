@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 28/09/2024
+/// \date modification : 29/09/2024
 ///
 
 
@@ -22,18 +22,24 @@
 #include <FS.h>
 #include <ESPFMfGK.h>
 //#include <driver/dac.h>
+#include <SFE_BMP180.h>
 
 #include <math.h>
 #include <map>
 #include <vector>
 #include <algorithm>
 
-///////////////////
-// pour le debug //
-///////////////////
+//////////////////////////
+// define pour le debug //
+//////////////////////////
 //#define GPS_DEBUG
 //#define PERFMON_DEBUG
 //#define NO_GPS_DEBUG
+
+/////////////////////////////
+// define pour le materiel //
+/////////////////////////////
+#define BMP180_PRESS
 
 //////////////////////////
 // includes du logiciel //
@@ -85,6 +91,7 @@
 #define pinGpsTXD  (-1)
 
 #define VoltageInPin (35)
+//#define VoltageInPin (-1)
 
 // SDCARD
 #define SDCARD_CS_PIN   5
@@ -94,6 +101,8 @@
 
 // SDA SCL
 #define VARIO_SDA_PIN 27
+//#define VARIO_SDA_PIN 21
+//#define VARIO_SDA_PIN 35
 #define VARIO_SCL_PIN 22
 
 ////////////////

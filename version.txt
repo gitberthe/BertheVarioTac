@@ -1,3 +1,6 @@
+le 20241002a :
+ - optimisation memoire globale;
+ 
 le 20240928a :
  - correction bug zone limite alti XY
 

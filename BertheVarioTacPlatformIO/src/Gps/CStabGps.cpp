@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/04/2024
-/// \date modification : 22/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -26,6 +26,11 @@ void CStabGps::RazGpsPos()
 {
 m_ipile = 0 ;
 m_pile_full = false ;
+if ( m_PosArr != NULL )
+    {
+    delete [] m_PosArr ;
+    m_PosArr = NULL ;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

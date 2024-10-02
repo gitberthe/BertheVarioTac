@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _CAUTOPAGE_
@@ -63,7 +63,7 @@ protected :
     virtual EtatsAuto EcranTmaMod() = 0 ;
     virtual EtatsAuto EcranConfimeArchIgcFch() = 0 ;
 
-    virtual void ScreenRaz() = 0 ;
+    virtual void ScreenRaz( bool SaufBoutons = true ) = 0 ;
     virtual void ScreenRazButtons() = 0 ;
 
     void SetVzEtatAuto() ;

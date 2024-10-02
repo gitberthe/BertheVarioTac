@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/03/2024
-/// \date modification : 22/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -24,8 +24,8 @@ sprintf( m_NomFchCourant ,"/%02d%02d%02d%02d.IGC" ,
     ) ;
 
 // ouverture fichier
-m_File = SD.open(m_NomFchCourant, FILE_WRITE , true );
-if (!m_File)
+File IgcFile = SD.open(m_NomFchCourant, FILE_WRITE , true );
+if (!IgcFile)
     {
     #ifdef _LG_DEBUG_
      Serial.print( "erreur creation fichier " ) ;
@@ -35,7 +35,7 @@ if (!m_File)
     }
 
 // debut de fichier
-m_File.seek(0) ;
+IgcFile.seek(0) ;
 
 // elaboration date
 char TmpDate[50] ;
@@ -45,16 +45,16 @@ if ( Annee < 0 )
 sprintf(TmpDate,"HFDTEDATE:%02d%02d%02d", g_GlobalVar.m_Jour, g_GlobalVar.m_Mois, Annee ) ;
 
 // ecriture entete de fichier IGC
-m_File.println("AXXX GnuVario-E") ;
-m_File.println(TmpDate) ;     // date
-m_File.print("HFPLTPILOTINCHARGE: ") ;
-m_File.println(g_GlobalVar.m_Config.m_Pilote.c_str() ) ;  // pilote
-m_File.print("HFGTYGLIDERTYPE: " ) ;
-m_File.println( g_GlobalVar.m_Config.m_Voile.c_str() ) ; //glider
-m_File.println("HFDTM100GPSDATUM: WGS-1984") ; // repere
-m_File.println("HFFTYFRTYPE: GnuVario-E") ; // vario
+IgcFile.println("AXXX GnuVario-E") ;
+IgcFile.println(TmpDate) ;     // date
+IgcFile.print("HFPLTPILOTINCHARGE: ") ;
+IgcFile.println(g_GlobalVar.m_Config.m_Pilote.c_str() ) ;  // pilote
+IgcFile.print("HFGTYGLIDERTYPE: " ) ;
+IgcFile.println( g_GlobalVar.m_Config.m_Voile.c_str() ) ; //glider
+IgcFile.println("HFDTM100GPSDATUM: WGS-1984") ; // repere
+IgcFile.println("HFFTYFRTYPE: GnuVario-E") ; // vario
 
-m_File.close() ;
+IgcFile.close() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,8 +62,8 @@ m_File.close() ;
 void CIgc::PushLoc2Igc()
 {
 // ouverture fichier
-m_File = SD.open(m_NomFchCourant, FILE_APPEND );
-if (!m_File)
+File IgcFile = SD.open(m_NomFchCourant, FILE_APPEND );
+if (!IgcFile)
     {
     #ifdef _LG_DEBUG_
      Serial.print( "erreur creation fichier " ) ;
@@ -118,7 +118,7 @@ sprintf( CharRecord , "B%02d%02d%02d%s%c%s%cA%05d%05d" ,
 
 
 // ecriture record dans fichier
-m_File.println(CharRecord) ;
+IgcFile.println(CharRecord) ;
 
-m_File.close() ;
+IgcFile.close() ;
 }

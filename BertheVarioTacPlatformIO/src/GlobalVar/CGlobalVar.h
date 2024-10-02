@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Variable globale du projet
-class CGlobalVar : public CSDCard, public CNumTaskArr, public CFinSol , public CGps //, public CVarioBeep,
+class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps //, public CVarioBeep, public CFinSol ,
 {
 public :
     CGlobalVar() ;
@@ -20,11 +20,11 @@ public :
     CMutex      m_MutexI2c ; ///< mutex d'accet au bus car trop de plantage nan alti baro / beeper / cap magnetique
     CMutex      m_MutexVariable ; ///< mutex de la variable globale pour lat/lon gps sous forme char entre tache gps / igc
 
-    bool BoutonGauche() 
+    bool BoutonGauche()
         { return m_Screen.IsButtonPressed(0) ; } ;
-    bool BoutonCentre() 
+    bool BoutonCentre()
         { return m_Screen.IsButtonPressed(1) ; } ;
-    bool BoutonDroit() 
+    bool BoutonDroit()
         { return m_Screen.IsButtonPressed(2) ; } ;
     void PurgeBoutons( unsigned long DelayMs ) ;
 
@@ -34,7 +34,9 @@ public :
     CHgt2Agl        m_Hgt2Agl ;     ///< pour determiner la hauteur sol
     CPileVit        m_PileVit ;     ///< pour lancement vol suivant la vitesse gps
     CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
-    CBMP180Pression m_BMP180Pression ;///< capteur de pression
+    #ifdef BMP180_PRESS
+     CBMP180Pression m_BMP180Pression ;///< capteur de pression
+    #endif
 
     bool m_ModeHttp = false ;          ///< si mode http
     bool m_BeepAttenteGVZone = true ;  ///< beep d'attente Gps/Vitesse/Zone

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 17/03/2024
-/// \date modification : 01/04/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _TERRAINCONNU_
@@ -23,8 +23,8 @@ public :
     float m_AltiBaro = 0. ; ///< altitude en metres
     std::string m_Nom = "undefine" ;    ///< nom de terrain 10 caracteres maximum
     float m_Finesse ;                   ///< finesse utilisee pour le tri
-    float m_GisementDeg = -1 ;          ///< gisement en degres
-    float m_DistanceMetres = -1 ;       ///< distance en metres
+    //float m_GisementDeg = -1 ;          ///< gisement en degres
+    //float m_DistanceMetres = -1 ;       ///< distance en metres
 
     void CalcFinesse() ;
 

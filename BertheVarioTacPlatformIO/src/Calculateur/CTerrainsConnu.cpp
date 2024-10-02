@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 17/03/2024
-/// \date modification : 22/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -21,11 +21,11 @@ float DeltaLat = fabsf( Lat_y ) * 60. * UnMileEnMetres ;
 float DeltaLon = fabsf( Lon_x ) * 60. * UnMileEnMetres ;
 float DeltaAlt = g_GlobalVar.m_TerrainPosCur.m_AltiBaro - m_AltiBaro ;
 
-m_DistanceMetres = sqrtf( powf(DeltaLat,2.) + powf(DeltaLon,2.) ) ;
-m_GisementDeg    = 180 - 180. / T_PI * atan2f( Lat_y , Lon_x ) - 90.  ;
+float DistanceMetres = sqrtf( powf(DeltaLat,2.) + powf(DeltaLon,2.) ) ;
+//m_GisementDeg    = 180 - 180. / T_PI * atan2f( Lat_y , Lon_x ) - 90.  ;
 
 if ( DeltaAlt > 0. )
-    m_Finesse = m_DistanceMetres / DeltaAlt ;
+    m_Finesse = DistanceMetres / DeltaAlt ;
 else
     m_Finesse = FINESSE_IMPOSSIBLE ;
 }

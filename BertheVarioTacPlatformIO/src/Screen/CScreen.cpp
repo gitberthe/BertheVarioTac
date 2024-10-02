@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 28/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -23,25 +23,6 @@ m_T2SPageVzArr[PAGE_VZ_FIN_TER].SetPos  (   5 ,  5  , 3 ) ;
 m_T2SPageVzArr[PAGE_VZ_RECULADE].SetPos (  75 , 60  , 3 ) ;
 m_T2SPageVzArr[PAGE_VZ_VIT_SOL].SetPos  ( 110 , 240 , 3 , 'k') ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240 , 3 , 'm' ) ;
-
-// page sys
-m_T2SPageSysArr.resize(8) ;
-const int DeltaY = 20 ;
-int y = 35 ;
-// cpu
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].SetPos( 170 , y , 2 , '%' ) ;
-y += DeltaY ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].SetPos( 170 , y , 2 , '%' ) ;
-// free memory
-y += DeltaY ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].SetPos( 120 , y , 2 , 'o' ) ;
-// vbat
-y += DeltaY ;
-m_T2SPageSysArr[PAGE_SYS_VBAT_TXT].SetPos( 10  , y , 2 , ' ' , true ) ;
-m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].SetPos( 155 , y , 2 , 'v' ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,9 +36,12 @@ m_MutexTft.RelacherMutex() ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Raz page blanche ecran
-void CScreen::ScreenRaz()
+void CScreen::ScreenRaz( bool SaufBouton )
 {
-g_tft.fillRect( 0 , 0 , m_Largeur , m_Hauteur , TFT_BLACK ) ;
+if ( SaufBouton )
+    g_tft.fillRect( 0 , 0 , m_Largeur , m_Hauteur - 50 , TFT_BLACK ) ;
+else
+    g_tft.fillRect( 0 , 0 , m_Largeur , m_Hauteur , TFT_BLACK ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +65,7 @@ if ( IsPageChanged() || count == 1 )
     g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
     g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
+    g_GlobalVar.m_Config.FreeVect() ;
     }
 
 
@@ -729,6 +714,7 @@ static bool CfgFileEnMod = false ;
 // à l'entree dans la page on a rien modifier
 if ( IsPageChanged() )
     {
+    g_GlobalVar.m_Config.ConstructVect() ;
     m_CfgFileiChamps = -1 ;
     ChampsModified = false ;
     m_LastiChamps = -2 ;
@@ -1127,26 +1113,39 @@ return ECRAN_2b_ConfirmArchIgc ;
 /// \brief Affichage des parametres systemes.
 CAutoPages::EtatsAuto CScreen::EcranSys()
 {
-if ( IsPageChanged() )
-    ScreenRaz() ;
+//if ( IsPageChanged() )
+ScreenRaz() ;
 
+g_tft.setTextSize(2) ;
+
+const int DeltaY = 20 ;
+int x = 30 ;
+int y = 35 ;
 // % cpu 0
-char TmpChar[10] ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_TXT].Affiche( "cpu0:" ) ;
-sprintf( TmpChar , "%3d" , g_GlobalVar.m_PercentCore0 ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU0_VAL].Affiche( TmpChar ) ;
+char TmpChar[20] ;
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "cpu0:" ) ;
+sprintf( TmpChar , "      %3d%c" , g_GlobalVar.m_PercentCore0 , '%' ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
 // % cpu 1
-m_T2SPageSysArr[PAGE_SYS_CPU1_TXT].Affiche( "cpu1:" ) ;
-sprintf( TmpChar , "%3d" , g_GlobalVar.m_PercentCore1 ) ;
-m_T2SPageSysArr[PAGE_SYS_CPU1_VAL].Affiche( TmpChar ) ;
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "cpu1:" ) ;
+sprintf( TmpChar , "      %3d%c" , g_GlobalVar.m_PercentCore1 , '%' ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
 // free mem
-m_T2SPageSysArr[PAGE_SYS_FMEM_TXT].Affiche( "fmem:" ) ;
-sprintf( TmpChar , "%7d" , (int) esp_get_free_heap_size() ) ;
-m_T2SPageSysArr[PAGE_SYS_FMEM_VAL].Affiche( TmpChar ) ;
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "fmem:" ) ;
+sprintf( TmpChar , "  %7do" , (int) esp_get_free_heap_size() ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
 // vbat
-m_T2SPageSysArr[PAGE_SYS_VBAT_TXT].Affiche( "vbat:" ) ;
-sprintf( TmpChar , "%4.2f" , g_GlobalVar.GetBatteryVoltage() ) ;
-m_T2SPageSysArr[PAGE_SYS_VBAT_VAL].Affiche( TmpChar ) ;
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "vbat:" ) ;
+sprintf( TmpChar , "     %4.2fv" , g_GlobalVar.GetBatteryVoltage() ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
 
 // defilement autre ecran
 g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
@@ -1175,7 +1174,7 @@ if ( IsPageChanged() )
     }
 
 StItem ItemMenu ;
-static std::vector<StItem> VecMenu ;
+std::vector<StItem> VecMenu ;
 
 // construction menu
 const int largeur = 100 ;

@@ -23,7 +23,9 @@ void setup()
 //Serial.begin(115200);
 #ifdef NO_GPS_DEBUG
  Serial.begin(9600);
+ Serial.println("Debugage on" ) ;
 #endif
+//goto fin ;
 
 // tache de mise a jour % cpu
 perfmon_start() ;
@@ -55,12 +57,14 @@ g_GlobalVar.m_Config.LectureFichier() ;
 // reglage luminosite car initscreen en premier obligatoire pour SDCard
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
+// init capteur de pression
+#ifdef BMP180_PRESS
+ g_GlobalVar.m_BMP180Pression.InitBMP180() ;
+#endif
+
 #ifndef NO_GPS_DEBUG
  // init port serie GPS
  g_GlobalVar.InitGps() ;
-
- // init capteur de pression
- //g_GlobalVar.m_BMP180Pression.InitBMP180() ;
 
  // lancement tache gps
  g_GlobalVar.LanceTacheGps(true) ;
@@ -72,11 +76,12 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 // lancement tache beep
 //g_GlobalVar.LanceTacheVarioBeep() ;
 
-g_GlobalVar.m_Screen.ScreenRaz() ;
+g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
 // lancement tache touch
 g_GlobalVar.m_Screen.LancerTacheTouch() ;
 
+//fin :
 /*const int freq = 4000; // 5000 Hz
 const int ledChannel = 0;
 const int resolution = 8; // Résolution de 8 bits
@@ -85,24 +90,52 @@ int dutyCycle = 255/2 ;
 
 ledcWrite(ledChannel, dutyCycle);
 ledcSetup(ledChannel, freq, resolution);
-ledcAttachPin(ledPin, ledChannel);*/
+ledcAttachPin(ledPin, ledChannel);
+pinMode(22, OUTPUT); */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief boucle sans fin
 void loop()
 {
+
+/*
 //tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
-/* while ( true )
+CText2Screen Aff ;
+Aff.SetPos(  15 , 15 , 3 , 'm' ) ;
+float Alti_0 = 0 ;
+float Alti_1 = 0 ;
+float Vz = 0 ;
+while ( true )
     {
-    g_GlobalVar.m_Screen.ScreenRaz() ;
+    //g_tft.setCursor(20,50);
 
     if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
-        g_tft.print( "ok" );
+        {
+        //g_tft.print( "ok" );
+        Serial.print("ok");
+        }
     else
-        g_tft.print( "fail" );
+        {
+        //g_tft.print( "fail" );
+        Serial.print("fail");
+        }
+    float coef = 0.4 ;
+    Alti_0 = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+    Vz = (1.-coef) * Vz + coef * (Alti_0 - Alti_1) ;
+    Alti_1 = Alti_0 ;
+    //float VzRound = ((int)(Vz*100.)) / 100. ;
+    char Tmp[25] ;
+    sprintf(Tmp,"%5.2f %4.1f", Alti_0 , Vz ) ;
+    Aff.Affiche(Tmp) ;
+//    if ( etat%2 )
+//        digitalWrite(22, HIGH) ;
+//    else
+//        digitalWrite(22, LOW) ;
 
-    } // */
+    delay ( 1000 ) ;
+    }
+return ; */
 
 static int count = 0 ;
 static bool WifiSetup = true ;
@@ -142,6 +175,10 @@ delay( 250 ) ;
 // 1hz
 if ( count%4 )
     return ;
+
+#ifdef NO_GPS_DEBUG
+ Serial.println("mode debug") ;
+#endif
 
 // si on n'est pas en ecran 0
 //if ( g_GlobalVar.m_EtatAuto != ECRAN_0_Vz )

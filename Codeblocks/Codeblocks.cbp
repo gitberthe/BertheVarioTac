@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DBMP180_PRESS" />
 		</Compiler>
 		<Unit filename="../BertheVarioTacPlatformIO/src/BMP180/CBMP180Pression.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/BMP180/CBMP180Pression.h" />

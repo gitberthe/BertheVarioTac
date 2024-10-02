@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #ifndef _CSCREEN_
@@ -25,16 +25,6 @@
 #define PAGE_VZ_FIN_TER    6
 #define PAGE_VZ_RECULADE   7
 
-// define des champs a afficher page Sys
-#define PAGE_SYS_CPU0_TXT  0
-#define PAGE_SYS_CPU1_TXT  1
-#define PAGE_SYS_CPU0_VAL  2
-#define PAGE_SYS_CPU1_VAL  3
-#define PAGE_SYS_FMEM_TXT  4
-#define PAGE_SYS_FMEM_VAL  5
-#define PAGE_SYS_VBAT_TXT  6
-#define PAGE_SYS_VBAT_VAL  7
-
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Definition des pages ecran.
 class CScreen : public CTouchButtons , public CAutoPages
@@ -47,12 +37,12 @@ public :
     const int m_Largeur = 240 ;  ///< dimensions de l'écran
     const int m_Hauteur = 320 ;  ///< dimensions de l'écran
 
-    void ScreenRaz() ;
+    void ScreenRaz( bool SaufBouton = true ) ;
     void ScreenRazButtons()
         { RazButtons() ; }  ;
 
 private :
-    /// \brief iteam de la page menu
+    /// \brief item de la page menu
     struct StItem
         {
         int m_x , m_y ;
@@ -74,7 +64,6 @@ private :
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;
 
     std::vector<CText2Screen>   m_T2SPageVzArr ;  ///< tableau des champs page Vz
-    std::vector<CText2Screen>   m_T2SPageSysArr ; ///< tableau des champs page Sys
 } ;
 
 #endif

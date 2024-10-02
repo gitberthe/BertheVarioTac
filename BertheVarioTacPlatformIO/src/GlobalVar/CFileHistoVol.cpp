@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 22/03/2024
-/// \date modification : 22/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -30,25 +30,25 @@ if ( !HistoDir )
 while( true )
     {
     // ouverture fichier
-    m_File = HistoDir.openNextFile() ;
-    Serial.println( m_File.name() ) ;
+    File FileHisto = HistoDir.openNextFile() ;
+    Serial.println( FileHisto.name() ) ;
 
     // si fin de liste
-    if ( ! m_File )
+    if ( ! FileHisto )
         break ;
 
     // si directorie
-    if ( m_File.isDirectory() )
+    if ( FileHisto.isDirectory() )
         continue ;
 
     // lecture fichier
     int ic = 0 ;
-    while(m_File.available())
-        TmpChar[ic++] = m_File.read();
+    while(FileHisto.available())
+        TmpChar[ic++] = FileHisto.read();
     TmpChar[ic++] = 0 ;
 
     // fermeture fichier
-    m_File.close() ;
+    FileHisto.close() ;
 
     // decoupage en ligne
     std::vector<char*> VecLigne ;
@@ -121,8 +121,8 @@ strcat( TmpChar , ".his" ) ;
 strcat( HistoFileName , TmpChar ) ;
 
 // ouverture fichier
-m_File = SD.open(HistoFileName, FILE_WRITE , true );
-if (!m_File)
+File FileHisto = SD.open(HistoFileName, FILE_WRITE , true );
+if (!FileHisto)
     {
     #ifdef _LG_DEBUG_
      Serial.print( "erreur creation fichier NOM_FCH_HISTO_VOL" ) ;
@@ -131,22 +131,22 @@ if (!m_File)
     }
 
 // debut de fichier
-m_File.seek(0) ;
+FileHisto.seek(0) ;
 
 // ecritude fichier
-m_File.print("[IgcNom] ") ; m_File.println( NomFichierIgc ) ;
-m_File.print("[IgcAnnee] ") ; m_File.println( g_GlobalVar.m_Annee ) ;
-m_File.print("[VzMax] ") ; m_File.println( m_VzMax ) ;
-m_File.print("[VzMin] ") ; m_File.println( m_VzMin ) ;
-m_File.print("[VsMax] ") ; m_File.println( m_VsMax ) ;
-m_File.print("[temps_vol] ") ; m_File.println( m_TempsDeVol ) ;
-m_File.print("[distance] ") ; m_File.println( m_DistanceKm ) ;
-m_File.print("[z_deco] ") ; m_File.println( m_ZDeco ) ;
-m_File.print("[z_max] ") ; m_File.println( m_ZMax ) ;
-m_File.println(" ") ;
+FileHisto.print("[IgcNom] ") ; FileHisto.println( NomFichierIgc ) ;
+FileHisto.print("[IgcAnnee] ") ; FileHisto.println( g_GlobalVar.m_Annee ) ;
+FileHisto.print("[VzMax] ") ; FileHisto.println( m_VzMax ) ;
+FileHisto.print("[VzMin] ") ; FileHisto.println( m_VzMin ) ;
+FileHisto.print("[VsMax] ") ; FileHisto.println( m_VsMax ) ;
+FileHisto.print("[temps_vol] ") ; FileHisto.println( m_TempsDeVol ) ;
+FileHisto.print("[distance] ") ; FileHisto.println( m_DistanceKm ) ;
+FileHisto.print("[z_deco] ") ; FileHisto.println( m_ZDeco ) ;
+FileHisto.print("[z_max] ") ; FileHisto.println( m_ZMax ) ;
+FileHisto.println(" ") ;
 
 // fermeture fichier
-m_File.close() ;
+FileHisto.close() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -205,18 +205,18 @@ if ( !HistoDir )
 while( true )
     {
     // ouverture fichier
-    m_File = HistoDir.openNextFile() ;
+    File FileHisto = HistoDir.openNextFile() ;
 
-    if ( ! m_File )
+    if ( ! FileHisto )
         break ;
 
     char TmpChar[50] = HISTO_DIR ;
     strcat( TmpChar , "/" ) ;
-    strcat( TmpChar , m_File.name() ) ;
+    strcat( TmpChar , FileHisto.name() ) ;
 
     SD.remove( TmpChar ) ;
 
-    m_File.close() ;
+    FileHisto.close() ;
     }
 
 HistoDir.close() ;

@@ -156,7 +156,8 @@ delay(100);
 //I2C1.begin(VARIO_SDA_PIN, VARIO_SCL_PIN,400000);
 //Wire.flush();
 Wire.begin(VARIO_SDA_PIN, VARIO_SCL_PIN);
-Wire.setClock(400000); //Increase I2C data rate to 400kHz
+//Wire.begin(VARIO_SCL_PIN, VARIO_SDA_PIN);
+//Wire.setClock(400000); //Increase I2C data rate to 400kHz
  // d'apres la FAQ 100khz evite un plantage du MS5611 capteur de pression
  // mais je pense que c'est plus le mutex qui fait que ca plante plus
 //Wire.setClock(100000); //Increase I2C data rate to 100kHz

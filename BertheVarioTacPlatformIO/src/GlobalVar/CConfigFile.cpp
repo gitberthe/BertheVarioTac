@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 25/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -13,6 +13,15 @@
 /// \brief
 CConfigFile::CConfigFile()
 {
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Contsruction des lignes champs/variable
+void CConfigFile::ConstructVect()
+{
+// destruction des lignes precedents
+FreeVect() ;
+
 st_line * pLine ;
 
 /*pLine = new st_line ;
@@ -153,6 +162,9 @@ if (!file)
 // debut de fichier
 file.seek(0) ;
 
+// construction des champs/variables
+ConstructVect() ;
+
 for( int iv = 0 ; iv < m_LinesVect.size() ; iv++ )
     {
     const st_line * pline = m_LinesVect[iv] ;
@@ -200,6 +212,9 @@ for( int iv = 0 ; iv < m_LinesVect.size() ; iv++ )
     }
 
 file.close() ;
+
+// destruction des champs/variables
+FreeVect() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -273,6 +288,9 @@ if ( !file )
     delete [] TmpChar ;
     return;
     }
+
+// construction des champs/variables
+ConstructVect() ;
 
 // lecture fichier
 while(file.available())
@@ -385,6 +403,9 @@ for ( int i = 0 ; i < VecLigne.size() ; i++ )
     delete [] VecLigne[i] ;
 
 delete [] TmpChar ;
+
+// detruction des champs/variables
+FreeVect() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

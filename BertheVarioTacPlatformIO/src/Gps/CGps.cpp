@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 23/09/2024
+/// \date modification : 02/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -121,7 +121,11 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         {
         // raz difference altitude presion/wgs84 = altitude affichée est barometrique pure
         if ( ! g_GlobalVar.IsGpsStable() )
-            g_GlobalVar.m_BMP180Pression.SetAltiSolUndef() ;
+            {
+            #ifdef BMP180_PRESS
+             g_GlobalVar.m_BMP180Pression.SetAltiSolUndef() ;
+            #endif
+            }
 
         // purge boutons pour eviter un arret vol dans la foulée
         g_GlobalVar.PurgeBoutons( 6000 ) ;
@@ -130,25 +134,25 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         }
 
     // si le gps nest pas stable au moins une fois (10 secondes)
-    #ifndef SIMU_VOL
-     g_GlobalVar.PushGpPos4Stab() ;
-     // si pas attente vitesse
-     if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS )
-         {
-         // beep attente gps 'S'
-         if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
-             CGlobalVar::beeper( 1500 , 100 ) ;
+    g_GlobalVar.PushGpPos4Stab() ;
+    // si pas attente vitesse
+    if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS )
+        {
+        // beep attente gps 'S'
+        if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
+            CGlobalVar::beeper( 1500 , 100 ) ;
 
-         // recalage altibaro
-         g_GlobalVar.m_MutexVariable.PrendreMutex() ;
-          g_GlobalVar.m_BMP180Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
-         g_GlobalVar.m_MutexVariable.RelacherMutex() ;
+        // recalage altibaro
+        g_GlobalVar.m_MutexVariable.PrendreMutex() ;
+        #ifdef BMP180_PRESS
+         g_GlobalVar.m_BMP180Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
+        #endif
+        g_GlobalVar.m_MutexVariable.RelacherMutex() ;
 
-         // si le gps n'est pas stable
-         if ( ! g_GlobalVar.IsGpsStable() )
-            continue ;
-         }
-    #endif
+        // si le gps n'est pas stable
+        if ( ! g_GlobalVar.IsGpsStable() )
+           continue ;
+        }
 
     // beep attente vitesse
     g_GlobalVar.m_PileVit.PusGpsVit() ;
@@ -170,6 +174,11 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     if ( fabs(g_GlobalVar.m_VitVertMS) >= g_GlobalVar.m_Config.m_vz_igc_ms )
         break ;
     }
+
+// pour gain memoire
+g_GlobalVar.RazGpsPos() ;
+g_GlobalVar.m_PileVit.ResetVit() ;
+g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
 
 // derniere configuration des zones
 g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
@@ -219,10 +228,11 @@ while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
     g_GlobalVar.m_DureeVolMin = TempsCourant ;
 
     // histo vol
-    float Distance = g_GlobalVar.m_HistoVol.PushHistoVol() ;
+    //float Distance =
+    g_GlobalVar.m_HistoVol.PushHistoVol() ;
 
     // pour la finesse sol
-    g_GlobalVar.PushDistAlti( Distance , g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
+    //g_GlobalVar.PushDistAlti( Distance , g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
 
     // historique du vol toutes les 5 sec
     if ( !(iboucleHistoVol%5) )

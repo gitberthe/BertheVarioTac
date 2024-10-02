@@ -17,6 +17,10 @@ class CBMP180Pression
 public :
     void InitBMP180() ;
 
+    bool   m_InitOk = false ;
+    double m_Temperature;
+    double m_PressionRef ;
+
     void SetAltiSolUndef()
         {} ;
     void SetAltiSolMetres( int AltitudeSolHgt )
