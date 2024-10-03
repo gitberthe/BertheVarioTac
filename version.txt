@@ -1,3 +1,6 @@
+le 20241003a :
+ - fonctionnement gps + baro + son ok.
+
 le 20241002a :
  - optimisation memoire globale;
  

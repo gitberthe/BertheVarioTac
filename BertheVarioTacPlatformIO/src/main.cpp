@@ -71,9 +71,9 @@ g_GlobalVar.m_Config.LectureFichier() ;
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
 // init capteur de pression
-//#ifdef BMP180_PRESS
+#ifdef BMP180_PRESS
  g_GlobalVar.m_BMP180Pression.InitBMP180() ;
-//#endif
+#endif
 
 #ifndef NO_GPS_DEBUG
  // init port serie GPS
@@ -95,32 +95,35 @@ g_GlobalVar.m_Screen.ScreenRaz(false) ;
 // lancement tache touch
 g_GlobalVar.m_Screen.LancerTacheTouch() ;
 
-/*//fin :
-//pinMode(22, OUTPUT);
-int freq = 2000; // 3000 Hz
-const int ledChannel = 0;
+//fin :
+//pinMode(26, OUTPUT);
+/*int freq = 3000; // 3000 Hz
+const int ledChannel = 1;
 const int resolution = 8; // Résolution de 8 bits
 const int ledPin = 26;
 int dutyCycle = 255/2 ;
 
-//ledcWrite(ledChannel, dutyCycle);
-//ledcSetup(ledChannel, freq, resolution);
+ledcWrite(ledChannel, dutyCycle);
+ledcSetup(ledChannel, freq, resolution);
 ledcAttachPin(ledPin, ledChannel);
-ledcWriteTone( ledChannel, freq ) ;
+//ledcWriteTone( ledChannel, freq ) ;
 //pinMode(22, OUTPUT);
 
-delay( 300 ) ;
+while( true )
+    delay( 2000 ) ;
 
-freq = 8000 ;
-//ledcSetup(ledChannel, freq, resolution);
-ledcWriteTone( ledChannel, freq ) ;
+freq = 7000 ;
+ledcWrite(ledChannel, dutyCycle);
+ledcSetup(ledChannel, freq, resolution);
+ledcAttachPin(ledPin, ledChannel);
+//ledcWriteTone( ledChannel, freq ) ;
 
-delay( 300 ) ;
+delay( 2000 ) ;
 
-ledcDetachPin( ledPin ) ;*/
+ledcDetachPin( ledPin ) ; //*/
 //#define EXAMPLE_ADC_ATTEN                   ADC_ATTEN_DB_12
-/*int8_t offset = 0 ;
-dac_cw_scale_t scale = DAC_CW_SCALE_8 ;
+//int8_t offset = 0 ;
+//dac_cw_scale_t scale = DAC_CW_SCALE_8 ;
 dac_output_enable(DAC_CHANNEL_2);
 
 
@@ -133,7 +136,7 @@ dac_cw_generator_enable() ;
 
 
 delay( 2000 ) ;
-dac_cw_generator_disable() ;*/
+dac_cw_generator_disable() ;
 }
 
 

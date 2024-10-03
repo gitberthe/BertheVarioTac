@@ -32,7 +32,7 @@
 //////////////////////////
 // define pour le debug //
 //////////////////////////
-#define GPS_DEBUG
+//#define GPS_DEBUG
 //#define PERFMON_DEBUG
 //#define NO_GPS_DEBUG
 
