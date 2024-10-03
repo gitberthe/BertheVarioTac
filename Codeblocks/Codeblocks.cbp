@@ -98,7 +98,7 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/User_Setup.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/lv_conf.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CSoubdSvr.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CSoundSvr.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CSoundSvr.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.h" />
