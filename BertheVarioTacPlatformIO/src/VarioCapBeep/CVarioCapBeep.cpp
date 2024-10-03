@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// \file CVarioCapBeep.h
 ///
-/// \brief Main du projet de vario tactile
+/// \brief
 ///
 /// \date creation     : 03/10/2024
 /// \date modification : 03/10/2024
@@ -13,7 +13,6 @@
 /// \brief Lance la tache de mesure des capteurs et calcul de la VZ.
 void CVarioCapBeep::LanceTacheVarioCapBeep()
 {
-// tache de calcul du temps de vol
 xTaskCreatePinnedToCore(TacheVarioCapteurBeep, "VarioCapteur", VARIOCAPBEEP_STACK_SIZE , this, VARIOCAPBEEP_PRIORITY, NULL, VARIOCAPBEEP_CORE);
 }
 

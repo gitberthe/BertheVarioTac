@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// \file CVarioCapBeep.h
 ///
-/// \brief Main du projet de vario tactile
+/// \brief 
 ///
 /// \date creation     : 03/10/2024
 /// \date modification : 03/10/2024

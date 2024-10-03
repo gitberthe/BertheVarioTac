@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Variable globale du projet
-class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps , public CVarioCapBeep // public CFinSol ,
+class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps , public CVarioCapBeep , public CSoundSvr // public CFinSol ,
 {
 public :
     CGlobalVar() ;

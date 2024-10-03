@@ -10,24 +10,8 @@
 #include "BertheVarioTac.h"
 CGlobalVar g_GlobalVar ;
 
-//#include "AudioOutputI2S.h"
-//#include "WiFiMulti.h"
-//#include "Audio.h"
-#define BUZZER_PIN 26
-#define BUZZER_CHANNEL 0
-
-//#include "SoundSrv/DacESP32.h"
-
-//DacESP32 dac1(GPIO_NUM_26);
-//#define DAC_CH2 26
-
-/*#include "soc/rtc_io_reg.h"
-#include "soc/rtc_cntl_reg.h"
-#include "soc/sens_reg.h"
-
-#include "soc/rtc.h"*/
-#include "soc/dac_channel.h"
-#include "driver/dac.h"
+//#define BUZZER_PIN 26
+//#define BUZZER_CHANNEL 0
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
@@ -83,8 +67,8 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
  g_GlobalVar.LanceTacheGps(true) ;
 #endif // NO_GPS_DEBUG
 
-// lancement tache de calcul du cap magnetique
-//g_GlobalVar.m_Mpu9250.LancerTacheCalculCapMag() ;
+// lancement tache son
+g_GlobalVar.LanceTacheSound() ;
 
 // lancement tache beep
 g_GlobalVar.LanceTacheVarioCapBeep() ;
@@ -94,49 +78,6 @@ g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
 // lancement tache touch
 g_GlobalVar.m_Screen.LancerTacheTouch() ;
-
-//fin :
-//pinMode(26, OUTPUT);
-/*int freq = 3000; // 3000 Hz
-const int ledChannel = 1;
-const int resolution = 8; // Résolution de 8 bits
-const int ledPin = 26;
-int dutyCycle = 255/2 ;
-
-ledcWrite(ledChannel, dutyCycle);
-ledcSetup(ledChannel, freq, resolution);
-ledcAttachPin(ledPin, ledChannel);
-//ledcWriteTone( ledChannel, freq ) ;
-//pinMode(22, OUTPUT);
-
-while( true )
-    delay( 2000 ) ;
-
-freq = 7000 ;
-ledcWrite(ledChannel, dutyCycle);
-ledcSetup(ledChannel, freq, resolution);
-ledcAttachPin(ledPin, ledChannel);
-//ledcWriteTone( ledChannel, freq ) ;
-
-delay( 2000 ) ;
-
-ledcDetachPin( ledPin ) ; //*/
-//#define EXAMPLE_ADC_ATTEN                   ADC_ATTEN_DB_12
-//int8_t offset = 0 ;
-//dac_cw_scale_t scale = DAC_CW_SCALE_8 ;
-dac_output_enable(DAC_CHANNEL_2);
-
-
-dac_cw_config_t config ;
-config.en_ch = DAC_GPIO26_CHANNEL ;
-config.scale = DAC_CW_SCALE_8 ;
-config.freq = 2000 ;
-dac_cw_generator_config( & config ) ;
-dac_cw_generator_enable() ;
-
-
-delay( 2000 ) ;
-dac_cw_generator_disable() ;
 }
 
 
@@ -237,7 +178,6 @@ if ( g_GlobalVar.m_ModeHttp )
     return ;
     }
 
-
 // 4hz
 g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
  g_GlobalVar.m_Screen.AfficheButtons() ;
@@ -262,6 +202,15 @@ g_GlobalVar.m_ZonesAerAll.CalcZone() ;
 
 // calcul terrain le plus proche
 g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
+
+if ( g_GlobalVar.m_BeepAttenteGVZone )
+    {
+    CSoundSvr::StSoundRequest Req ;
+    Req.m_Frequence = 3000 ;
+    Req.m_DelayMs = 100 ;
+    g_GlobalVar.PostRequest( &Req ) ;
+    }
+
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
