@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 29/09/2024
+/// \date modification : 03/10/2024
 ///
 
 
@@ -32,7 +32,7 @@
 //////////////////////////
 // define pour le debug //
 //////////////////////////
-//#define GPS_DEBUG
+#define GPS_DEBUG
 //#define PERFMON_DEBUG
 //#define NO_GPS_DEBUG
 
@@ -78,6 +78,7 @@
 #include "Gps/CPileVit.h"
 #include "BMP180/CBMP180Pression.h"
 #include "FileMgr/FileMgr.h"
+#include "VarioCapBeep/CVarioCapBeep.h"
 
 ////////////////////////
 // definition des pin //
@@ -141,11 +142,11 @@
 // FreeRtOs utilise le core 0 a 75% a vide //
 /////////////////////////////////////////////
 
-// son priorite tres haute non interruptible (bloque/bug les capteurs sans mutex)
-#define VARIOBEEP_NUM_TASK   1
-#define VARIOBEEP_STACK_SIZE 1000
-#define VARIOBEEP_PRIORITY   20
-#define VARIOBEEP_CORE       1
+// son priorite tres haute non interruptible
+#define VARIOCAPBEEP_NUM_TASK   1
+#define VARIOCAPBEEP_STACK_SIZE 4000
+#define VARIOCAPBEEP_PRIORITY   20
+#define VARIOCAPBEEP_CORE       1
 
 // pression calcul Vz, priorite tres haute non interruptible
 #define MS5611_NUM_TASK   2

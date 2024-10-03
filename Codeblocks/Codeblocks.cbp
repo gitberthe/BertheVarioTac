@@ -98,6 +98,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CTouchButtons.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/User_Setup.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/lv_conf.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CDate.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CDate.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CDistFront.cpp" />

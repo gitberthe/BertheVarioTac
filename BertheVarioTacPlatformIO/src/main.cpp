@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 03/10/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -15,6 +15,19 @@ CGlobalVar g_GlobalVar ;
 //#include "Audio.h"
 #define BUZZER_PIN 26
 #define BUZZER_CHANNEL 0
+
+//#include "SoundSrv/DacESP32.h"
+
+//DacESP32 dac1(GPIO_NUM_26);
+//#define DAC_CH2 26
+
+/*#include "soc/rtc_io_reg.h"
+#include "soc/rtc_cntl_reg.h"
+#include "soc/sens_reg.h"
+
+#include "soc/rtc.h"*/
+#include "soc/dac_channel.h"
+#include "driver/dac.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
@@ -58,9 +71,9 @@ g_GlobalVar.m_Config.LectureFichier() ;
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
 // init capteur de pression
-#ifdef BMP180_PRESS
+//#ifdef BMP180_PRESS
  g_GlobalVar.m_BMP180Pression.InitBMP180() ;
-#endif
+//#endif
 
 #ifndef NO_GPS_DEBUG
  // init port serie GPS
@@ -74,30 +87,87 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 //g_GlobalVar.m_Mpu9250.LancerTacheCalculCapMag() ;
 
 // lancement tache beep
-//g_GlobalVar.LanceTacheVarioBeep() ;
+g_GlobalVar.LanceTacheVarioCapBeep() ;
 
+// raz de l'ecran
 g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
 // lancement tache touch
 g_GlobalVar.m_Screen.LancerTacheTouch() ;
 
-//fin :
-/*const int freq = 4000; // 5000 Hz
+/*//fin :
+//pinMode(22, OUTPUT);
+int freq = 2000; // 3000 Hz
 const int ledChannel = 0;
 const int resolution = 8; // Résolution de 8 bits
 const int ledPin = 26;
 int dutyCycle = 255/2 ;
 
-ledcWrite(ledChannel, dutyCycle);
-ledcSetup(ledChannel, freq, resolution);
+//ledcWrite(ledChannel, dutyCycle);
+//ledcSetup(ledChannel, freq, resolution);
 ledcAttachPin(ledPin, ledChannel);
-pinMode(22, OUTPUT); */
+ledcWriteTone( ledChannel, freq ) ;
+//pinMode(22, OUTPUT);
+
+delay( 300 ) ;
+
+freq = 8000 ;
+//ledcSetup(ledChannel, freq, resolution);
+ledcWriteTone( ledChannel, freq ) ;
+
+delay( 300 ) ;
+
+ledcDetachPin( ledPin ) ;*/
+//#define EXAMPLE_ADC_ATTEN                   ADC_ATTEN_DB_12
+/*int8_t offset = 0 ;
+dac_cw_scale_t scale = DAC_CW_SCALE_8 ;
+dac_output_enable(DAC_CHANNEL_2);
+
+
+dac_cw_config_t config ;
+config.en_ch = DAC_GPIO26_CHANNEL ;
+config.scale = DAC_CW_SCALE_8 ;
+config.freq = 2000 ;
+dac_cw_generator_config( & config ) ;
+dac_cw_generator_enable() ;
+
+
+delay( 2000 ) ;
+dac_cw_generator_disable() ;*/
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief boucle sans fin
 void loop()
 {
+  /*for (int deg = 0; deg < 360; deg = deg + 1) {
+    // Calculate sine and write to DAC
+    dacWrite(26, int(128 + 64 * sin(deg * PI / 180)));
+    }*/
+/*int A = 2 ;
+dacWrite(26,A);
+delay(1) ;
+dacWrite(26,0);
+delay(1) ;
+return ;*/
+/*float freq = 2000 ;
+int A = 10 ;
+int count_d = 0 ;
+while ( true ) ;
+    {
+    count_d++ ;
+    if ( count_d%2  )
+        {
+        dacWrite(26, A ) ;
+        //delay( 1000*(int)(1./freq)/2 ) ;
+        }
+    else
+        {
+        dacWrite(26, 0 ) ;
+        //delay( 1000*(int)(1./freq)/2 ) ;
+        }
+    }*/
 
 /*
 //tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);

@@ -51,7 +51,7 @@ return -Angle ;
 /// \brief
 void CGlobalVar::BeepError(bool small)
 {
-delay( 500 ) ;
+/*delay( 500 ) ;
 beeper(7000, 300) ;
 delay( 500 ) ;
 beeper(7000, 300) ;
@@ -61,7 +61,7 @@ delay( 500 ) ;
 beeper(7000, 300) ;
 delay( 500 ) ;
 beeper(7000, 300) ;
-delay( 500 ) ;
+delay( 500 ) ;*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////

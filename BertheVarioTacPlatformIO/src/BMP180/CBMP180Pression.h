@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 03/10/2024
 ///
 
 #ifndef _BMP180PRESS_
@@ -20,12 +20,15 @@ public :
     bool   m_InitOk = false ;
     double m_Temperature;
     double m_PressionRef ;
+    float  m_AltitudeBaroPure ; ///< altitude baro pure du cpateur
 
     void SetAltiSolUndef()
         {} ;
     void SetAltiSolMetres( int AltitudeSolHgt )
         {} ;
-    float GetAltiMetres() ;
+    //float GetAltiMetres() ;
+
+    void MesureAltitudeCapteur() ;
 } ;
 
 #endif

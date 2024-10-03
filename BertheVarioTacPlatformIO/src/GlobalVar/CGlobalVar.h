@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 02/10/2024
+/// \date modification : 03/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -12,7 +12,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Variable globale du projet
-class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps //, public CVarioBeep, public CFinSol ,
+class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps , public CVarioCapBeep // public CFinSol ,
 {
 public :
     CGlobalVar() ;
@@ -55,7 +55,7 @@ public :
 
     // parametres Gps
     float m_AltiGps = 0. ;      ///< alti gps en metres
-    int   m_AltitudeSolHgt = 0 ;    ///< altitude sol hgt
+    int   m_AltitudeSolHgt = 0 ;///< altitude sol hgt
     int   m_CapGpsDeg = 0 ;     ///< cap gps en degres
     float m_VitesseKmh = 0. ;   ///< vitesse gps en km/h
     int   m_Annee = 1 ;         ///< Annee gps

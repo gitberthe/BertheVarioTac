@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 02/10/2024
+/// \date modification : 03/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -99,6 +99,7 @@ const int x1 = 70 , x2 = 240-70;
 const int y1 = 50 , y2 = 90;
 
 // dans zone
+static bool TextePrecedant = false ;
 if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     {
     color = TFT_BLACK ;
@@ -107,12 +108,13 @@ if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_RED) ;
+    g_tft.setTextColor(TFT_CYAN) ;
     g_tft.setCursor( 0 , 0 ) ;
-    g_tft.setTextSize( 2 ) ;
+    g_tft.setTextSize( 3 ) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
     if ( g_GlobalVar.m_BeepAttenteGVZone )
         CGlobalVar::BeepError() ;
+    TextePrecedant = true ;
     }
 // limite zone alti
 else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
@@ -125,8 +127,9 @@ else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
     g_tft.setTextColor(TFT_CYAN) ;
     g_tft.setCursor( 0 , 0 ) ;
-    g_tft.setTextSize( 2 ) ;
+    g_tft.setTextSize( 3 ) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
+    TextePrecedant = true ;
     }
 // limite zone frontiere
 else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
@@ -139,8 +142,9 @@ else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
     g_tft.setTextColor(TFT_YELLOW) ;
     g_tft.setCursor( 0 , 0 ) ;
-    g_tft.setTextSize( 2 ) ;
+    g_tft.setTextSize( 3 ) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneEnLimite.c_str() ) ;
+    TextePrecedant = true ;
     }
 // erreur hgt file
 else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
@@ -157,9 +161,17 @@ else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     g_tft.print("** Erreur  **** Hgt File *");
     if ( g_GlobalVar.m_BeepAttenteGVZone )
         CGlobalVar::BeepError() ;
+    TextePrecedant = true ;
     }
 else
     {
+    // effacement si txete d'erreur precedent
+    if ( TextePrecedant )
+        {
+        TextePrecedant = false ;
+        g_tft.fillRect( 0 , 0 , g_GlobalVar.m_Screen.m_Largeur , y1 , TFT_BLACK ) ;
+        }
+
     // nom terrain
     sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
@@ -232,10 +244,6 @@ m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche(TmpChar) ;
 
 // affichage VZ
 float VitVert = g_GlobalVar.m_VitVertMS ;
-if ( count%2 )
-    VitVert = -0.5 ;
-else
-    VitVert = 0.3 ;
 bool SigneNeg = VitVert < 0. ;
 color = TFT_BLACK ;
 if ( SigneNeg )

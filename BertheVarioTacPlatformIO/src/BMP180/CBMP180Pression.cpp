@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 22/09/2024
+/// \date modification : 03/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -20,26 +20,22 @@ float seaLevelPressure = 101325;
 /// \brief
 void CBMP180Pression::InitBMP180()
 {
-//barometer = BMP180();
-
 if (pressure.begin())
-    {
     m_InitOk = true ;
-     // When we have connected, we reset the device to ensure a clean start.
-    //barometer.SoftReset();
-    // Now we initialize the sensor and pull the calibration data.
-    //barometer.Initialize();
-
-    //barometer.SetResolution( BMP180_Mode_UltraHighResolution , true ) ;
-    }
-//else
+else
     m_InitOk =false ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoie l'alti pression filtree recalee alti sol a la stabilisation gps
-float CBMP180Pression::GetAltiMetres()
+void CBMP180Pression::MesureAltitudeCapteur()
 {
+if ( ! m_InitOk )
+    {
+    m_AltitudeBaroPure = 9999 ;
+    return ;
+    }
+
 char status;
 double T,P,p0=seaLevelPressure/100.;
 
@@ -47,16 +43,19 @@ status = pressure.startTemperature();
 delay(status);
 pressure.getTemperature(T);
 
-const int NbAverage = 4 ;
+const int NbAverage = 1 ;
 double PAverage = 0 ;
 for ( int i = 0 ; i < NbAverage ; i++ )
     {
+    // mesure haute precision
     status = pressure.startPressure(3);
-    delay(status*3);
+    // attente 26 * 5 ms d'echantillonnage (3 minimum d'apres la doc)
+    delay(status*5);
+    // echantillonnage
     pressure.getPressure(P,T);
     PAverage += P ;
     }
 PAverage /= NbAverage ;
 
-return pressure.altitude(PAverage,p0); ;
+m_AltitudeBaroPure = pressure.altitude(PAverage,p0); ;
 }

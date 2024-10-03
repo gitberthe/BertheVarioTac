@@ -208,7 +208,7 @@ if ( !strcmp(pChar,"--GGA" ) )
                  g_GlobalVar.m_TerrainPosCur.m_Lon *= -1 ;
             g_GlobalVar.m_MutexVariable.RelacherMutex() ;
             // mise a jour des altitudes
-            g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+            //g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
             #endif
             }
         // nombre de satellites en poursuite
