@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 24/09/2024
+/// \date modification : 04/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -48,37 +48,38 @@ return -Angle ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Son d'erreur
 void CGlobalVar::BeepError(bool small)
 {
-/*delay( 500 ) ;
 beeper(7000, 300) ;
-delay( 500 ) ;
+beeper( SOUND_DELAY_ONLY , 500 ) ;
 beeper(7000, 300) ;
 if ( small )
     return ;
-delay( 500 ) ;
+beeper( SOUND_DELAY_ONLY , 500 ) ;
 beeper(7000, 300) ;
-delay( 500 ) ;
+beeper( SOUND_DELAY_ONLY , 500 ) ;
 beeper(7000, 300) ;
-delay( 500 ) ;*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Son Ok
 void CGlobalVar::BeepOk()
 {
-g_GlobalVar.beeper( 7000 , 100 ) ;
+beeper( 7000 , 100 ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
 void CGlobalVar::beeper( int frequence , int DurationMs )
 {
-g_GlobalVar.m_MutexI2c.PrendreMutex() ;
+//g_GlobalVar.m_MutexI2c.PrendreMutex() ;
 // tone(SPEAKER_PIN, frequence, DurationMs ) ;
-g_GlobalVar.m_MutexI2c.RelacherMutex() ;
-
+CSoundSvr::StSoundRequest Req ;
+Req.m_Frequence = frequence ;
+Req.m_DelayMs = DurationMs ;
+g_GlobalVar.PostSoundRequest( & Req ) ;
+//g_GlobalVar.m_MutexI2c.RelacherMutex() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

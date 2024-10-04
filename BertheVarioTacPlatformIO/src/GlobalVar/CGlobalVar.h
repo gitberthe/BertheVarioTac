@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 03/10/2024
+/// \date modification : 04/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -17,7 +17,7 @@ class CGlobalVar : public CSDCard, public CNumTaskArr, public CGps , public CVar
 public :
     CGlobalVar() ;
 
-    CMutex      m_MutexI2c ; ///< mutex d'accet au bus car trop de plantage nan alti baro / beeper / cap magnetique
+//    CMutex      m_MutexI2c ; ///< mutex d'accet au bus car trop de plantage nan alti baro / beeper / cap magnetique
     CMutex      m_MutexVariable ; ///< mutex de la variable globale pour lat/lon gps sous forme char entre tache gps / igc
 
     bool BoutonGauche()

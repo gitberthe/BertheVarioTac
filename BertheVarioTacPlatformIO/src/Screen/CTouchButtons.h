@@ -4,11 +4,13 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 04/10/2024
 ///
 
 #ifndef _TOUCHBUTTONS_
 #define _TOUCHBUTTONS_
+
+#define ANTI_REBONDS_MS 800
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Pour les boutons tactiles en modifiables
@@ -29,8 +31,7 @@ public :
         { return m_XTouch ; } ;
     int GetY() const
         { return m_YTouch ; } ;
-    void SetPressed( bool pressed )
-        { m_Pressed = pressed ; } ;
+    void SetPressed( bool pressed ) ;
     bool IsCenterPressed() ;
 
     friend class CLGFX ;

@@ -145,15 +145,15 @@
 // FreeRtOs utilise le core 0 a 75% a vide //
 /////////////////////////////////////////////
 
-// son priorite tres haute non interruptible
+// scan capteur et calcul Vz priorite tres haute non interruptible
 #define VARIOCAPBEEP_NUM_TASK   1
-#define VARIOCAPBEEP_STACK_SIZE 4000
+#define VARIOCAPBEEP_STACK_SIZE 3000
 #define VARIOCAPBEEP_PRIORITY   20
 #define VARIOCAPBEEP_CORE       1
 
 // serveur de son, priorite moyenne
 #define SOUNDSVR_NUM_TASK   2
-#define SOUNDSVR_STACK_SIZE 2000
+#define SOUNDSVR_STACK_SIZE 1500
 #define SOUNDSVR_PRIORITY   10
 #define SOUNDSVR_CORE       1
 

@@ -24,6 +24,10 @@ void setup()
 #endif
 //goto fin ;
 
+// lancement tache son
+g_GlobalVar.LanceTacheSound() ;
+g_GlobalVar.BeepOk() ;
+
 // tache de mise a jour % cpu
 perfmon_start() ;
 
@@ -66,9 +70,6 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
  // lancement tache gps
  g_GlobalVar.LanceTacheGps(true) ;
 #endif // NO_GPS_DEBUG
-
-// lancement tache son
-g_GlobalVar.LanceTacheSound() ;
 
 // lancement tache beep
 g_GlobalVar.LanceTacheVarioCapBeep() ;
@@ -202,14 +203,6 @@ g_GlobalVar.m_ZonesAerAll.CalcZone() ;
 
 // calcul terrain le plus proche
 g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
-
-if ( g_GlobalVar.m_BeepAttenteGVZone )
-    {
-    CSoundSvr::StSoundRequest Req ;
-    Req.m_Frequence = 3000 ;
-    Req.m_DelayMs = 100 ;
-    g_GlobalVar.PostRequest( &Req ) ;
-    }
 
 
 //tft.sleep() ;

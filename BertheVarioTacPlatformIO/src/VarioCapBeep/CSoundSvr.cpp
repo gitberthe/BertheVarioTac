@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 03/10/2024
+/// \date modification : 04/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -14,12 +14,12 @@
 CSoundSvr::CSoundSvr()
 {
 // taille de 8
-m_queue = xQueueCreate(8, sizeof(StSoundRequest));
+m_queue = xQueueCreate(SOUND_BUFFER_SIZE, sizeof(StSoundRequest));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
-void CSoundSvr::PostRequest( const StSoundRequest * pReq )
+/// \brief Met un son dans la file d'attente.
+void CSoundSvr::PostSoundRequest( const StSoundRequest * pReq )
 {
 xQueueSend(m_queue, (void*)pReq, (TickType_t)0);
 }
@@ -32,7 +32,7 @@ xTaskCreatePinnedToCore(TacheSoundSvr, "SoundSvr", SOUNDSVR_STACK_SIZE , this, S
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Tache de mesure des capteurs et calcul de la VZ.
+/// \brief Tache pour jouer les sons qui sont dans la file d'attente.
 void CSoundSvr::TacheSoundSvr(void* param)
 {
 g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = false ;
@@ -40,8 +40,9 @@ g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = false ;
 // utilisation du convertisseur DA
 dac_output_enable(DAC_CHANNEL_2);
 dac_cw_config_t config ;
-config.en_ch = DAC_GPIO26_CHANNEL ;
+config.en_ch = DAC_CHANNEL_2 ; // DAC_GPIO26_CHANNEL ;
 config.scale = DAC_CW_SCALE_8 ;
+//config.scale = DAC_CW_SCALE_1 ;
 
 // boucle du serveur
 StSoundRequest SoundRequest ;

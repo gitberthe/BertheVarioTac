@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 04/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -20,6 +20,18 @@ return ret ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/// \brief Positionne par CGLFX.
+void CTouchButtons::SetPressed( bool pressed )
+{
+// anti-rebond
+if ( (millis()-m_TimePressed) < ANTI_REBONDS_MS )
+    return ;
+
+m_Pressed = pressed ;
+m_TimePressed = millis() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// \brief si le centre de l'ecran est appuyé
 bool CTouchButtons::IsCenterPressed()
 {
@@ -32,10 +44,6 @@ return ret ;
 /// \brief Lit la position du touch pad et active les boutons en consequence
 void CTouchButtons::HandleButtons()
 {
-// anti-rebond
-if ( (millis()-m_TimePressed) < 600 )
-    return ;
-
 // hinibition des boutons
 if ( g_GlobalVar.m_FinDeVol.IsInFlight() )
     {
@@ -58,7 +66,6 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
         m_PressedArr[ib] = true ;
         m_Pressed = false ;
         m_CenterPressed = false ;
-        m_TimePressed = millis() ;
         return ;
         }
     }
@@ -68,7 +75,6 @@ if ( m_Pressed )
     {
     m_CenterPressed = true ;
     m_Pressed = false ;
-    m_TimePressed = millis() ;
     }
 }
 
