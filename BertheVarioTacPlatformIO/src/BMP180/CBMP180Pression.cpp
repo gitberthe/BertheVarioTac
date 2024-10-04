@@ -14,7 +14,7 @@
 SFE_BMP180 pressure;
 
 // Store the current sea level pressure at your location in Pascals.
-float seaLevelPressure = 101325;
+const float seaLevelPressure = 101325;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
@@ -27,21 +27,52 @@ else
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Renvoie l'alti pression filtree recalee alti sol a la stabilisation gps
+/// \brief En cas de debut de vol sans stabilisation gps, altibaro == alti recalée
+void CBMP180Pression::SetAltiSolUndef()
+{
+m_Mutex.PrendreMutex() ;
+ m_DiffAltiBaroHauteurSol = 0 ;
+m_Mutex.RelacherMutex() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Determine la difference du jour entre l'altibaro pure et la hauteur
+/// sol des fichier hgt
+void CBMP180Pression::SetAltiSolMetres( int AltitudeSolHgt )
+{
+m_Mutex.PrendreMutex() ;
+ m_DiffAltiBaroHauteurSol = AltitudeSolHgt - m_AltitudeBaroPure ;
+m_Mutex.RelacherMutex() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Renvoie l'alti pression recalee alti sol a la stabilisation gps
+float CBMP180Pression::GetAltiMetres()
+{
+m_Mutex.PrendreMutex() ;
+ float ret = m_AltitudeBaroPure + m_DiffAltiBaroHauteurSol ;
+m_Mutex.RelacherMutex() ;
+return ret ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Mesure l'altitude baro pure
 void CBMP180Pression::MesureAltitudeCapteur()
 {
 if ( ! m_InitOk )
     {
-    m_AltitudeBaroPure = 9999 ;
+    m_Mutex.PrendreMutex() ;
+     m_AltitudeBaroPure = 9999 ;
+    m_Mutex.RelacherMutex() ;
     return ;
     }
 
 char status;
-double T,P,p0=seaLevelPressure/100.;
+double P,p0=seaLevelPressure/100.;
 
 status = pressure.startTemperature();
 delay(status);
-pressure.getTemperature(T);
+pressure.getTemperature(m_Temperature);
 
 const int NbAverage = 1 ;
 double PAverage = 0 ;
@@ -52,10 +83,12 @@ for ( int i = 0 ; i < NbAverage ; i++ )
     // attente 26 * 5 ms d'echantillonnage (3 minimum d'apres la doc)
     delay(status*5);
     // echantillonnage
-    pressure.getPressure(P,T);
+    pressure.getPressure(P,m_Temperature);
     PAverage += P ;
     }
 PAverage /= NbAverage ;
 
-m_AltitudeBaroPure = pressure.altitude(PAverage,p0); ;
+m_Mutex.PrendreMutex() ;
+ m_AltitudeBaroPure = pressure.altitude(PAverage,p0); ;
+m_Mutex.RelacherMutex() ;
 }

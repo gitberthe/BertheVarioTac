@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 03/10/2024
+/// \date modification : 04/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -13,14 +13,16 @@
 /// \brief Lance la tache de mesure des capteurs et calcul de la VZ.
 void CVarioCapBeep::LanceTacheVarioCapBeep()
 {
-xTaskCreatePinnedToCore(TacheVarioCapteurBeep, "VarioCapteur", VARIOCAPBEEP_STACK_SIZE , this, VARIOCAPBEEP_PRIORITY, NULL, VARIOCAPBEEP_CORE);
+xTaskCreatePinnedToCore(TacheVarioCapteur, "VarioCapteur", VARIOCAP_STACK_SIZE , this, VARIOCAP_PRIORITY, NULL, VARIOCAP_CORE);
+delay( 500 ) ;
+xTaskCreatePinnedToCore(TacheGenereSonVario, "VarioBeep", VARIOBEEP_STACK_SIZE , this, VARIOBEEP_PRIORITY, NULL, VARIOBEEP_CORE);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Tache de mesure des capteurs et calcul de la VZ.
-void CVarioCapBeep::TacheVarioCapteurBeep(void* param)
+void CVarioCapBeep::TacheVarioCapteur(void* param)
 {
-g_GlobalVar.m_TaskArr[VARIOCAPBEEP_NUM_TASK].m_Stopped = false ;
+g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Stopped = false ;
 
 // variables
 int count = 0 ;
@@ -28,28 +30,29 @@ float LastAlti ;
 
 // premiere altitude
 g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
-g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.m_AltitudeBaroPure ;
+g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
 LastAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
 
 // boucle Vz
-while (g_GlobalVar.m_TaskArr[VARIOCAPBEEP_NUM_TASK].m_Run)
+while (g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run)
     {
     // a 2 hz
     count++ ;
     delay( 500 ) ;
 
-    // mesure altitude et mise a jour altitude courante
+    // mesure altitude recalee et mise a jour altitude courante
     g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
-    g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.m_AltitudeBaroPure ;
+    g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
 
     // a 1 hz
     //if ( count%2 )
     //    continue ;
 
-    // calcul difference alti courante
-    float DiffAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro - LastAlti ;
+    // calcul difference alti baro pure
+    float AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiBaroPureMetres() ;
+    float DiffAlti = AltiBaro - LastAlti ;
     DiffAlti /= 2 ; // car 2hz
-    LastAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
+    LastAlti = AltiBaro ;
 
     // filtrage vz
     float Vz = g_GlobalVar.m_VitVertMS ;
@@ -60,17 +63,15 @@ while (g_GlobalVar.m_TaskArr[VARIOCAPBEEP_NUM_TASK].m_Run)
     g_GlobalVar.m_VitVertMS = Vz ;
     }
 
-g_GlobalVar.m_TaskArr[VARIOCAPBEEP_NUM_TASK].m_Stopped = true ;
+g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Stopped = true ;
 while( true )
     vTaskDelete(NULL) ;
 }
 
-/*
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Fonction static core 0 qui calcul la Vz et gere les beep.
-void CVarioBeep::TacheVarioBeep(void *param)
+/// \brief Fonction static core 0 qui gere les beep.
+void CVarioCapBeep::TacheGenereSonVario(void *param)
 {
-delay(3000) ;
 const float LowFreq = 1100 ;
 const float MinFreq = 1200 ;
 const float MaxFreq = 8000 ;
@@ -94,7 +95,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
         }
 
     float LocalVitVertMS = g_GlobalVar.m_VitVertMS ;
-    //LocalVitVertMS = 0.1 ;
+    //LocalVitVertMS = 4. ;
     //float LocalVitVertMS = g_GlobalVar.m_Config.m_vz_seuil_haut ;
     #ifdef SOUND_DEBUG
      LocalVitVertMS = 6 ;
@@ -162,4 +163,4 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     }
 
 g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Stopped = true ;
-}*/
+}
