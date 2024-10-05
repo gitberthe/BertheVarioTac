@@ -4,14 +4,11 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 03/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #include "BertheVarioTac.h"
 CGlobalVar g_GlobalVar ;
-
-//#define BUZZER_PIN 26
-//#define BUZZER_CHANNEL 0
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
@@ -63,12 +60,17 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
  g_GlobalVar.m_BMP180Pression.InitBMP180() ;
 #endif
 
+// init capteur magnetique
+g_GlobalVar.m_QMC5883Mag.InitMagnetique() ;
+
 #ifndef NO_GPS_DEBUG
  // init port serie GPS
  g_GlobalVar.InitGps() ;
 
  // lancement tache gps
  g_GlobalVar.LanceTacheGps(true) ;
+#else
+ g_GlobalVar.m_DureeVolMin = ATTENTE_MESSAGE_GPS ;
 #endif // NO_GPS_DEBUG
 
 // lancement tache beep
@@ -86,72 +88,9 @@ g_GlobalVar.m_Screen.LancerTacheTouch() ;
 /// \brief boucle sans fin
 void loop()
 {
-  /*for (int deg = 0; deg < 360; deg = deg + 1) {
-    // Calculate sine and write to DAC
-    dacWrite(26, int(128 + 64 * sin(deg * PI / 180)));
-    }*/
-/*int A = 2 ;
-dacWrite(26,A);
-delay(1) ;
-dacWrite(26,0);
-delay(1) ;
-return ;*/
-/*float freq = 2000 ;
-int A = 10 ;
-int count_d = 0 ;
-while ( true ) ;
-    {
-    count_d++ ;
-    if ( count_d%2  )
-        {
-        dacWrite(26, A ) ;
-        //delay( 1000*(int)(1./freq)/2 ) ;
-        }
-    else
-        {
-        dacWrite(26, 0 ) ;
-        //delay( 1000*(int)(1./freq)/2 ) ;
-        }
-    }*/
+//g_GlobalVar.m_QMC5883Mag.ScanI2C() ;
 
-/*
-//tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
-CText2Screen Aff ;
-Aff.SetPos(  15 , 15 , 3 , 'm' ) ;
-float Alti_0 = 0 ;
-float Alti_1 = 0 ;
-float Vz = 0 ;
-while ( true )
-    {
-    //g_tft.setCursor(20,50);
-
-    if ( g_GlobalVar.m_BMP180Pression.m_InitOk )
-        {
-        //g_tft.print( "ok" );
-        Serial.print("ok");
-        }
-    else
-        {
-        //g_tft.print( "fail" );
-        Serial.print("fail");
-        }
-    float coef = 0.4 ;
-    Alti_0 = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
-    Vz = (1.-coef) * Vz + coef * (Alti_0 - Alti_1) ;
-    Alti_1 = Alti_0 ;
-    //float VzRound = ((int)(Vz*100.)) / 100. ;
-    char Tmp[25] ;
-    sprintf(Tmp,"%5.2f %4.1f", Alti_0 , Vz ) ;
-    Aff.Affiche(Tmp) ;
-//    if ( etat%2 )
-//        digitalWrite(22, HIGH) ;
-//    else
-//        digitalWrite(22, LOW) ;
-
-    delay ( 1000 ) ;
-    }
-return ; */
-
+// variables
 static int count = 0 ;
 static bool WifiSetup = true ;
 
@@ -193,10 +132,6 @@ if ( count%4 )
 #ifdef NO_GPS_DEBUG
  Serial.println("mode debug") ;
 #endif
-
-// si on n'est pas en ecran 0
-//if ( g_GlobalVar.m_EtatAuto != ECRAN_0_Vz )
-//    continue ;
 
 // calcul des zones aeriennes
 g_GlobalVar.m_ZonesAerAll.CalcZone() ;

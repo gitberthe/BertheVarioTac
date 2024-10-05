@@ -41,8 +41,8 @@ g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = false ;
 dac_output_enable(DAC_CHANNEL_2);
 dac_cw_config_t config ;
 config.en_ch = DAC_CHANNEL_2 ; // DAC_GPIO26_CHANNEL ;
-config.scale = DAC_CW_SCALE_8 ;
-//config.scale = DAC_CW_SCALE_1 ;
+//config.scale = DAC_CW_SCALE_8 ;
+config.scale = DAC_CW_SCALE_1 ;
 
 // boucle du serveur
 StSoundRequest SoundRequest ;

@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 02/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #ifndef _CAUTOPAGE_
@@ -31,6 +31,7 @@ public :
         ECRAN_6_Sys ,
         ECRAN_7_Wifi ,
         ECRAN_8_Menu ,
+        ECRAN_6b_CalMag ,
         ERREUR ,
         FIN
         } ;
@@ -59,6 +60,7 @@ protected :
     virtual EtatsAuto EcranSys() = 0 ;
     virtual EtatsAuto EcranWifi() = 0 ;
     virtual EtatsAuto EcranMenu() = 0 ;
+    virtual EtatsAuto EcranCalibreMagnetique() = 0 ;
 
     virtual EtatsAuto EcranTmaMod() = 0 ;
     virtual EtatsAuto EcranConfimeArchIgcFch() = 0 ;
@@ -78,7 +80,8 @@ protected :
             CAutoPages::EtatsAuto (CAutoPages::*m_pFunction)() ;
         } ;
 
-    int     m_CfgFileiChamps = -1 ; ///< lors du deplacement dans les variables cfg file
+    int     m_CfgFileiChamps = -1 ;         ///< lors du deplacement dans les variables cfg file
+    bool    m_CalibrationEnCours = false ;  ///< calibration magnetique en cours
 
 private :
     EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;   ///< etat courant de l'automate

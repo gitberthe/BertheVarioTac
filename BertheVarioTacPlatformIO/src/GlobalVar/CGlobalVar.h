@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 04/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -37,6 +37,7 @@ public :
     #ifdef BMP180_PRESS
      CBMP180Pression m_BMP180Pression ;///< capteur de pression
     #endif
+    CQMC5883Mag      m_QMC5883Mag ;   ///< capteur magnetique
 
     bool m_ModeHttp = false ;          ///< si mode http
     bool m_BeepAttenteGVZone = true ;  ///< beep d'attente Gps/Vitesse/Zone

@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 03/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -68,7 +68,7 @@ if ( IsPageChanged() || count == 1 )
     g_GlobalVar.m_Config.FreeVect() ;
     }
 
-
+/////////////////////////////////////
 // nom/finesse du site le plus proche
 float FinesseTerrainMinimum = 99. ;
 const CLocTerrain * pTerrain = g_GlobalVar.m_TerrainArr.GetTerrainProche( FinesseTerrainMinimum ) ;
@@ -98,6 +98,7 @@ uint16_t color = TFT_WHITE ;
 const int x1 = 70 , x2 = 240-70;
 const int y1 = 50 , y2 = 90;
 
+////////////
 // dans zone
 static bool TextePrecedant = false ;
 if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
@@ -205,6 +206,7 @@ else
         }
     }
 
+///////////////
 // duree du vol
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
     sprintf( TmpChar , "%2dG" , g_GlobalVar.GetNbSat() ) ;
@@ -216,8 +218,10 @@ else
     sprintf( TmpChar , "%3d", g_GlobalVar.m_DureeVolMin ) ;
 m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
+//////////////
 // cap lettres
-int Cap = g_GlobalVar.m_CapGpsDeg ;
+//int Cap = g_GlobalVar.m_CapGpsDeg ;
+int Cap = g_GlobalVar.m_QMC5883Mag.GetCapDegres() ;
 int CapMarge = 45/2 + 1 ;
 char TmpCharNomCap[] = "  " ;
 if ( Cap < CapMarge || Cap > (360-CapMarge) )
@@ -238,10 +242,12 @@ else if ( labs(Cap-315) < CapMarge )
     strcpy( TmpCharNomCap, "NW" ) ;
 m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche(TmpCharNomCap) ;
 
+/////////////
 // cap degres
 sprintf( TmpChar , "%3d", Cap ) ;
 m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche(TmpChar) ;
 
+///////////////
 // affichage VZ
 float VitVert = g_GlobalVar.m_VitVertMS ;
 bool SigneNeg = VitVert < 0. ;
@@ -260,6 +266,7 @@ g_tft.fillRect( bordure , 135 , g_GlobalVar.m_Screen.m_Largeur - 2 * bordure , 1
 g_tft.fillRect( bordure , 135 , 15 , 75 , color ) ;
 g_tft.fillRect( g_GlobalVar.m_Screen.m_Largeur - bordure -15 , 135 , 15 , 75 , color ) ;
 
+///////////////////////////////////////////////
 // affichage pour affichage vitesse/hauteur sol
 static bool AffichageVitesse = false ;
 static unsigned long TempsHauteurSol = millis() ;
@@ -290,6 +297,7 @@ else
     }
 m_T2SPageVzArr[PAGE_VZ_VIT_SOL].Affiche(TmpChar,color) ;
 
+/////////////////////
 // affichage altitude
 sprintf( TmpChar , "%4d", (int)g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
 m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche(TmpChar) ;
@@ -1142,6 +1150,12 @@ g_tft.print( "cpu1:" ) ;
 sprintf( TmpChar , "      %3d%c" , g_GlobalVar.m_PercentCore1 , '%' ) ;
 g_tft.print( TmpChar ) ;
 y += DeltaY ;
+// cap magnetique
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "mag.:" ) ;
+sprintf( TmpChar , "     %4dd" , g_GlobalVar.m_QMC5883Mag.GetCapDegres() ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
 // free mem
 g_tft.setCursor( x  , y ) ;
 g_tft.print( "fmem:" ) ;
@@ -1156,13 +1170,13 @@ g_tft.print( TmpChar ) ;
 y += DeltaY ;
 
 // defilement autre ecran
-g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+g_GlobalVar.m_Screen.SetText( "Cal" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
-    {
-    //return ECRAN_0_Vz ;
-    }
+
+// ecran calibration
+if ( g_GlobalVar.BoutonGauche() )
+    return ECRAN_6b_CalMag ;
 
 return ECRAN_6_Sys ;
 }
@@ -1268,4 +1282,55 @@ for ( int im = 0 ; im < VecMenu.size() ; im++ )
     }
 
 return ECRAN_8_Menu ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Ecran calibration du capteur magnetique.
+CAutoPages::EtatsAuto CScreen::EcranCalibreMagnetique()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+    g_tft.setTextSize(3) ;
+
+    m_CalibrationEnCours = false ;
+
+    g_tft.setCursor( 20 , 20 ) ;
+    g_tft.print( "Lancer" ) ;
+    g_tft.setCursor( 20 , 50 ) ;
+    g_tft.print( "Calibration" ) ;
+    g_tft.setCursor( 20 , 80 ) ;
+    g_tft.print( "Magnetique?" ) ;
+
+    g_GlobalVar.m_Screen.SetText( "Ok" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+    }
+
+// cancel calibration
+if ( g_GlobalVar.BoutonCentre() )
+    return ECRAN_6_Sys ;
+
+// ok calibration
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    ScreenRaz() ;
+    g_tft.setTextSize(3) ;
+
+    g_tft.setCursor( 20 , 20 ) ;
+    g_tft.print( "Calibration" ) ;
+    g_tft.setCursor( 20 , 50 ) ;
+    g_tft.print( "en cours" ) ;
+
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "", 1 ) ;
+
+    m_CalibrationEnCours = true ;
+
+    g_GlobalVar.m_QMC5883Mag.CalibrationMagnetique() ;
+
+    return ECRAN_6_Sys ;
+    }
+
+return ECRAN_6b_CalMag ;
 }

@@ -84,6 +84,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Gps/CTrame.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/esp32_perfmon.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/perfmon.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/QMC5883L/CQMC5883Mag.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/QMC5883L/CQMC883Mag.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/SDCard/CSDCard.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/SDCard/CSDCard.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.cpp" />

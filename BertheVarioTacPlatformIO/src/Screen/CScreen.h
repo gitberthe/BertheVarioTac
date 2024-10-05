@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 02/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #ifndef _CSCREEN_
@@ -59,6 +59,7 @@ private :
     CAutoPages::EtatsAuto EcranSys() ;
     CAutoPages::EtatsAuto EcranWifi() ;
     CAutoPages::EtatsAuto EcranMenu() ;
+    CAutoPages::EtatsAuto EcranCalibreMagnetique() ;
 
     CAutoPages::EtatsAuto EcranTmaMod() ;
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;

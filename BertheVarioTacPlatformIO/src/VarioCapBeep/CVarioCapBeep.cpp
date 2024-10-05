@@ -40,6 +40,8 @@ while (g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run)
     count++ ;
     delay( 500 ) ;
 
+    g_GlobalVar.m_QMC5883Mag.LectureCap() ;
+
     // mesure altitude recalee et mise a jour altitude courante
     g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
     g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;

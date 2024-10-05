@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 03/10/2024
+/// \date modification : 05/10/2024
 ///
 
 
@@ -15,7 +15,6 @@
 #include <esp32-hal-dac.h>
 #include <Wire.h>
 #include <Arduino.h>
-//#include <ESP32Servo.h>
 #include <SPI.h>
 #include <SD.h>
 #include <WiFi.h>
@@ -25,11 +24,13 @@
 #include <freertos/queue.h>
 #include <soc/dac_channel.h>
 #include <driver/dac.h>
+#include <DFRobot_QMC5883.h>
 
 #include <math.h>
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <limits>
 
 //////////////////////////
 // define pour le debug //
@@ -82,6 +83,7 @@
 #include "FileMgr/FileMgr.h"
 #include "VarioCapBeep/CVarioCapBeep.h"
 #include "VarioCapBeep/CSoundSvr.h"
+#include "QMC5883L/CQMC5883Mag.h"
 
 ////////////////////////
 // definition des pin //
@@ -116,9 +118,9 @@
 #define UnMileEnMetres         (1852.)
 #define T_PI                   (3.1415926535)
 
-///////////////////
-// compatibilite //
-///////////////////
+///////////
+// macro //
+///////////
 
 #define FABS(x)     fabsf(x)
 #define SQRT(x)     sqrtf(x)
@@ -129,6 +131,9 @@
 #define FMOD(x,y)   fmodf(x,y)
 #define FLOOR(x)    floorf(x)
 #define MODF(x,y)   modff(x,y)
+
+#define MIN( a , b )   (((a)<(b)) ? (a) : (b))
+#define MAX( a , b )   (((a)>(b)) ? (a) : (b))
 
 ///////////////////////////
 // taches plus affichage //

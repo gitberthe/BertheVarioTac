@@ -985,7 +985,7 @@
   (symbol (lib_id "BertheLibrary:I2C-COMPOSANT") (at 203.2 105.41 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 07008d45-df9f-4d4e-894d-0327d99c52a5)
-    (property "Reference" "HMC5883L_Mag." (at 196.85 105.41 0)
+    (property "Reference" "QMC5883_Mag." (at 196.85 105.41 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "~" (at 203.2 105.41 0)
@@ -1004,7 +1004,7 @@
     (instances
       (project "BertheVarioTac-Shema"
         (path "/20a72893-107a-4d28-9717-d104a5df1eab"
-          (reference "HMC5883L_Mag.") (unit 1)
+          (reference "QMC5883_Mag.") (unit 1)
         )
       )
     )
