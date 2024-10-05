@@ -30,6 +30,11 @@ g_tft.print(g_NumVersion);
 /// \brief init du Wifi
 void WifiInit()
 {
+// arret des autres taches
+g_GlobalVar.StopAll() ;
+
+delay( 500 ) ;
+
 g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 
 // raz des boutons
@@ -78,7 +83,4 @@ g_pfilemgr = new ESPFMfGK( 8080 ) ;
 
 addFileSystems();
 setupFilemanager();
-
-// arret des autres taches
-g_GlobalVar.StopAll() ;
 }

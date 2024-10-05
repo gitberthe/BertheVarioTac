@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 02/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -159,7 +159,8 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
         {
         CGlobalVar::beeper( 1500 , 100 ) ;
-        delay( 200 ) ;
+        CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
+        //delay( 200 ) ;
         CGlobalVar::beeper( 2000 , 100 ) ;
         }
 
@@ -205,9 +206,11 @@ xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar ,
 
 // bip debut enregistrement
 CGlobalVar::BeepOk() ;
-delay(200);
+CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
+//delay(200);
 CGlobalVar::BeepOk() ;
-delay(200);
+CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
+//delay(200);
 CGlobalVar::BeepOk() ;
 
 // pos et temps debut de stationnarite
