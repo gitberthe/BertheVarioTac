@@ -131,6 +131,8 @@ return ERREUR ;
 /// \brief Fonction static qui lit les boutons
 void CAutoPages::LancerTacheTouch()
 {
+g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheTouch, "Touch", TOUCH_STACK_SIZE , this, TOUCH_PRIORITY, NULL, TOUCH_CORE);
 }
 

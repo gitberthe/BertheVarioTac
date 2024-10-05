@@ -192,8 +192,14 @@
 #define RELANCE_IGC_PRIORITY   0
 #define RELANCE_IGC_CORE       1
 
+// tache de mesure d'occupation des cores 0 et 1
+#define PERF_MON_NUM_TASK   8
+#define PERF_MON_STACK_SIZE 1000
+#define PERF_MON_PRIORITY   1
+#define PERF_MON_CORE       1
+
 // nombre total de taches
-#define SIZE_TASK 8
+#define SIZE_TASK 9
 
 
 //////////////////////////

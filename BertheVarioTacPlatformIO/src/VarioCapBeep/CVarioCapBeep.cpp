@@ -13,8 +13,14 @@
 /// \brief Lance la tache de mesure des capteurs et calcul de la VZ.
 void CVarioCapBeep::LanceTacheVarioCapBeep()
 {
+g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheVarioCapteur, "VarioCapteur", VARIOCAP_STACK_SIZE , this, VARIOCAP_PRIORITY, NULL, VARIOCAP_CORE);
+
 delay( 500 ) ;
+
+g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheGenereSonVario, "VarioBeep", VARIOBEEP_STACK_SIZE , this, VARIOBEEP_PRIORITY, NULL, VARIOBEEP_CORE);
 }
 
@@ -22,7 +28,7 @@ xTaskCreatePinnedToCore(TacheGenereSonVario, "VarioBeep", VARIOBEEP_STACK_SIZE ,
 /// \brief Tache de mesure des capteurs et calcul de la VZ.
 void CVarioCapBeep::TacheVarioCapteur(void* param)
 {
-g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Stopped = false ;
+
 
 // variables
 int count = 0 ;
@@ -97,7 +103,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
         }
 
     float LocalVitVertMS = g_GlobalVar.m_VitVertMS ;
-    //LocalVitVertMS = 4 ;
+    //LocalVitVertMS = 0.5 ;
     //float LocalVitVertMS = g_GlobalVar.m_Config.m_vz_seuil_haut ;
     #ifdef SOUND_DEBUG
      LocalVitVertMS = 6 ;

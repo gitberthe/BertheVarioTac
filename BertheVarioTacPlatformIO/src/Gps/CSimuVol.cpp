@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 30/03/2024
-/// \date modification : 22/09/2024
+/// \date modification : 05/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -17,6 +17,8 @@ CSimuVol g_SimuVol ;
 /// \brief Lance la tache de simulation de vol.
 void CSimuVol::LancerTacheSimuVol()
 {
+g_GlobalVar.m_TaskArr[SIMUVOL_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[SIMUVOL_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheSimuVol, "SimuVolTask", SIMUVOL_STACK_SIZE, this, SIMUVOL_PRIORITY,NULL, SIMUVOL_CORE);
 }
 
@@ -128,6 +130,8 @@ while( g_GlobalVar.m_TaskArr[SIMUVOL_NUM_TASK].m_Run )
     LastLon = g_GlobalVar.m_TerrainPosCur.m_Lon ;
     LastAlti= g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
     }
+
+g_GlobalVar.m_TaskArr[SIMUVOL_NUM_TASK].m_Stopped = true ;
 }
 
 #endif

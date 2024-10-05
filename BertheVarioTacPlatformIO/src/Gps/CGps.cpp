@@ -27,9 +27,16 @@ void CGps::LanceTacheGps( bool AvecPortSerie )
 
 // tache de port serie
 if ( AvecPortSerie )
+    {
+    g_GlobalVar.m_TaskArr[SERIAL_NUM_TASK].m_Run = true ;
+    g_GlobalVar.m_TaskArr[SERIAL_NUM_TASK].m_Stopped = false ;
     xTaskCreatePinnedToCore(TacheGpsSerial, "GpsSerial", SERIAL_GPS_STACK_SIZE, this, SERIAL_GPS_PRIORITY,NULL, SERIAL_GPS_CORE);
+    }
 
 // tache de calcul du temps de vol
+g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
+
 xTaskCreatePinnedToCore(TacheGpsTempsVol, "GpsTempsVol", TEMPS_STACK_SIZE , this, TEMPS_PRIORITY, NULL, TEMPS_CORE);
 }
 
@@ -64,10 +71,6 @@ void CGps::TacheGpsTempsVol(void *param)
  Serial.println("tache temps de vol lancee");
 #endif
 
-// variables des taches
-g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = true ;
-g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
-
 // raz temps premier GGA
 CTrame::m_MillisPremierGGA = 0 ;
 g_GlobalVar.m_VitesseKmh = 0 ;
@@ -91,13 +94,14 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         CGlobalVar::beeper( 1100 , 100 ) ;
 
     // si pas de GGA attente
-    if ( m_MillisPremierGGA == 0 )
+    if ( CTrame::m_MillisPremierGGA == 0 )
         {
         // pas de memorisation du depart de vol par bouton droit
         if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz )
             {
             g_GlobalVar.m_Screen.RazButtons(2) ;
             }
+        g_GlobalVar.m_AltitudeSolHgt = -1 ;
         continue ;
         }
     else
@@ -144,7 +148,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         {
         // beep attente gps 'S'
         if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
-            CGlobalVar::beeper( 1500 , 100 ) ;
+            CGlobalVar::beeper( 1500 , 100 , false ) ;
 
         // recalage altibaro
         g_GlobalVar.m_MutexVariable.PrendreMutex() ;
@@ -162,10 +166,10 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     g_GlobalVar.m_PileVit.PusGpsVit() ;
     if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
         {
-        CGlobalVar::beeper( 1500 , 100 ) ;
+        CGlobalVar::beeper( 1500 , 100 , false ) ;
         CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
         //delay( 200 ) ;
-        CGlobalVar::beeper( 2000 , 100 ) ;
+        CGlobalVar::beeper( 2000 , 100 , false ) ;
         }
 
     // affichage gps pret
@@ -206,6 +210,8 @@ g_GlobalVar.m_HistoVol.m_VzMax = -10 ;
 g_GlobalVar.m_HistoVol.m_VzMin =  10 ;
 
 // lancement tache fichier igc
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar , IGC_PRIORITY , NULL, IGC_CORE);
 
 // bip debut enregistrement
@@ -261,9 +267,6 @@ void CGps::TacheGpsIgc(void *param)
 #ifdef _LG_DEBUG_
  Serial.println("tache igc lancee");
 #endif
-
-// pour gestion bouton
-g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
 
 // init fichier IGC
 g_GlobalVar.InitCurentIgc() ;

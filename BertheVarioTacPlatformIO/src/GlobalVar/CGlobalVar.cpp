@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 04/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -71,13 +71,16 @@ beeper( 7000 , 100 ) ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
-void CGlobalVar::beeper( int frequence , int DurationMs )
+void CGlobalVar::beeper( int frequence , int DurationMs , bool VolumeFort )
 {
 //g_GlobalVar.m_MutexI2c.PrendreMutex() ;
-// tone(SPEAKER_PIN, frequence, DurationMs ) ;
 CSoundSvr::StSoundRequest Req ;
 Req.m_Frequence = frequence ;
 Req.m_DelayMs = DurationMs ;
+if ( VolumeFort )
+    Req.m_Volume = DAC_CW_SCALE_1 ;
+else
+    Req.m_Volume = DAC_CW_SCALE_8 ;
 g_GlobalVar.PostSoundRequest( & Req ) ;
 //g_GlobalVar.m_MutexI2c.RelacherMutex() ;
 }
@@ -171,6 +174,8 @@ void CGlobalVar::RelancerEnregistrementFichier()
 {
 Serial.println("CGlobalVar::RelancerEnregistrementFichier()") ;
 beeper(7000, 300) ;
+g_GlobalVar.m_TaskArr[RELANCE_IGC_NUM_TASK].m_Run = true ;
+g_GlobalVar.m_TaskArr[RELANCE_IGC_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore( TacheRelanceIgc, "RelanceIgc", RELANCE_IGC_STACK_SIZE, NULL  , RELANCE_IGC_PRIORITY , NULL, RELANCE_IGC_CORE );
 }
 
@@ -203,6 +208,8 @@ g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
 
 // relance tache
 g_GlobalVar.LanceTacheGps(false) ;
+
+g_GlobalVar.m_TaskArr[RELANCE_IGC_NUM_TASK].m_Stopped = true ;
 
 while( true )
     vTaskDelete(NULL) ;

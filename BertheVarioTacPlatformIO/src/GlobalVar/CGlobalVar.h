@@ -73,7 +73,7 @@ public :
     static void BeepError(bool small = false) ;
     static void Reboot() ;
     static void BeepOk() ;
-    static void beeper( int frequence , int DurationMs ) ;
+    static void beeper( int frequence , int DurationMs , bool VolumeFort = true ) ;
 
     static void  RelancerEnregistrementFichier() ;
 

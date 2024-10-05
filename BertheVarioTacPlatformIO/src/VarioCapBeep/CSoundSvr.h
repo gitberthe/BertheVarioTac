@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 04/10/2024
+/// \date modification : 05/10/2024
 ///
 
 #ifndef _CSOUNDSVR_
@@ -25,8 +25,9 @@ public :
     /// \brief requette pour serveur de son
     struct StSoundRequest
         {
-        int m_Frequence = 2000 ;    ///< frequence, negative alors juste attente
-        int m_DelayMs  = 200 ;      ///< durée de la frequence
+        int             m_Frequence = 2000 ;    ///< frequence, negative alors juste attente
+        int             m_DelayMs  = 200 ;      ///< durée de la frequence
+        dac_cw_scale_t  m_Volume = DAC_CW_SCALE_1 ; ///< tres fort par defaut
         } ;
 
 protected :

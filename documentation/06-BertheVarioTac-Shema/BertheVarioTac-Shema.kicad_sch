@@ -6,7 +6,7 @@
 
   (title_block
     (title "BertheVarioTac")
-    (date "2024-10-04")
+    (date "2024-10-05")
     (rev "1.0")
     (comment 1 "Author : SpinBerthe")
   )
@@ -1128,7 +1128,7 @@
     (property "Reference" "1/2w" (at 46.99 64.77 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "18 ohms" (at 46.99 67.31 90)
+    (property "Value" "3.6 ohms" (at 46.99 67.31 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (at 46.99 69.85 0)

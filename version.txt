@@ -1,5 +1,8 @@
+le 20241005d :
+ - modification conditions "EnVol".
+
 le 20241005c :
- - doc utilisateur et modifiction code.
+ - doc utilisateur et modification code.
  
 le 20241005b :
  - correction bug reboot systematique en wifi.
