@@ -74,7 +74,7 @@ while( true )
 /// \brief Fonction static core 0 qui gere les beep.
 void CVarioCapBeep::TacheGenereSonVario(void *param)
 {
-const float LowFreq = 1100 ;
+const float LowFreq = 1000 ;
 const float MinFreq = 1200 ;
 const float MaxFreq = 8000 ;
 const float SeuilVzMin = g_GlobalVar.m_Config.m_vz_seuil_haut ;
@@ -97,7 +97,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
         }
 
     float LocalVitVertMS = g_GlobalVar.m_VitVertMS ;
-    //LocalVitVertMS = 4. ;
+    //LocalVitVertMS = 4 ;
     //float LocalVitVertMS = g_GlobalVar.m_Config.m_vz_seuil_haut ;
     #ifdef SOUND_DEBUG
      LocalVitVertMS = 6 ;
@@ -107,7 +107,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     if ( LocalVitVertMS <= g_GlobalVar.m_Config.m_vz_seuil_bas )
         {
         g_GlobalVar.beeper( LowFreq , 400 ) ;
-        delay( 400 ) ;
+        delay( 450 ) ;
         continue ;
         }
     // descente normale
@@ -133,8 +133,9 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
             else if ( BeepZerotage == 2 || BeepZerotage == 5 )
                 g_GlobalVar.beeper( LowFreq , 100 ) ;
             else
-                delay( 500 ) ;
+                delay( 2000 ) ;
             }
+        // si le vol n'a pas debute
         else
             delay( 100 ) ;
         continue ;
