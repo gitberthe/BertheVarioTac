@@ -23,6 +23,9 @@ void setup()
 
 // lancement tache son
 g_GlobalVar.LanceTacheSound() ;
+delay(500) ;
+g_GlobalVar.BeepOk() ;
+g_GlobalVar.beeper( SOUND_DELAY_ONLY , 100 ) ;
 g_GlobalVar.BeepOk() ;
 
 // tache de mise a jour % cpu

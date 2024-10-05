@@ -64,6 +64,10 @@ void CGps::TacheGpsTempsVol(void *param)
  Serial.println("tache temps de vol lancee");
 #endif
 
+// variables des taches
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = true ;
+g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
+
 // raz temps premier GGA
 CTrame::m_MillisPremierGGA = 0 ;
 g_GlobalVar.m_VitesseKmh = 0 ;
@@ -273,9 +277,9 @@ while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
     g_GlobalVar.m_FinDeVol.PushPos4FlihgtEnd() ;
     delay( 500 ) ;
 
-    // arret du vol par bouton droit
-    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonDroit()
-         && g_GlobalVar.m_VitesseKmh < 5. && g_GlobalVar.m_VitVertMS < 0.4 )
+    // arret du vol par bouton centre
+    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonCentre()
+         && !g_GlobalVar.m_FinDeVol.IsInFlight() )
         {
         CGlobalVar::RelancerEnregistrementFichier() ;
         // purge boutons pour eviter un relance vol dans la fouléé

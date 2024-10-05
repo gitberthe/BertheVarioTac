@@ -44,16 +44,6 @@ return ret ;
 /// \brief Lit la position du touch pad et active les boutons en consequence
 void CTouchButtons::HandleButtons()
 {
-// hinibition des boutons
-if ( g_GlobalVar.m_FinDeVol.IsInFlight() )
-    {
-    for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
-        m_PressedArr[ib] = false ;
-    //g_tft.drawRect( 0 , g_GlobalVar.m_Screen.m_Hauteur - HauteurBoutons , g_GlobalVar.m_Screen.m_Largeur , HauteurBoutons , TFT_WHITE ) ;
-    //g_GlobalVar.m_Screen.m_MutexAffichage.RelacherMutex() ;
-    return ;
-    }
-
 // pour tous les boutons
 int ib = 0 ;
 for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , ib++ )
@@ -63,17 +53,33 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
          g_GlobalVar.m_Screen.m_YTouch > (g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons) &&
          g_GlobalVar.m_Screen.m_Pressed )
         {
+        // bouton gauche centre ou droit
         m_PressedArr[ib] = true ;
+        // desactivation g_tft
         m_Pressed = false ;
+        // desactivation centre écran
         m_CenterPressed = false ;
         return ;
         }
     }
 
-// si toujours presse alors centre de l'ecran
-if ( m_Pressed )
+// si pas en vol
+if ( !g_GlobalVar.m_FinDeVol.IsInFlight() )
     {
-    m_CenterPressed = true ;
+    // si toujours presse alors centre de l'ecran
+    if ( m_Pressed )
+        {
+        // centre pressé
+        m_CenterPressed = true ;
+        // desactivation g_tft
+        m_Pressed = false ;
+        }
+    }
+else
+    {
+    // centre pressé
+    m_CenterPressed = false ;
+    // desactivation g_tft
     m_Pressed = false ;
     }
 }

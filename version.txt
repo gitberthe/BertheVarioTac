@@ -1,3 +1,6 @@
+le 20241005c :
+ - doc utilisateur et modifiction code.
+ 
 le 20241005b :
  - correction bug reboot systematique en wifi.
 

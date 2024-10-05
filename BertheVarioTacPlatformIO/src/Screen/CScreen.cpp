@@ -320,30 +320,30 @@ if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
 else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 
-    // si vol en cours
-if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
+// si vol en cours
+if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run && ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
     g_GlobalVar.m_Screen.SetText( "Vo-" , 1 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "" , 1 ) ;
 
-// ecran menu
-if( g_GlobalVar.m_Screen.IsCenterPressed() )
+// ecran menu si pas en vol
+if( g_GlobalVar.m_Screen.IsCenterPressed() && !g_GlobalVar.m_FinDeVol.IsInFlight() )
     {
     ScreenRaz() ;
     return ECRAN_8_Menu ;
     }
-// desactivation son
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
+// desactivation/activation du son
+else if ( g_GlobalVar.BoutonGauche() )
     {
-    if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
+    /*if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
          g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
-         g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
+         g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )*/
         g_GlobalVar.m_BeepAttenteGVZone = ! g_GlobalVar.m_BeepAttenteGVZone ;
     return ECRAN_0_Vz ;
     }
-// page suivante
-else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
-    {}
+//// page suivante
+//else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
+//    {}
 // le bouton 2 est gere par CGps
 //else if ( g_GlobalVar.m_Screen.IsButtonPressed( 2 ) )
 //    return ECRAN_0_Vz ;
@@ -470,12 +470,12 @@ fin_histo :
 if ( ivol <= 0 )
     g_GlobalVar.m_Screen.SetText( "   " , 0 ) ;
 else
-    g_GlobalVar.m_Screen.SetText( "M-" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "H-" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "", 1 ) ;
 if ( ivol >= (g_GlobalVar.m_HistoVol.m_HistoDir.size() - 1) )
     g_GlobalVar.m_Screen.SetText( "   " , 2 ) ;
 else
-    g_GlobalVar.m_Screen.SetText( "M+" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( "H+" , 2 ) ;
 
 // si changement de numero histo vol
 if ( g_GlobalVar.BoutonDroit() )
