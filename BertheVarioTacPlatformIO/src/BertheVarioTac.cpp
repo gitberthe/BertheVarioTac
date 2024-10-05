@@ -16,7 +16,7 @@ char g_NumVersion[] = "20241005a" ;
 void AfficheEcranDebut()
 {
 g_GlobalVar.m_Screen.ScreenRaz() ;
-g_tft.setTextColor(TFT_RED) ;
+g_tft.setTextColor(TFT_MAGENTA) ;
 g_tft.setTextSize(2) ;
 g_tft.setCursor( 35 , 50 ) ;
 g_tft.print("BertheVarioTac");

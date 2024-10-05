@@ -109,7 +109,7 @@ if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_CYAN) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
@@ -126,7 +126,7 @@ else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
     g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_CYAN) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
@@ -156,7 +156,7 @@ else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
     m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_RED) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
     g_tft.print("** Erreur  **** Hgt File *");
@@ -183,21 +183,21 @@ else
     g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
 
     const float DeriveMilieu = 41. ;
-    float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , 0 /*m_Mpu9250.m_CapMagnetique*/ ) ;
+    float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , g_GlobalVar.m_QMC5883Mag.GetCapDegres() ) ;
     if ( fabsf(DeriveAngle) >= 90. )
         {
-        sprintf( TmpChar , " \\R/" ) ;
-        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_RED) ;
+        sprintf( TmpChar , "\\\\R//" ) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_MAGENTA) ;
         }
     else if ( DeriveAngle >= DeriveMilieu )
         {
         sprintf( TmpChar , "  %1d>>", ((int)(fabsf(DeriveAngle)/10)) ) ;
-        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_YELLOW) ;
         }
     else if ( DeriveAngle <= -DeriveMilieu )
         {
         sprintf( TmpChar , "<<%1d", ((int)(fabsf(DeriveAngle)/10)) ) ;
-        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
+        m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_YELLOW) ;
         }
     else
         {
@@ -255,7 +255,7 @@ color = TFT_BLACK ;
 if ( SigneNeg )
     {
     sprintf( TmpChar , "%2.1f-" , VitVert ) ;
-    color = TFT_RED ;
+    color = TFT_CYAN ;
     }
 else
     sprintf( TmpChar , " %2.1f " , VitVert ) ;
@@ -287,7 +287,7 @@ if ( AffichageVitesse )
     m_T2SPageVzArr[PAGE_VZ_VIT_SOL].ChangeUnit('k') ;
     sprintf( TmpChar , "%6.1f" , g_GlobalVar.m_VitesseKmh ) ;
     if ( g_GlobalVar.m_VitesseKmh < 5. )
-        color = TFT_RED ;
+        color = TFT_MAGENTA ;
     }
 else
     {
