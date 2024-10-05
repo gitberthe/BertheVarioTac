@@ -95,7 +95,7 @@ else
 
 // reculade/derive
 uint16_t color = TFT_WHITE ;
-const int x1 = 70 , x2 = 240-70;
+const int x1 = 68 , x2 = 240-72;
 const int y1 = 50 , y2 = 90;
 
 ////////////
@@ -220,8 +220,8 @@ m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
 //////////////
 // cap lettres
-//int Cap = g_GlobalVar.m_CapGpsDeg ;
-int Cap = g_GlobalVar.m_QMC5883Mag.GetCapDegres() ;
+int Cap = g_GlobalVar.m_CapGpsDeg ;
+//int Cap = g_GlobalVar.m_QMC5883Mag.GetCapDegres() ;
 int CapMarge = 45/2 + 1 ;
 char TmpCharNomCap[] = "  " ;
 if ( Cap < CapMarge || Cap > (360-CapMarge) )
