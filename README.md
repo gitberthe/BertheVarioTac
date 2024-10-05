@@ -14,3 +14,5 @@ Projet d'alti vario gps parapente tactile.
 
 **Pour les développeur :**
 - voir la documentation doxygen generée.
+
+<img src="./shema.jpg" width="400"/>
