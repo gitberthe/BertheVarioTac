@@ -1,0 +1,10 @@
+le 2024-10-05 :
+
+- boitier
+- pcb
+
+- validation en dynamique
+
+- revoir le gel des boutons en vol pour declenchement de vol en l'air.
+
+- documentation utilisateur propre au BertheVarioTac

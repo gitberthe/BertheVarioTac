@@ -1,1 +1,9 @@
 voir https://github.com/gitberthe/BertheVario /doc qui est assez proche
+
+- les differences avec le BertheVario sont au niveau des boutons 
+  (3 boutons tactiles en bas + le menu avec appui sur le fond d'ecran). 
+  Calibration capteur magnetique à ne pas oublier dans page Sys (faire 
+  des ronds pendant 40secondes pour avoir un maximum de valeur de cap)
+  
+- attention, dans la version ESP32-2432S028R, la broche IO22-SCL du 
+  connecteur CN1 n'est pas cablée. Il faut prendre le connecteur P3.

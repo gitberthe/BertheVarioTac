@@ -1,0 +1,20 @@
+prix moyen sur aliexpess :
+
+- resistance        1.18
+- haut parleur x5   5.43
+- fils rigide 20awg 4.63
+- pcb 5*7cm         1
+- prises jst 1.25   5.38
+- epoxy boitier    19.89
+- sd card 4g        8.57
+- batterie 2000mah 10.43
+- interrupteur x10  3.40
+- fil souple 28awg  7.36
+- convert. 1S to 5v 4.49
+- chargeur lipo     2.92
+- bmp180 pression   1.22
+- ESP32-2432S028   10.99
+- gps neo6mv2       3.11
+- QMC5883L magnet.  2.21
+------------------------
+             total 92.21
