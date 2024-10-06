@@ -1,3 +1,6 @@
+le 20241006a :
+ - essai pcb.
+
 le 20241005d :
  - modification conditions "EnVol".
 

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 05/10/2024
+/// \date modification : 06/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -101,7 +101,8 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
             {
             g_GlobalVar.m_Screen.RazButtons(2) ;
             }
-        g_GlobalVar.m_AltitudeSolHgt = -1 ;
+        // pour avoir une altitude sol à -1 au début
+        g_GlobalVar.m_AltitudeSolHgt = g_GlobalVar.m_TerrainPosCur.m_AltiBaro + 2 ;
         continue ;
         }
     else

@@ -1134,11 +1134,16 @@ ScreenRaz() ;
 
 g_tft.setTextSize(2) ;
 
+// date
+char TmpChar[20] ;
+g_tft.setCursor( 60  , 0 ) ;
+sprintf( TmpChar , "%04d-%02d-%02d" , g_GlobalVar.m_Annee , g_GlobalVar.m_Mois , g_GlobalVar.m_Jour ) ;
+g_tft.print( TmpChar ) ;
+
 const int DeltaY = 20 ;
 int x = 30 ;
 int y = 35 ;
 // % cpu 0
-char TmpChar[20] ;
 g_tft.setCursor( x  , y ) ;
 g_tft.print( "cpu0:" ) ;
 sprintf( TmpChar , "      %3d%c" , g_GlobalVar.m_PercentCore0 , '%' ) ;
