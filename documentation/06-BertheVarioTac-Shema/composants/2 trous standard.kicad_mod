@@ -13,6 +13,6 @@
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp a57d65e9-8acc-4187-851a-8b58fffea687)
   )
-  (pad "1" thru_hole circle (at 0 0) (size 2.286 2.286) (drill 0.8) (layers "*.Cu" "*.Mask") (tstamp ebce4028-2df5-43de-8571-6ae7f96d8092))
-  (pad "2" thru_hole circle (at 0 -2.54) (size 2.286 2.286) (drill 0.8) (layers "*.Cu" "*.Mask") (tstamp 7a849322-afa3-45f3-bfd9-4d1dbc434510))
+  (pad "1" thru_hole circle (at 0 0) (size 1.8 1.8) (drill 0.8) (layers "*.Cu" "*.Mask") (tstamp ebce4028-2df5-43de-8571-6ae7f96d8092))
+  (pad "2" thru_hole circle (at 0 -2.54) (size 1.8 1.8) (drill 0.8) (layers "*.Cu" "*.Mask") (tstamp 7a849322-afa3-45f3-bfd9-4d1dbc434510))
 )
