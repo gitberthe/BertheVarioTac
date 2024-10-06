@@ -211,7 +211,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp 6cb60984-5d51-4f34-8666-36dd5c313657)
-    (at 137.16 144.78 90)
+    (at 137.46 139 90)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (property "ki_description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
@@ -242,7 +242,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp 7207f947-a31a-47a0-a3cc-d74ed3236f85)
-    (at 185.42 132.08)
+    (at 173 130.54)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (path "/8cb219e4-0903-41c2-bce3-86e6df32246c")
@@ -2289,7 +2289,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp 9839b3b2-aebd-416c-ab56-c4b1d2538171)
-    (at 137.16 86.36)
+    (at 123 99)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (path "/c5ecfd6d-54f7-40f6-b5ed-605224a2ebcf")
@@ -2345,7 +2345,7 @@
 
   (footprint "BertheShema:3 trous standard" (layer "F.Cu")
     (tstamp a6bdae31-c40a-443e-9a06-bcc6fc8e2510)
-    (at 175.26 91.44)
+    (at 168 99)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (path "/3f2a46f1-a49d-423d-b5d5-d9ef3d2bef3a")
@@ -2396,7 +2396,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp e6ac3e07-b52c-4ca4-b40f-acbbba1eb058)
-    (at 160.02 144.78 90)
+    (at 164 139 90)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (property "ki_description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
@@ -2511,7 +2511,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp f2da8ee5-9b64-4cb5-a5c1-902f12adf1dd)
-    (at 111.76 144.78 90)
+    (at 111.46 138 90)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (property "ki_description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
@@ -2542,7 +2542,7 @@
 
   (footprint "BertheShema:4 trous standard" (layer "F.Cu")
     (tstamp f45e5ea7-b720-445f-a2a9-fcfce018bb6e)
-    (at 104.14 93.98)
+    (at 107 99)
     (property "Sheetfile" "BertheVarioTac-Shema.kicad_sch")
     (property "Sheetname" "")
     (attr through_hole)
@@ -2564,9 +2564,76 @@
     (pad "4" thru_hole circle (at 0 -5.08) (size 1.8 1.8) (drill 0.8) (layers "*.Cu" "*.Mask") (tstamp b1a231ed-0191-416a-96a7-116671be448b))
   )
 
-  (segment (start 185.42 134.62) (end 154.94 134.62) (width 0.2) (layer "B.Cu") (net 4) (tstamp b4935288-fef1-43f4-a0d4-edd60e3db8f9))
-  (segment (start 185.42 127) (end 154.94 127) (width 0.2) (layer "B.Cu") (net 5) (tstamp 79395b89-e5bf-4320-9678-990263f63f5e))
-  (segment (start 185.42 132.08) (end 154.94 132.08) (width 0.2) (layer "B.Cu") (net 6) (tstamp 214416fc-2be8-452d-b363-93c7c94c675c))
-  (segment (start 185.42 129.54) (end 154.94 129.54) (width 0.2) (layer "B.Cu") (net 16) (tstamp b5df2602-dc70-4991-abb0-0a867dac4a5d))
+  (gr_arc (start 178 138) (mid 176.828427 140.828427) (end 174 142)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp 14ab3eb0-edeb-4a10-99bd-bd9d66ab876c))
+  (gr_circle (center 174 96) (end 175.6 96)
+    (stroke (width 0.05) (type default)) (fill none) (layer "Edge.Cuts") (tstamp 1d0498f0-752b-443e-8148-5aa2b962b7a3))
+  (gr_line (start 174 142) (end 96 142)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp 21d5e2e3-8709-4750-97f3-a6e40610c2d5))
+  (gr_line (start 96 92) (end 174 92)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp 3d4c446b-af76-428d-9a47-48d02f800e49))
+  (gr_circle (center 96 138) (end 97.6 138)
+    (stroke (width 0.05) (type default)) (fill none) (layer "Edge.Cuts") (tstamp 572ea4bf-6317-46f3-a113-f5182fe790e0))
+  (gr_arc (start 92 96) (mid 93.171573 93.171573) (end 96 92)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp 96111b40-6dcd-48ce-b0a0-9ed80f65b4a3))
+  (gr_arc (start 96 142) (mid 93.171573 140.828427) (end 92 138)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp 9f9868f8-45b8-4a90-b3ed-a7b33c2fcf27))
+  (gr_line (start 92 138) (end 92 96)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp a26722e0-9102-49f0-a156-8686068cbf61))
+  (gr_arc (start 174 92) (mid 176.828427 93.171573) (end 178 96)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp d145e3c3-7baa-4e59-af47-7f73e101fd7b))
+  (gr_circle (center 96 96) (end 97.6 96)
+    (stroke (width 0.05) (type default)) (fill none) (layer "Edge.Cuts") (tstamp d47c83dc-98c8-4d42-97d3-a11a46a141ec))
+  (gr_circle (center 174 138) (end 175.6 138)
+    (stroke (width 0.05) (type default)) (fill none) (layer "Edge.Cuts") (tstamp d602dbab-7d3d-44b7-865f-2fd9e32380bc))
+  (gr_line (start 178 96) (end 178 138)
+    (stroke (width 0.05) (type default)) (layer "Edge.Cuts") (tstamp dc52b986-18b0-4170-a0c2-74534dd7363a))
+  (gr_line (start 96 92) (end 174 92)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 0f9f0b0f-10d0-4955-aeab-e1cbe94f8aaf))
+  (gr_arc (start 178 138) (mid 176.828427 140.828427) (end 174 142)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 1d9b28d2-06b9-404c-adb2-de31102f96a1))
+  (gr_line (start 92 138) (end 92 96)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 223a3170-5f80-4ce5-bbe9-b8b930264e48))
+  (gr_circle (center 174 138) (end 175.6 138)
+    (stroke (width 0.05) (type default)) (fill none) (layer "B.CrtYd") (tstamp 26dfce0e-8679-4bfa-a42c-da5aa9b72e1e))
+  (gr_circle (center 174 96) (end 175.6 96)
+    (stroke (width 0.05) (type default)) (fill none) (layer "B.CrtYd") (tstamp 33614b74-2ace-421b-9f19-22bc0e874804))
+  (gr_arc (start 174 92) (mid 176.828427 93.171573) (end 178 96)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 429b46c1-531f-49cb-800f-b4dde87b6c70))
+  (gr_arc (start 92 96) (mid 93.171573 93.171573) (end 96 92)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 4889d7a9-ad07-4583-91ea-aaed64f57fe2))
+  (gr_arc (start 96 142) (mid 93.171573 140.828427) (end 92 138)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 6b1070e5-8a20-4791-b941-fc0960756bf0))
+  (gr_line (start 178 96) (end 178 138)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 826b8b91-82cd-45be-98eb-f7b463ab3d81))
+  (gr_line (start 174 142) (end 96 142)
+    (stroke (width 0.05) (type default)) (layer "B.CrtYd") (tstamp 911cae65-0d15-454d-953d-11a9e9fa0e53))
+  (gr_circle (center 96 96) (end 97.6 96)
+    (stroke (width 0.05) (type default)) (fill none) (layer "B.CrtYd") (tstamp 991e1e35-13ee-4674-b56a-04ca9e1af8ef))
+  (gr_circle (center 96 138) (end 97.6 138)
+    (stroke (width 0.05) (type default)) (fill none) (layer "B.CrtYd") (tstamp fd43a713-06b2-47a8-93d6-f73d757ec9dd))
 
+  (segment (start 129 135) (end 134 135) (width 0.2) (layer "B.Cu") (net 16) (tstamp 910610fb-9843-4f58-96a0-4d431767f68b))
+  (segment (start 134 135) (end 135 136) (width 0.2) (layer "B.Cu") (net 16) (tstamp 94ed62be-19df-40a0-a822-559844a31941))
+  (segment (start 104.394 121.666) (end 115.666 121.666) (width 0.2) (layer "B.Cu") (net 16) (tstamp a76ac025-93c1-42bd-8db2-bf77894c582b))
+  (segment (start 135 136) (end 134.92 136.08) (width 0.2) (layer "B.Cu") (net 16) (tstamp ea46b465-4834-4fba-afec-f5d184ee3dc7))
+  (segment (start 115.666 121.666) (end 129 135) (width 0.2) (layer "B.Cu") (net 16) (tstamp eb7286cd-4a18-4b5a-a244-b73d1ca7f437))
+  (segment (start 134.92 136.08) (end 134.92 139) (width 0.2) (layer "B.Cu") (net 16) (tstamp f74d6522-80e0-4e71-9d3e-1017e352ad04))
+
+  (group "" (id 0c24f856-827c-4db5-bedc-1da90101af9d)
+    (members
+      0f9f0b0f-10d0-4955-aeab-e1cbe94f8aaf
+      1d9b28d2-06b9-404c-adb2-de31102f96a1
+      223a3170-5f80-4ce5-bbe9-b8b930264e48
+      26dfce0e-8679-4bfa-a42c-da5aa9b72e1e
+      33614b74-2ace-421b-9f19-22bc0e874804
+      429b46c1-531f-49cb-800f-b4dde87b6c70
+      4889d7a9-ad07-4583-91ea-aaed64f57fe2
+      6b1070e5-8a20-4791-b941-fc0960756bf0
+      826b8b91-82cd-45be-98eb-f7b463ab3d81
+      911cae65-0d15-454d-953d-11a9e9fa0e53
+      991e1e35-13ee-4674-b56a-04ca9e1af8ef
+      fd43a713-06b2-47a8-93d6-f73d757ec9dd
+    )
+  )
 )
