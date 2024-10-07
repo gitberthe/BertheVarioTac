@@ -1,3 +1,6 @@
+le 20241007a :
+ - pcb a tester, compatible MS5611 .
+
 le 20241006a :
  - essai pcb.
 
