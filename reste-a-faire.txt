@@ -1,6 +1,6 @@
 le 2024-10-07 :
 
 - boitier
-- capteur MS5611
+- logiciel pour capteur MS5611
 
 - validation en dynamique
