@@ -18,4 +18,4 @@ Projet d'alti vario gps parapente tactile.
 **Shemas dans /documentation :**
 
 <img src="./shema-bmp180.png" width="500"/>
-<img src="./pcb.jpg" width="500"/>
+<img src="./pcb-b.png" width="500"/>
