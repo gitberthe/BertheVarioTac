@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 07/10/2024
 ///
 
 
@@ -21,6 +21,7 @@
 #include <FS.h>
 #include <ESPFMfGK.h>
 #include <SFE_BMP180.h>
+#include <MS5611.h>
 #include <freertos/queue.h>
 #include <soc/dac_channel.h>
 #include <driver/dac.h>
@@ -43,6 +44,7 @@
 // define pour le materiel //
 /////////////////////////////
 #define BMP180_PRESS
+//#define MS5611_PRESS
 
 //////////////////////////
 // includes du logiciel //
@@ -80,6 +82,7 @@
 #include "Gps/CHgt2Agl.h"
 #include "Gps/CPileVit.h"
 #include "BMP180/CBMP180Pression.h"
+#include "MS5611/CMS5611Pression.h"
 #include "FileMgr/FileMgr.h"
 #include "VarioCapBeep/CVarioCapBeep.h"
 #include "VarioCapBeep/CSoundSvr.h"

@@ -82,6 +82,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Gps/CStabGps.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Gps/CTrame.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Gps/CTrame.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/MS5611/CMS5611Pression.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/MS5611/CMS5611Pression.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/esp32_perfmon.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/perfmon.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/QMC5883L/CQMC5883Mag.cpp" />

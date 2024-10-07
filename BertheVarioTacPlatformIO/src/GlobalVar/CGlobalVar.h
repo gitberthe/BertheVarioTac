@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 07/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -36,6 +36,9 @@ public :
     CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
     #ifdef BMP180_PRESS
      CBMP180Pression m_BMP180Pression ;///< capteur de pression
+    #endif
+    #ifdef MS5611_PRESS
+     CMS5611Pression m_MS5611Pression ;///< capteur de pression
     #endif
     CQMC5883Mag      m_QMC5883Mag ;   ///< capteur magnetique
 
