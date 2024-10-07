@@ -19,6 +19,8 @@ class CMS5611Pression : public CVirtCaptPress
 {
 public :
 
+    void InitCapteur()
+            { InitMs5611() ; } ;
     void InitMs5611() ;
 
     void MesureAltitudeCapteur() ;

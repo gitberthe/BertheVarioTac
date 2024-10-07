@@ -16,6 +16,14 @@ CGlobalVar::CGlobalVar()
 strcpy(m_LatChar, "0000000") ;
 strcpy(m_LonChar, "00000000") ;
 m_TerrainPosCur.m_Nom = "pos-cur" ;
+
+m_pCapteurPression = NULL ;
+#ifdef BMP180_PRESS
+ m_pCapteurPression = new CBMP180Pression ;///< capteur de pression
+#endif
+#ifdef MS5611_PRESS
+ m_pCapteurPression = new CMS5611Pression ;///< capteur de pression
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

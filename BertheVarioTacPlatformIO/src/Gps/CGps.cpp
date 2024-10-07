@@ -131,12 +131,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         // raz difference altitude presion/wgs84 = altitude affichée est barometrique pure
         if ( ! g_GlobalVar.IsGpsStable() )
             {
-            #ifdef BMP180_PRESS
-             g_GlobalVar.m_BMP180Pression.SetAltiSolUndef() ;
-            #endif
-            #ifdef MS5611_PRESS
-             g_GlobalVar.m_MS5611Pression.SetAltiSolUndef() ;
-            #endif
+            g_GlobalVar.m_pCapteurPression->SetAltiSolUndef() ;
             }
 
         // purge boutons pour eviter un arret vol dans la foulée
@@ -156,12 +151,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
 
         // recalage altibaro
         g_GlobalVar.m_MutexVariable.PrendreMutex() ;
-        #ifdef BMP180_PRESS
-         g_GlobalVar.m_BMP180Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
-        #endif
-        #ifdef MS5611_PRESS
-         g_GlobalVar.m_MS5611Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
-        #endif
+         g_GlobalVar.m_pCapteurPression->SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
         g_GlobalVar.m_MutexVariable.RelacherMutex() ;
 
         // si le gps n'est pas stable

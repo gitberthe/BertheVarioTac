@@ -59,12 +59,7 @@ g_GlobalVar.m_Config.LectureFichier() ;
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 
 // init capteur de pression
-#ifdef BMP180_PRESS
- g_GlobalVar.m_BMP180Pression.InitBMP180() ;
-#endif
-#ifdef MS5611_PRESS
- g_GlobalVar.m_MS5611Pression.InitMs5611() ;
-#endif
+g_GlobalVar.m_pCapteurPression->InitCapteur() ;
 
 // init capteur magnetique
 g_GlobalVar.m_QMC5883Mag.InitMagnetique() ;

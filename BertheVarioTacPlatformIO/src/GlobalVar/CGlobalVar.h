@@ -34,13 +34,8 @@ public :
     CHgt2Agl        m_Hgt2Agl ;     ///< pour determiner la hauteur sol
     CPileVit        m_PileVit ;     ///< pour lancement vol suivant la vitesse gps
     CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
-    #ifdef BMP180_PRESS
-     CBMP180Pression m_BMP180Pression ;///< capteur de pression
-    #endif
-    #ifdef MS5611_PRESS
-     CMS5611Pression m_MS5611Pression ;///< capteur de pression
-    #endif
-    CQMC5883Mag      m_QMC5883Mag ;   ///< capteur magnetique
+    CVirtCaptPress* m_pCapteurPression ;    ///< capteur de pression BMP180 ou MS5611
+    CQMC5883Mag     m_QMC5883Mag ;   ///< capteur magnetique
 
     bool m_ModeHttp = false ;          ///< si mode http
     bool m_BeepAttenteGVZone = true ;  ///< beep d'attente Gps/Vitesse/Zone

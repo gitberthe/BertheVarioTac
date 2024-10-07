@@ -16,6 +16,7 @@ class CVirtCaptPress
 {
 public :
 
+    virtual void InitCapteur() = 0 ;
     virtual void MesureAltitudeCapteur() = 0 ;
 
     virtual float GetAltiMetres() ;
@@ -36,6 +37,8 @@ protected :
 class CBMP180Pression : public CVirtCaptPress
 {
 public :
+    void InitCapteur()
+            { InitBMP180() ; } ;
     void InitBMP180() ;
 
     bool   m_InitOk = false ;
