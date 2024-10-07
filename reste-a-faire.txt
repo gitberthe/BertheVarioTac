@@ -1,10 +1,6 @@
-le 2024-10-05 :
+le 2024-10-07 :
 
 - boitier
-- pcb
+- capteur MS5611
 
 - validation en dynamique
-
-- revoir le gel des boutons en vol pour declenchement de vol en l'air.
-
-- documentation utilisateur propre au BertheVarioTac
