@@ -1,5 +1,5 @@
 le 20241007b :
- - preparation du logiciel au capteur de pression MS5611 plus precis.
+ - intergation logiciel pour capteur de pression MS5611 plus precis.
 
 le 20241007a :
  - pcb a tester, compatible MS5611.
