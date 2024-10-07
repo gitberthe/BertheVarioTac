@@ -35,8 +35,14 @@ int count = 0 ;
 float LastAlti ;
 
 // premiere altitude
-g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
-g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+#ifdef BMP180_PRESS
+ g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
+ g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+#endif
+#ifdef MS5611_PRESS
+ g_GlobalVar.m_MS5611Pression.MesureAltitudeCapteur() ;
+ g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_MS5611Pression.GetAltiMetres() ;
+#endif
 LastAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
 
 // boucle Vz
@@ -46,18 +52,30 @@ while (g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run)
     count++ ;
     delay( 500 ) ;
 
+    // lecture cap magnetique
     g_GlobalVar.m_QMC5883Mag.LectureCap() ;
 
     // mesure altitude recalee et mise a jour altitude courante
-    g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
-    g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+    #ifdef BMP180_PRESS
+     g_GlobalVar.m_BMP180Pression.MesureAltitudeCapteur() ;
+     g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiMetres() ;
+    #endif
+    #ifdef MS5611_PRESS
+     g_GlobalVar.m_MS5611Pression.MesureAltitudeCapteur() ;
+     g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_MS5611Pression.GetAltiMetres() ;
+    #endif
 
     // a 1 hz
     //if ( count%2 )
     //    continue ;
 
     // calcul difference alti baro pure
-    float AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiBaroPureMetres() ;
+    #ifdef BMP180_PRESS
+     float AltiBaro = g_GlobalVar.m_BMP180Pression.GetAltiBaroPureMetres() ;
+    #endif
+    #ifdef MS5611_PRESS
+     float AltiBaro = g_GlobalVar.m_MS5611Pression.GetAltiBaroPureMetres() ;
+    #endif
     float DiffAlti = AltiBaro - LastAlti ;
     DiffAlti /= 2 ; // car 2hz
     LastAlti = AltiBaro ;

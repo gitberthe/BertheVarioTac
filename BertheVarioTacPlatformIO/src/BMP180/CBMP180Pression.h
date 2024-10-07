@@ -4,15 +4,36 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 04/10/2024
+/// \date modification : 07/10/2024
 ///
 
 #ifndef _BMP180PRESS_
 #define _BMP180PRESS_
 
 ////////////////////////////////////////////////////////////////////////////////
+/// \brief Classe pour capteur de pression
+class CVirtCaptPress
+{
+public :
+
+    virtual void MesureAltitudeCapteur() = 0 ;
+
+    virtual float GetAltiMetres() ;
+
+    void    SetAltiSolMetres( float AltitudeSolHgt ) ;
+    float   GetAltiBaroPureMetres() const
+                { return m_AltitudeBaroPure ; } ;
+    void    SetAltiSolUndef() ;
+
+protected :
+    CMutex  m_Mutex ;
+    float   m_AltitudeBaroPure ;            ///< altitude baro pure du capteur
+    float   m_DiffAltiBaroHauteurSol = 0 ;  ///< difference alti baro avec la hauteur sol (recalee avant décollage)
+} ;
+
+////////////////////////////////////////////////////////////////////////////////
 /// \brief Capteur de pression BMP180
-class CBMP180Pression
+class CBMP180Pression : public CVirtCaptPress
 {
 public :
     void InitBMP180() ;
@@ -20,18 +41,7 @@ public :
     bool   m_InitOk = false ;
     double m_Temperature;
 
-    void SetAltiSolUndef() ;
-    void SetAltiSolMetres( int AltitudeSolHgt ) ;
-    float GetAltiMetres() ;
-    float GetAltiBaroPureMetres()
-        { return m_AltitudeBaroPure ; } ;
-
     void MesureAltitudeCapteur() ;
-
-private :
-    CMutex  m_Mutex ;
-    float   m_AltitudeBaroPure ;            ///< altitude baro pure du capteur
-    float   m_DiffAltiBaroHauteurSol = 0 ;  ///< difference alti baro avec la hauteur sol (recalee avant décollage)
 } ;
 
 #endif

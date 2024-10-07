@@ -134,6 +134,9 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
             #ifdef BMP180_PRESS
              g_GlobalVar.m_BMP180Pression.SetAltiSolUndef() ;
             #endif
+            #ifdef MS5611_PRESS
+             g_GlobalVar.m_MS5611Pression.SetAltiSolUndef() ;
+            #endif
             }
 
         // purge boutons pour eviter un arret vol dans la foulée
@@ -155,6 +158,9 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         g_GlobalVar.m_MutexVariable.PrendreMutex() ;
         #ifdef BMP180_PRESS
          g_GlobalVar.m_BMP180Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
+        #endif
+        #ifdef MS5611_PRESS
+         g_GlobalVar.m_MS5611Pression.SetAltiSolMetres( g_GlobalVar.m_AltitudeSolHgt ) ;
         #endif
         g_GlobalVar.m_MutexVariable.RelacherMutex() ;
 

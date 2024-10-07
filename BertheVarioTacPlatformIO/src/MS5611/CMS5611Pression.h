@@ -10,30 +10,26 @@
 #ifndef _CMS5611_
 #define _CMS5611_
 
+
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Capteur de pression et de temperature.
 /// Precision du capteur 10cm.
 /// Attention à la frequence du bus I2C CGlobalVar::InitI2C().
-class CMS5611Pression
+class CMS5611Pression : public CVirtCaptPress
 {
 public :
 
     void InitMs5611() ;
 
-    void  SetAltiSolMetres( float AltiSol ) ;
-    void  SetAltiSolUndef()                 ///< pour demmarrage en vol alti = alti baro pure
-            { m_DiffAltiFchAgl = 0. ; } ;
+    void MesureAltitudeCapteur() ;
 
-    float GetAltiMetres() ;             ///< alti pression filtree recalee alti gps en debut de vol
+    float GetAltiMetres() override ;
 
 private :
     void  Read() ;
     float GetPressureMb() ;
     float GetAltiPressionCapteurMetres() ;
     float GetTemperatureDegres() ;
-
-    float m_AltiPressionFiltree ;       ///< altitude pression filtree
-    float m_DiffAltiFchAgl = 0 ;        ///< difference avec alti fichier agl
 
     float CalcAltitude(float pressure_mb_x100 , float seaLevelPressure = 101325 ) ;
 } ;

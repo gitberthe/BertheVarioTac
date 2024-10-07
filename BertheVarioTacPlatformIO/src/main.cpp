@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 07/10/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -61,6 +61,9 @@ g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
 // init capteur de pression
 #ifdef BMP180_PRESS
  g_GlobalVar.m_BMP180Pression.InitBMP180() ;
+#endif
+#ifdef MS5611_PRESS
+ g_GlobalVar.m_MS5611Pression.InitMs5611() ;
 #endif
 
 // init capteur magnetique

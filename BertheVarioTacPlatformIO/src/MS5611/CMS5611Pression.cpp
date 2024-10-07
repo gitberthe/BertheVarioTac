@@ -83,13 +83,15 @@ return CalcAltitude( GetPressureMb() * 100. ) ;
 /// \brief Renvoie l'alti pression filtree recalee alti sol en debut de stabilisation gps
 float CMS5611Pression::GetAltiMetres()
 {
-float Alti = m_AltiPressionFiltree + m_DiffAltiFchAgl ;
+m_Mutex.PrendreMutex() ;
+ float Alti = m_AltitudeBaroPure + m_DiffAltiBaroHauteurSol ;
+m_Mutex.RelacherMutex() ;
 
 // pour parer a un probleme
 if ( Alti > 9999. || isnan(Alti) || Alti < -500. )
     {
     Alti = 9999. ;
-    m_DiffAltiFchAgl = 0. ; // si probleme de diff alti comme reboot en vol
+    SetAltiSolUndef() ; // si probleme de diff alti comme reboot en vol
     //CGlobalVar::BeepError() ;
     //g_GlobalVar.m_MutexI2c.PrendreMutex() ;
      g_MS5611.reset() ;
@@ -101,16 +103,15 @@ return Alti ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Positionne la difference avec l'alti sol.
-void CMS5611Pression::SetAltiSolMetres( float AltiSol )
+/// \brief Lit l'altitude capteur
+void CMS5611Pression::MesureAltitudeCapteur()
 {
-//g_GlobalVar.m_MutexI2c.PrendreMutex() ;
- Read() ;
- float AltiMesCapteur = GetAltiPressionCapteurMetres()  ;
- m_DiffAltiFchAgl = AltiSol - AltiMesCapteur ;
-//g_GlobalVar.m_MutexI2c.RelacherMutex() ;
+Read() ;
+float AltiMesCapteur = GetAltiPressionCapteurMetres()  ;
 
-g_GlobalVar.m_TerrainPosCur.m_AltiBaro = GetAltiMetres() ;
+m_Mutex.PrendreMutex() ;
+ m_AltitudeBaroPure = AltiMesCapteur ;
+m_Mutex.RelacherMutex() ;
 }
 
 
