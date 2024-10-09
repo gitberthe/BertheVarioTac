@@ -1,3 +1,7 @@
+
+le 20241009a :
+ - purge des boutons non bloquant.
+
 le 20241008a :
  - [vz_igc_ms] pendant 3s pour déclenchement de vol.
  - modification pcb.

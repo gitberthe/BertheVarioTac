@@ -141,14 +141,9 @@ return val ;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Permet de purger les boutons pour ne pas redeclancher un vol
-void CGlobalVar::PurgeBoutons( unsigned long DelayMs )
+void CGlobalVar::PurgeBoutons( int DelaySec )
 {
-unsigned long time = millis() ;
-while( millis()-time < DelayMs )
-    {
-    m_Screen.RazButtons() ;
-    delay( 1 ) ;
-    }
+m_Screen.SetFrozenDelaySec( DelaySec ) ;
 }
 
 //TwoWire I2C1 = TwoWire(1);

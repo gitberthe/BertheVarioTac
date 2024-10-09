@@ -26,7 +26,7 @@ public :
         { return m_Screen.IsButtonPressed(1) ; } ;
     bool BoutonDroit()
         { return m_Screen.IsButtonPressed(2) ; } ;
-    void PurgeBoutons( unsigned long DelayMs ) ;
+    void PurgeBoutons( int DelaySec ) ;
 
     CScreen         m_Screen ;
     CConfigFile     m_Config ;      ///< variables issues du fichier de config

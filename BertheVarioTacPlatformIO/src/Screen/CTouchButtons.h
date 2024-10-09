@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 04/10/2024
+/// \date modification : 09/10/2024
 ///
 
 #ifndef _TOUCHBUTTONS_
@@ -32,6 +32,7 @@ public :
     int GetY() const
         { return m_YTouch ; } ;
     void SetPressed( bool pressed ) ;
+    void SetFrozenDelaySec( int SecDelay ) ;
     bool IsCenterPressed() ;
 
     friend class CLGFX ;
@@ -42,7 +43,8 @@ protected :
     bool  m_Pressed = false ;   ///< si est appuyé en milieu d'ecran
 
 private :
-    unsigned long   m_TimePressed = 0 ;///< pour le rebond
+    unsigned long   m_TimePressed = 0 ;///< pour l' anti-rebond
+    int             m_FrozenSec = 0 ;  ///< temps ou les boutons sont geles
     int             m_NbButtons = 3 ;  ///< bombre de boutons a afficher
     bool            m_PressedArr[3] ;  ///< si boutons pressés
     char            m_Intitule[3][4] ; ///< texte de bouton

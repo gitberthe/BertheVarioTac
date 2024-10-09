@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 04/10/2024
+/// \date modification : 09/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -20,9 +20,24 @@ return ret ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/// \brief Pour le gel des boutons.
+void CTouchButtons::SetFrozenDelaySec( int SecDelay )
+{
+m_FrozenSec = SecDelay ;
+m_TimePressed = millis() ;
+RazButtons() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// \brief Positionne par CGLFX.
 void CTouchButtons::SetPressed( bool pressed )
 {
+// gel des boutons
+if ( (millis()-m_TimePressed) < (m_FrozenSec*1000) )
+    return ;
+else
+    m_FrozenSec = 0 ;
+
 // anti-rebond
 if ( (millis()-m_TimePressed) < ANTI_REBONDS_MS )
     return ;
@@ -134,7 +149,6 @@ if ( button == -1 )
     m_CenterPressed = false ;
     for ( int ib = 0 ; ib < m_NbButtons ; ib++ )
         m_PressedArr[ib] = false ;
-    m_TimePressed = millis() ;
     }
 else
     m_PressedArr[button] = false ;

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 08/10/2024
+/// \date modification : 09/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -36,7 +36,6 @@ if ( AvecPortSerie )
 // tache de calcul du temps de vol
 g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = true ;
 g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
-
 xTaskCreatePinnedToCore(TacheGpsTempsVol, "GpsTempsVol", TEMPS_STACK_SIZE , this, TEMPS_PRIORITY, NULL, TEMPS_CORE);
 }
 
@@ -136,7 +135,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
             }
 
         // purge boutons pour eviter un arret vol dans la foulée
-        g_GlobalVar.PurgeBoutons( 6000 ) ;
+        g_GlobalVar.PurgeBoutons( 6 ) ;
 
         break ;
         }
@@ -290,7 +289,7 @@ while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
         {
         CGlobalVar::RelancerEnregistrementFichier() ;
         // purge boutons pour eviter un relance vol dans la fouléé
-        g_GlobalVar.PurgeBoutons( 6000 ) ;
+        g_GlobalVar.PurgeBoutons( 6 ) ;
         break ;
         }
 
