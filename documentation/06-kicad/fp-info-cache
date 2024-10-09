@@ -1,4 +1,4 @@
-23052251172074780
+23053980168543530
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -405,6 +405,13 @@ QMC5883
 0
 5
 5
+BertheShema
+R_47
+
+
+0
+0
+0
 BertheShema
 Usb-C-Charger
 

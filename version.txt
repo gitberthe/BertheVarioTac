@@ -1,3 +1,5 @@
+le 20241009b :
+ - ajout resistances Sda Scl pcb.
 
 le 20241009a :
  - purge des boutons non bloquant.
