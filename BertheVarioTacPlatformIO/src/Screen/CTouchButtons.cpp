@@ -56,7 +56,8 @@ return ret ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Lit la position du touch pad et active les boutons en consequence
+/// \brief Lit la position du touch pad et active les boutons en consequence.
+/// Si on est en vol, la page menu par le centre de l'ecran n'est plus accessible.
 void CTouchButtons::HandleButtons()
 {
 // pour tous les boutons

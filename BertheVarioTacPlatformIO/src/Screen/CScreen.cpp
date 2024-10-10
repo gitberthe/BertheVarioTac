@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 10/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -1171,6 +1171,12 @@ y += DeltaY ;
 g_tft.setCursor( x  , y ) ;
 g_tft.print( "vbat:" ) ;
 sprintf( TmpChar , "     %4.2fv" , g_GlobalVar.GetBatteryVoltage() ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
+// numero firmware
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "fir.:" ) ;
+sprintf( TmpChar , " %s" , g_NumVersion ) ;
 g_tft.print( TmpChar ) ;
 y += DeltaY ;
 

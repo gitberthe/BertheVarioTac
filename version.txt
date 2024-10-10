@@ -1,3 +1,8 @@
+le 20241010a :
+ - mise à jour documentation utilisateur et concepteur.
+ - ajout numero de firmware en page sys.
+ - pcb en commande.
+
 le 20241009b :
  - ajout resistances Sda Scl pcb.
 
