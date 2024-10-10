@@ -1129,7 +1129,19 @@ return ECRAN_2b_ConfirmArchIgc ;
 /// \brief Affichage des parametres systemes.
 CAutoPages::EtatsAuto CScreen::EcranSys()
 {
-//if ( IsPageChanged() )
+if ( IsPageChanged() )
+    {
+    // defilement autre ecran
+    g_GlobalVar.m_Screen.SetText( "Cal" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+
+    //pinMode(BrightnessPin, INPUT); //Il faut déclarer le pin en entrée
+    }
+
+//int luminosite = analogRead(BrightnessPin);
+//val = 3.3 * val / 4095. * 2. ;
+
 ScreenRaz() ;
 
 g_tft.setTextSize(2) ;
@@ -1179,11 +1191,12 @@ g_tft.print( "fir.:" ) ;
 sprintf( TmpChar , " %s" , g_NumVersion ) ;
 g_tft.print( TmpChar ) ;
 y += DeltaY ;
-
-// defilement autre ecran
-g_GlobalVar.m_Screen.SetText( "Cal" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+/*// numero luminosite
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "lum.:" ) ;
+sprintf( TmpChar , " %d" , luminosite ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;*/
 
 // ecran calibration
 if ( g_GlobalVar.BoutonGauche() )

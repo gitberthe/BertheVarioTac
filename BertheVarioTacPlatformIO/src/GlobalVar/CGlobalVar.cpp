@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 10/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -78,7 +78,7 @@ beeper( 7000 , 100 ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Permet de demander un son au serveur de son
 void CGlobalVar::beeper( int frequence , int DurationMs , bool VolumeFort )
 {
 //g_GlobalVar.m_MutexI2c.PrendreMutex() ;
@@ -121,15 +121,17 @@ ESP.restart();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief Init GPIO35 en mesure de tension.
+/// \brief Init GPIO35 en mesure de tension. Et GPIO34 pour luminosite
 void  CGlobalVar::InitBattery()
 {
 analogReadResolution( 12 ) ;
 pinMode(VoltageInPin, INPUT_PULLUP); //Il faut déclarer le pin en entrée
+
+pinMode(BrightnessPin, INPUT); //Il faut déclarer le pin en entrée
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief Permet de lire la tension sur 4095 valeur, avec VMax à 303v,
+/// \brief Permet de lire la tension sur 4095 valeur, avec VMax à 3.3v,
 /// par l'intermediare d'un potentiometre diviseur de tension par 2.
 float CGlobalVar::GetBatteryVoltage() const
 {
@@ -138,6 +140,17 @@ val = 3.3 * val / 4095. * 2. ;
 
 return val ;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Permet de lire la tension sur 4095 valeur de luminosite, avec VMax
+/// à 3.3v. Resistance GT36516 : 10lux = 5k, dark = 0.3M.
+/// la valeur semnle varie de 0 en pleine lumiere a 28 dans le noir.
+int CGlobalVar::GetBrightness() const
+{
+int val = analogRead(BrightnessPin);
+return val ;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Permet de purger les boutons pour ne pas redeclancher un vol

@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 07/10/2024
+/// \date modification : 10/10/2024
 ///
 
 
@@ -99,8 +99,8 @@
 #define pinGpsRXD  (1)
 #define pinGpsTXD  (-1)
 
-#define VoltageInPin (35)
-//#define VoltageInPin (-1)
+#define VoltageInPin  (35)
+#define BrightnessPin (34)
 
 // SDCARD
 #define SDCARD_CS_PIN   5
