@@ -43,8 +43,8 @@
 /////////////////////////////
 // define pour le materiel //
 /////////////////////////////
-#define BMP180_PRESS
-//#define MS5611_PRESS
+//#define BMP180_PRESS
+#define MS5611_PRESS
 
 //////////////////////////
 // includes du logiciel //
