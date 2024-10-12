@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 10/10/2024
+/// \date modification : 12/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -27,6 +27,7 @@ public :
     bool BoutonDroit()
         { return m_Screen.IsButtonPressed(2) ; } ;
     void PurgeBoutons( int DelaySec ) ;
+    void GainMemoire() ;
 
     CScreen         m_Screen ;
     CConfigFile     m_Config ;      ///< variables issues du fichier de config

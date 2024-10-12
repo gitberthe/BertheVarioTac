@@ -1,3 +1,9 @@
+le 20241012a :
+ - [temps_igc_ms] passe à 3s par defaut.
+ - Vz declenclement de vol pendant [temps_igc_ms].
+ - [sat_sec] 9s par defaut pour 4 satellites (puis 0s pour 26 satellites).
+ - correction bug editeur cfg file.
+ 
 le 20241010b :
  - essai mesure luminosite.
 

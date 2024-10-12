@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 10/10/2024
+/// \date modification : 12/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -24,6 +24,16 @@ m_pCapteurPression = NULL ;
 #ifdef MS5611_PRESS
  m_pCapteurPression = new CMS5611Pression ;///< capteur de pression
 #endif
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Pour un gain memoire
+void CGlobalVar::GainMemoire()
+{
+RazGpsPos() ;
+m_PileVit.ResetVit() ;
+m_HistoVol.m_HistoDir.clear() ;
+m_Config.FreeVect() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

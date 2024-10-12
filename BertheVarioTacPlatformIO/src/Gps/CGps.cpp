@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 09/10/2024
+/// \date modification : 12/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -180,7 +180,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     if ( fabs(g_GlobalVar.m_VitVertMS) >= g_GlobalVar.m_Config.m_vz_igc_ms )
         {
         iVz++ ;
-        if ( iVz >= 3 )
+        if ( iVz >= g_GlobalVar.m_Config.m_temps_igc_sec )
             break ;
         }
     else
@@ -188,9 +188,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     }
 
 // pour gain memoire
-g_GlobalVar.RazGpsPos() ;
-g_GlobalVar.m_PileVit.ResetVit() ;
-g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
+g_GlobalVar.GainMemoire() ;
 
 // derniere configuration des zones
 g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;

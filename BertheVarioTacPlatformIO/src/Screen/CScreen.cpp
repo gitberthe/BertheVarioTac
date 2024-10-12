@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 10/10/2024
+/// \date modification : 12/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -723,24 +723,24 @@ static char TmpModChar[100] = {0} ;
 std::string Name ;
 std::string Value ; ;
 
-static bool ChampsModified = false ;
-static int m_LastiChamps = -2 ;
-static bool CfgFileEnMod = false ;
+static bool s_ChampsModified = false ;
+static int  s_LastiChamps = -2 ;
+static bool s_CfgFileEnMod = false ;
 
 // à l'entree dans la page on a rien modifier
 if ( IsPageChanged() )
     {
     g_GlobalVar.m_Config.ConstructVect() ;
     m_CfgFileiChamps = -1 ;
-    ChampsModified = false ;
-    m_LastiChamps = -2 ;
+    s_ChampsModified = false ;
+    s_LastiChamps = -2 ;
     }
 
 // on modifie la luminosite en direct
 g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite ) ;
 
 // texte bouton
-if ( CfgFileEnMod )
+if ( s_CfgFileEnMod )
     {
     g_GlobalVar.m_Screen.SetText( " - " , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "Val", 1 ) ;
@@ -767,14 +767,16 @@ if ( m_CfgFileiChamps == -1 )
     {
     strcpy( TmpModChar , "" ) ;
     Name = "  Editeur Cfg file" ;
+    s_ChampsModified = false ;
+    s_LastiChamps = -2 ;
     }
 else
     g_GlobalVar.m_Config.GetChar( m_CfgFileiChamps , Name , Value ) ;
 
 // changement de champ
-if ( m_LastiChamps != m_CfgFileiChamps )
+if ( s_LastiChamps != m_CfgFileiChamps )
     {
-    m_LastiChamps = m_CfgFileiChamps ;
+    s_LastiChamps = m_CfgFileiChamps ;
     ScreenRaz() ;
 
     g_tft.setTextSize(2) ;
@@ -806,24 +808,35 @@ if ( BoutonCent && !CfgFileEnMod && m_CfgFileiChamps == -1 )
     } */
 
 // modification du mode modif/edition
-if ( BoutonCent && m_CfgFileiChamps != -1 )
+if ( BoutonCent )
     {
-    ScreenRaz() ;
-    CfgFileEnMod = !CfgFileEnMod ;
-    if ( CfgFileEnMod )
-        strcpy( TmpModChar , "Modification" ) ;
-    else
+    if ( m_CfgFileiChamps != -1 )
         {
-        strcpy( TmpModChar , "Edition" ) ;
-        if ( ChampsModified )
-            g_GlobalVar.m_Config.EcritureFichier() ;
+        ScreenRaz() ;
+        s_CfgFileEnMod = !s_CfgFileEnMod ;
+        if ( s_CfgFileEnMod )
+            strcpy( TmpModChar , "Modification" ) ;
+        else
+            {
+            strcpy( TmpModChar , "Edition" ) ;
+            if ( s_ChampsModified )
+                {
+                g_GlobalVar.m_Config.EcritureFichier() ;
+                g_GlobalVar.m_Config.ConstructVect() ;
+                }
+            s_ChampsModified = false ;
+            //s_LastiChamps = -2 ;
+            //m_CfgFileiChamps = -1 ;
+            }
         }
+    else
+        s_CfgFileEnMod = false ;
     }
 
 // decrementation de variable
-if ( BoutonGau && CfgFileEnMod )
+if ( BoutonGau && s_CfgFileEnMod && m_CfgFileiChamps >= 0 && m_CfgFileiChamps < g_GlobalVar.m_Config.m_LinesVect.size() )
     {
-    ChampsModified = true ;
+    s_ChampsModified = true ;
     CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[m_CfgFileiChamps] ;
     if ( pLine->m_Type == TYPE_VAR_FLOAT )
         {
@@ -847,9 +860,9 @@ if ( BoutonGau && CfgFileEnMod )
     }
 
 // incrementation de variable
-if ( BoutonDroi && CfgFileEnMod )
+if ( BoutonDroi && s_CfgFileEnMod && m_CfgFileiChamps >= 0 && m_CfgFileiChamps < g_GlobalVar.m_Config.m_LinesVect.size() )
     {
-    ChampsModified = true ;
+    s_ChampsModified = true ;
     CConfigFile::st_line * pLine = g_GlobalVar.m_Config.m_LinesVect[m_CfgFileiChamps] ;
     if ( pLine->m_Type == TYPE_VAR_FLOAT )
         {
@@ -872,8 +885,8 @@ if ( BoutonDroi && CfgFileEnMod )
     g_GlobalVar.m_Screen.ScreenRaz() ;
     }
 
-// defilement
-if (  BoutonGau && !CfgFileEnMod )
+// defilement variable gauche
+if (  BoutonGau && !s_CfgFileEnMod )
     {
     if ( m_CfgFileiChamps > -1 )
         m_CfgFileiChamps-- ;
@@ -881,7 +894,8 @@ if (  BoutonGau && !CfgFileEnMod )
         m_CfgFileiChamps = g_GlobalVar.m_Config.m_LinesVect.size()-1 ;
     }
 
-if ( BoutonDroi && !CfgFileEnMod  )
+// defilement variable droite
+if ( BoutonDroi && !s_CfgFileEnMod  )
     {
     int size = (g_GlobalVar.m_Config.m_LinesVect.size()-1) ;
     if ( m_CfgFileiChamps < size )

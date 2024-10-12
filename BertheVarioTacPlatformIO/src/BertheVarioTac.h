@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 10/10/2024
+/// \date modification : 12/10/2024
 ///
 
 
@@ -56,6 +56,7 @@
 #include "Screen/CText2Screen.h"
 #include "Screen/CScreen.h"
 #include "GlobalVar/CFileHistoVol.h"
+#include "GlobalVar/CNbSatDelay.h"
 #include "GlobalVar/CConfigFile.h"
 #include "Calculateur/CSortArray.h"
 #include "Calculateur/CTerrainsConnu.h"

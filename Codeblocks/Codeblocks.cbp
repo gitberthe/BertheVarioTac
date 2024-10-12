@@ -64,6 +64,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CGlobalVar.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CMutex.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CMutex.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CNbSatDelay.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CNbSatDelay.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CNumTaskArr.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/GlobalVar/CNumTaskArr.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Gps/CFinDeVol.cpp" />

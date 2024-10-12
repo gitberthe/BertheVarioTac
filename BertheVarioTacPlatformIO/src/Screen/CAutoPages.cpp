@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 05/10/2024
+/// \date modification : 12/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -73,9 +73,9 @@ if ( m_EtatAuto != NextStep )
     // pour retour automatique vers Vz_0
     m_MillisEcran0 = millis() ;
 
-    // raz screen si changement ecran
-    //ScreenRaz() ;
+    // changement page
     m_PageChanged = true ;
+    g_GlobalVar.GainMemoire() ;
 
     unsigned long time = millis() ;
     while( (millis()-time) < 200 )
@@ -104,8 +104,8 @@ else
         if( (millis()-m_MillisEcran0)/1000 > m_SecondesRetourEcran0 )
             {
             ScreenRaz() ;
-            //ScreenRazButtons() ;
             m_PageChanged = true ;
+            g_GlobalVar.GainMemoire() ;
             m_EtatAuto = ECRAN_0_Vz ;
             return ;
             }
