@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 09/10/2024
+/// \date modification : 14/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -79,8 +79,8 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
         }
     }
 
-// si pas en vol
-if ( !g_GlobalVar.m_FinDeVol.IsInFlight() )
+// si pas en vol ou modes wifi
+if ( !g_GlobalVar.m_FinDeVol.IsInFlight() || g_GlobalVar.m_ModeHttpFileMgr || g_GlobalVar.m_ModeHttpOta )
     {
     // si toujours presse alors centre de l'ecran
     if ( m_Pressed )

@@ -5,7 +5,7 @@
 ///
 /// \date creation     : 23/03/2024
 /// \date 25/09/2024 : refonte calcul des zones Tma...
-/// \date modification : 25/09/2024
+/// \date modification : 14/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -635,7 +635,7 @@ PtsEnCours.m_Lon = 3.041811;   // anzat-le-luguet
 //TriZonesSurface() ;
 
 // si test wifi positionnement altitude sol
-if ( g_GlobalVar.m_ModeHttp )
+if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_GlobalVar.m_AltitudeSolHgt = g_GlobalVar.m_Hgt2Agl.GetGroundZ( g_GlobalVar.m_TerrainPosCur.m_Lon , g_GlobalVar.m_TerrainPosCur.m_Lat ) ;
 
 // pour toutes les zones, determination si dans surface

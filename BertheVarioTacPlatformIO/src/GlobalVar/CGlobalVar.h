@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 12/10/2024
+/// \date modification : 14/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -38,7 +38,8 @@ public :
     CVirtCaptPress* m_pCapteurPression ;    ///< capteur de pression BMP180 ou MS5611
     CQMC5883Mag     m_QMC5883Mag ;   ///< capteur magnetique
 
-    bool m_ModeHttp = false ;          ///< si mode http
+    bool m_ModeHttpFileMgr = false ;   ///< si mode http pour file manager
+    bool m_ModeHttpOta = false ;       ///< si mode telechargement de firmware http
     bool m_BeepAttenteGVZone = true ;  ///< beep d'attente Gps/Vitesse/Zone
 
     int         m_PercentCore0 ;    ///< pourcentage utilisation core 0

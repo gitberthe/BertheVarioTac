@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 12/10/2024
+/// \date modification : 14/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -26,9 +26,10 @@ m_Automate[ECRAN_3b_TmaMod].m_pFunction  = & CAutoPages::EcranTmaMod ;
 m_Automate[ECRAN_4_CfgFch].m_pFunction   = & CAutoPages::EcranCfgFch ;
 m_Automate[ECRAN_5_TmaDessous].m_pFunction= & CAutoPages::EcranTmaDessous ;
 m_Automate[ECRAN_6_Sys].m_pFunction      = & CAutoPages::EcranSys ;
-m_Automate[ECRAN_7_Wifi].m_pFunction     = & CAutoPages::EcranWifi ;
+m_Automate[ECRAN_7_WifiFileMgr].m_pFunction= & CAutoPages::EcranWifiFileMgr ;
 m_Automate[ECRAN_8_Menu].m_pFunction     = & CAutoPages::EcranMenu ;
 m_Automate[ECRAN_6b_CalMag].m_pFunction  = & CAutoPages::EcranCalibreMagnetique ;
+m_Automate[ECRAN_6c_TelechFirm].m_pFunction= & CAutoPages::EcranTelechargementFirmware ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +94,7 @@ else
     // pas de retour Vz si modification tma ou wifi ou calibration
     if ( (m_CfgFileiChamps != -1 && m_EtatAuto == ECRAN_4_CfgFch ) ||
           m_EtatAuto == ECRAN_3b_TmaMod ||
-          m_EtatAuto == ECRAN_7_Wifi ||
+          //m_EtatAuto == ECRAN_7_WifiFileMgr ||
           (m_EtatAuto == ECRAN_6b_CalMag && m_CalibrationEnCours) )
         m_MillisEcran0 = millis() ;
 

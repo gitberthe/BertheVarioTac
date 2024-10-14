@@ -4,11 +4,10 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 07/10/2024
+/// \date modification : 14/10/2024
 ///
 
 #include "BertheVarioTac.h"
-CGlobalVar g_GlobalVar ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief setup ESP32-2432S028
@@ -93,21 +92,47 @@ void loop()
 
 // variables
 static int count = 0 ;
-static bool WifiSetup = true ;
+static bool WifiSetupFileMgr = true ;
+static bool WifiSetupOta = true ;
 
 count++ ;
 
-// si mode wifi
-if ( g_GlobalVar.m_ModeHttp )
+////////////////////////
+// si mode wifi file ngr
+if ( g_GlobalVar.m_ModeHttpFileMgr )
     {
     // si init wifi
-    if ( WifiSetup )
+    if ( WifiSetupFileMgr )
         {
-        WifiSetup = false ;
-        WifiInit() ;
+        WifiSetupFileMgr = false ;
+        WifiInitFileMgr() ;
         }
 
     g_pfilemgr->handleClient();
+
+    // si ecran pressé on reboot
+    //g_GlobalVar.m_Screen.ResetTimeOut() ;
+    if ( !(count%1000) )
+        {
+        if ( g_GlobalVar.m_Screen.IsCenterPressed() )
+            g_GlobalVar.Reboot() ;
+        }
+
+    return ;
+    }
+
+////////////////////
+// si mode wifi ota
+if ( g_GlobalVar.m_ModeHttpOta )
+    {
+    // si init wifi
+    if ( WifiSetupOta )
+        {
+        WifiSetupOta = false ;
+        WifiInitOta() ;
+        }
+
+    WifiOtaHandle() ;
 
     // si ecran pressé on reboot
     if ( !(count%1000) )
@@ -119,26 +144,39 @@ if ( g_GlobalVar.m_ModeHttp )
     return ;
     }
 
+//////
 // 4hz
-g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
- g_GlobalVar.m_Screen.AfficheButtons() ;
- g_GlobalVar.m_Screen.SequencementPages() ;
-g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 delay( 250 ) ;
 
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ g_GlobalVar.m_Screen.AfficheButtons() ;
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
+
+
+//////
+// 2hz
+if ( ! (count%2) )
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ g_GlobalVar.m_Screen.SequencementPages() ;
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
+
+
+//////
 // 1hz
-if ( count%4 )
-    return ;
+if ( ! (count%4) )
+    {
 
-#ifdef NO_GPS_DEBUG
- Serial.println("mode debug") ;
-#endif
 
-// calcul des zones aeriennes
-g_GlobalVar.m_ZonesAerAll.CalcZone() ;
+    #ifdef NO_GPS_DEBUG
+     Serial.println("mode debug") ;
+    #endif
 
-// calcul terrain le plus proche
-g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
+    // calcul des zones aeriennes
+    g_GlobalVar.m_ZonesAerAll.CalcZone() ;
+
+    // calcul terrain le plus proche
+    g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
+    }
 
 
 //tft.sleep() ;

@@ -1,3 +1,6 @@
+le 20241014a :
+ - telechargement firmware par wifi ok.
+
 le 20241012b :
  - validation capteur MS5611.
 

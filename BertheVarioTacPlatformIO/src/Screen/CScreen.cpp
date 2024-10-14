@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 12/10/2024
+/// \date modification : 14/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -557,7 +557,7 @@ if ( g_GlobalVar.m_Screen.IsButtonPressed( 0 ) )
     unsigned long time = millis() ;
     while( (millis()-time) < 1000 )
         g_GlobalVar.m_Screen.RazButtons() ;
-    return ECRAN_7_Wifi ;
+    return ECRAN_7_WifiFileMgr ;
     }
 else if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
     {
@@ -572,8 +572,8 @@ return ECRAN_2a_ListeIgc ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Permet de passer en mode wifi
-CAutoPages::EtatsAuto CScreen::EcranWifi()
+/// \brief Permet de passer en mode wifi file manager
+CAutoPages::EtatsAuto CScreen::EcranWifiFileMgr()
 {
 if ( IsPageChanged() )
     {
@@ -592,9 +592,9 @@ if ( IsPageChanged() )
 // si confirmation
 if ( g_GlobalVar.BoutonDroit() || g_GlobalVar.BoutonGauche() )
     {
-    g_GlobalVar.m_ModeHttp = true ;
+    g_GlobalVar.m_ModeHttpFileMgr = true ;
     ScreenRaz() ;
-    return ECRAN_7_Wifi ;
+    return ECRAN_7_WifiFileMgr ;
     }
 
 if ( g_GlobalVar.BoutonCentre() )
@@ -602,7 +602,7 @@ if ( g_GlobalVar.BoutonCentre() )
     return ECRAN_2a_ListeIgc ;
     }
 
-return ECRAN_7_Wifi ;
+return ECRAN_7_WifiFileMgr ;
 }
 
 
@@ -1148,7 +1148,7 @@ if ( IsPageChanged() )
     // defilement autre ecran
     g_GlobalVar.m_Screen.SetText( "Cal" , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "", 1 ) ;
-    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( "Fir" , 2 ) ;
 
     //pinMode(BrightnessPin, INPUT); //Il faut déclarer le pin en entrée
     }
@@ -1216,6 +1216,9 @@ y += DeltaY ;*/
 if ( g_GlobalVar.BoutonGauche() )
     return ECRAN_6b_CalMag ;
 
+if ( g_GlobalVar.BoutonDroit() )
+    return ECRAN_6c_TelechFirm ;
+
 return ECRAN_6_Sys ;
 }
 
@@ -1275,7 +1278,7 @@ for ( int im = 0 ; im < 8 ; im++ )
             break ;
         case 7 :
             ItemMenu.m_Intitule = "Wif" ;
-            ItemMenu.m_Page = ECRAN_7_Wifi ;
+            ItemMenu.m_Page = ECRAN_7_WifiFileMgr ;
             break ;
         default :
             ItemMenu.m_Intitule = "Def" ;
@@ -1371,4 +1374,43 @@ if ( g_GlobalVar.BoutonGauche() )
     }
 
 return ECRAN_6b_CalMag ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Ecran telechargement firmware.
+CAutoPages::EtatsAuto CScreen::EcranTelechargementFirmware()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "Ok" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Ok" , 2 ) ;
+
+    g_tft.setTextSize(2) ;
+
+    g_tft.setCursor( 20 , 20 ) ;
+    g_tft.print( "Lancer" ) ;
+    g_tft.setCursor( 20 , 50 ) ;
+    g_tft.print( "Telechargement" ) ;
+    g_tft.setCursor( 20 , 80 ) ;
+    g_tft.print( "Firmware?" ) ;
+    }
+
+// si confirmation
+if ( g_GlobalVar.BoutonDroit() || g_GlobalVar.BoutonGauche() )
+    {
+    g_GlobalVar.m_ModeHttpOta = true ;
+    ScreenRaz() ;
+    return ECRAN_6_Sys ;
+    }
+
+// cancel telechagement
+if ( g_GlobalVar.BoutonCentre() )
+    return ECRAN_6_Sys ;
+
+
+return ECRAN_6c_TelechFirm ;
 }

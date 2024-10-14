@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 12/10/2024
+/// \date modification : 14/10/2024
 ///
 
 
@@ -18,6 +18,8 @@
 #include <SPI.h>
 #include <SD.h>
 #include <WiFi.h>
+#include <WiFiClient.h>
+#include <WebServer.h>
 #include <FS.h>
 #include <ESPFMfGK.h>
 #include <SFE_BMP180.h>
@@ -217,5 +219,9 @@
 // fonctions et variables //
 ////////////////////////////
 void AfficheEcranDebut() ;
-void WifiInit() ;
+void WifiInitFileMgr() ;
+void WifiInitOta() ;
+void WifiOtaHandle() ;
+
+extern WebServer g_server_ota ;
 extern char g_NumVersion[] ;
