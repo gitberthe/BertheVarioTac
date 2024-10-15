@@ -1,3 +1,6 @@
+le 20241015a :
+ - [sat-sec] passe à 10s par defaut.
+
 le 20241014a :
  - telechargement firmware par wifi ok.
 
