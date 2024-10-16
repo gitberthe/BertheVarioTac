@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -104,6 +104,8 @@ else
 /// \brief Affiche la position du touch pad et active les boutons en consequence
 void CTouchButtons::AfficheButtons()
 {
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+
 const uint16_t ColorFond  = TFT_BLACK ;
 const uint16_t ColorTexte = TFT_WHITE ;
 
@@ -139,6 +141,8 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     g_tft.print(m_Intitule[ib]);
     }
 g_tft.endWrite();
+
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

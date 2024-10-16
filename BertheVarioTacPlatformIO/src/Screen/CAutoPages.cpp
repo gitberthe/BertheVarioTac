@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -55,7 +55,9 @@ void CAutoPages::SequencementPages()
 {
 // appel de la fonction de l'automate vers l'etat suivant
 CAutoPages::EtatsAuto (CAutoPages::*pFunction)() = m_Automate[m_EtatAuto].m_pFunction ;
-EtatsAuto NextStep = (this->*pFunction)() ;
+m_MutexTft.PrendreMutex() ;
+ EtatsAuto NextStep = (this->*pFunction)() ;
+m_MutexTft.RelacherMutex() ;
 
 //ScreenOff() ;
 // si centre de l'ecran presse
@@ -129,7 +131,7 @@ return ERREUR ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Fonction static qui lit les boutons
+/// \brief Fonction static qui lance la tache qui lit les boutons
 void CAutoPages::LancerTacheTouch()
 {
 g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Run = true ;
@@ -138,7 +140,8 @@ xTaskCreatePinnedToCore(TacheTouch, "Touch", TOUCH_STACK_SIZE , this, TOUCH_PRIO
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Fonction static qui affiche les ecrans
+/// \brief Fonction static. Tache qui lit les boutons à 10hz et positionne les
+/// variables attenantes.
 void CAutoPages::TacheTouch(void *param)
 {
 while (g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Run)

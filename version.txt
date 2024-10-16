@@ -1,3 +1,7 @@
+le 20241016a :
+ - correction bug ecran par mutex.
+ - prise en compte du capteur de luminosite (à isoler des led de l'ecran).
+
 le 20241015a :
  - [sat-sec] passe à 10s par defaut.
 

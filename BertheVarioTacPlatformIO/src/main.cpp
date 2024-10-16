@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -54,8 +54,8 @@ g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
 // lecture fichier de configuration
 g_GlobalVar.m_Config.LectureFichier() ;
 
-// reglage luminosite car initscreen en premier obligatoire pour SDCard
-g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
+// reglage luminosite
+g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 
 // init capteur de pression
 g_GlobalVar.m_pCapteurPression->InitCapteur() ;
@@ -148,27 +148,25 @@ if ( g_GlobalVar.m_ModeHttpOta )
 // 4hz
 delay( 250 ) ;
 
-g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
- g_GlobalVar.m_Screen.AfficheButtons() ;
-g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
-
+// gestion des boutons
+g_GlobalVar.m_Screen.AfficheButtons() ;
 
 //////
 // 2hz
 if ( ! (count%2) )
-g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
- g_GlobalVar.m_Screen.SequencementPages() ;
-g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
-
+    g_GlobalVar.m_Screen.SequencementPages() ;
 
 //////
 // 1hz
 if ( ! (count%4) )
     {
-
+    // reglage luminosite
+    g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 
     #ifdef NO_GPS_DEBUG
-     Serial.println("mode debug") ;
+     static int count_debug = 0 ;
+     Serial.print( count_debug++) ;
+     Serial.println(" mode debug") ;
     #endif
 
     // calcul des zones aeriennes

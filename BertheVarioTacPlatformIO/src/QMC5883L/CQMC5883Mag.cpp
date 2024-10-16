@@ -4,7 +4,7 @@
 /// \brief Capteur magnetique.
 ///
 /// \date creation     : 04/10/2024
-/// \date modification : 05/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -89,7 +89,7 @@ if ( Cap < 0. )
 if ( Cap > 360. )
     Cap -= 360. ;
 
-#ifdef NO_GPS_DEBUG
+#ifdef MAG_DEBUG
  Serial.println( "---" ) ;
  Serial.print( "x:" ) ; Serial.println( x ) ;
  Serial.print( "y:" ) ; Serial.println( y ) ;

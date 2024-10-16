@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 12/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -154,11 +154,25 @@ return val ;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Permet de lire la tension sur 4095 valeur de luminosite, avec VMax
 /// à 3.3v. Resistance GT36516 : 10lux = 5k, dark = 0.3M.
-/// la valeur semnle varie de 0 en pleine lumiere a 28 dans le noir.
+/// ValCap semble varier de 0 en pleine lumiere a 50 dans le noir.
 int CGlobalVar::GetBrightness() const
 {
-int val = analogRead(BrightnessPin);
-return val ;
+float ValCap = analogRead(BrightnessPin);
+ValCap /= 50. ; // varie alors de 0 pleine lumiere a 1 dans le noir
+float Brightness = 255. - 255./2. * ValCap + m_Config.m_luminosite  ;
+if ( Brightness < 0. )
+    Brightness = 0. ;
+if ( Brightness > 255. )
+    Brightness = 255. ;
+
+#ifdef BRIGHT_DEBUG
+ Serial.print( "lum:" ) ;
+ Serial.print( Brightness ) ;
+ Serial.print( " cap:" ) ;
+ Serial.println( ValCap ) ;
+#endif
+return Brightness ;
+//return 255 ;
 }
 
 
