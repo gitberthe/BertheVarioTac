@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 16/10/2024
 ///
 
 
@@ -148,10 +148,10 @@
 ///////////////////////////
 
 // tache touch, basse priorite core 0 necessaire ou plantage
-#define TOUCH_NUM_TASK       0
+/*#define TOUCH_NUM_TASK       0
 #define TOUCH_STACK_SIZE     3000
 #define TOUCH_PRIORITY       5
-#define TOUCH_CORE           0
+#define TOUCH_CORE           0*/
 
 /////////////////////////////////////////////
 // taches plus temps reel                  //
@@ -159,55 +159,55 @@
 /////////////////////////////////////////////
 
 // scan capteur et calcul Vz priorite tres haute non interruptible
-#define VARIOCAP_NUM_TASK   1
-#define VARIOCAP_STACK_SIZE 3000
+#define VARIOCAP_NUM_TASK   0
+#define VARIOCAP_STACK_SIZE 1500
 #define VARIOCAP_PRIORITY   20
 #define VARIOCAP_CORE       1
 
 // son vario fonction Vz priorite moyenne
-#define VARIOBEEP_NUM_TASK   2
-#define VARIOBEEP_STACK_SIZE 3000
+#define VARIOBEEP_NUM_TASK   1
+#define VARIOBEEP_STACK_SIZE 1000
 #define VARIOBEEP_PRIORITY   15
 #define VARIOBEEP_CORE       1
 
 // serveur de son, priorite moyenne
-#define SOUNDSVR_NUM_TASK   3
+#define SOUNDSVR_NUM_TASK   2
 #define SOUNDSVR_STACK_SIZE 1500
 #define SOUNDSVR_PRIORITY   10
 #define SOUNDSVR_CORE       1
 
 // acquisition gps, priorite haute non interruptible
-#define SERIAL_NUM_TASK         4
-#define SERIAL_GPS_STACK_SIZE   3000
+#define SERIAL_NUM_TASK         3
+#define SERIAL_GPS_STACK_SIZE   2800
 #define SERIAL_GPS_PRIORITY     19
 #define SERIAL_GPS_CORE         1
 
 // ecriture igc, priorite moyenne
-#define IGC_NUM_TASK    5
-#define IGC_STACK_SIZE  4000
+#define IGC_NUM_TASK    4
+#define IGC_STACK_SIZE  3000
 #define IGC_PRIORITY    10
 #define IGC_CORE        1
 
 // temps de vol / histo, basse priorite
-#define TEMPS_NUM_TASK   6
-#define TEMPS_STACK_SIZE 4000
+#define TEMPS_NUM_TASK   5
+#define TEMPS_STACK_SIZE 3000
 #define TEMPS_PRIORITY   5
 #define TEMPS_CORE       1
 
 // relance pour cause faux depart de vol, tache fugitive.
-#define RELANCE_IGC_NUM_TASK   7
+#define RELANCE_IGC_NUM_TASK   6
 #define RELANCE_IGC_STACK_SIZE 3000
 #define RELANCE_IGC_PRIORITY   0
 #define RELANCE_IGC_CORE       1
 
 // tache de mesure d'occupation des cores 0 et 1
-#define PERF_MON_NUM_TASK   8
-#define PERF_MON_STACK_SIZE 1000
+#define PERF_MON_NUM_TASK   7
+#define PERF_MON_STACK_SIZE 800
 #define PERF_MON_PRIORITY   1
 #define PERF_MON_CORE       1
 
 // nombre total de taches
-#define SIZE_TASK 9
+#define SIZE_TASK 8
 
 
 //////////////////////////

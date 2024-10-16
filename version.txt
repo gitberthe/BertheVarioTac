@@ -1,3 +1,6 @@
+le 20241016b :
+ - optimisation memoire (suppression de taches et reduction buffer/stack).
+
 le 20241016a :
  - correction bug ecran par mutex.
  - prise en compte du capteur de luminosite (à isoler des led de l'ecran).

@@ -80,7 +80,7 @@ g_GlobalVar.LanceTacheVarioCapBeep() ;
 g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
 // lancement tache touch
-g_GlobalVar.m_Screen.LancerTacheTouch() ;
+//g_GlobalVar.m_Screen.LancerTacheTouch() ;
 }
 
 
@@ -91,14 +91,18 @@ void loop()
 //g_GlobalVar.m_QMC5883Mag.ScanI2C() ;
 
 // variables
-static int count = 0 ;
+static int count_calcul = 0 ;
+static int count_10hz = 0 ;
+static int count_5hz = 0 ;
+static int count_2_5hz = 0 ;
 static bool WifiSetupFileMgr = true ;
 static bool WifiSetupOta = true ;
 
-count++ ;
+// compteur 10 hz
+count_10hz++ ;
 
 ////////////////////////
-// si mode wifi file ngr
+// si mode wifi file mgr
 if ( g_GlobalVar.m_ModeHttpFileMgr )
     {
     // si init wifi
@@ -111,9 +115,14 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_pfilemgr->handleClient();
 
     // si ecran pressé on reboot
-    //g_GlobalVar.m_Screen.ResetTimeOut() ;
-    if ( !(count%1000) )
+    if ( !(count_10hz%1000) )
         {
+        // traitement de touch pad
+        g_GlobalVar.m_Screen.HandleTouchScreen() ;
+
+        // scan les boutons tactiles
+        g_GlobalVar.m_Screen.HandleButtons() ;
+
         if ( g_GlobalVar.m_Screen.IsCenterPressed() )
             g_GlobalVar.Reboot() ;
         }
@@ -135,8 +144,14 @@ if ( g_GlobalVar.m_ModeHttpOta )
     WifiOtaHandle() ;
 
     // si ecran pressé on reboot
-    if ( !(count%1000) )
+    if ( !(count_10hz%1000) )
         {
+        // traitement de touch pad
+        g_GlobalVar.m_Screen.HandleTouchScreen() ;
+
+        // scan les boutons tactiles
+        g_GlobalVar.m_Screen.HandleButtons() ;
+
         if ( g_GlobalVar.m_Screen.IsCenterPressed() )
             g_GlobalVar.Reboot() ;
         }
@@ -144,38 +159,59 @@ if ( g_GlobalVar.m_ModeHttpOta )
     return ;
     }
 
-//////
-// 4hz
-delay( 250 ) ;
+////////
+// 10 hz
+delay( 100 ) ;
+
+// traitement de touch pad
+g_GlobalVar.m_Screen.HandleTouchScreen() ;
+
+// scan les boutons tactiles
+g_GlobalVar.m_Screen.HandleButtons() ;
+
+///////
+// 5hz
+if ( count_10hz%2 )
+    return ;
+
+// compteur 5hz
+count_5hz++ ;
 
 // gestion des boutons
 g_GlobalVar.m_Screen.AfficheButtons() ;
 
-//////
-// 2hz
-if ( ! (count%2) )
-    g_GlobalVar.m_Screen.SequencementPages() ;
+////////
+// 2.5hz
+if ( count_5hz%2 )
+    return ;
 
-//////
-// 1hz
-if ( ! (count%4) )
-    {
-    // reglage luminosite
-    g_tft.setBrightness( g_GlobalVar.GetBrightness() );
+// compteur 2.5 hz
+count_2_5hz++ ;
 
-    #ifdef NO_GPS_DEBUG
-     static int count_debug = 0 ;
-     Serial.print( count_debug++) ;
-     Serial.println(" mode debug") ;
-    #endif
+// gestion des pages
+g_GlobalVar.m_Screen.SequencementPages() ;
 
+/////////
+// 1.25hz
+if ( count_2_5hz%2 )
+    return ;
+
+// reglage luminosite
+g_tft.setBrightness( g_GlobalVar.GetBrightness() );
+
+#ifdef NO_GPS_DEBUG
+ static int count_debug = 0 ;
+ Serial.print( count_debug++) ;
+ Serial.println(" mode debug") ;
+#endif
+
+// une fois sur 2
+if ( (count_calcul++)%2 )
     // calcul des zones aeriennes
     g_GlobalVar.m_ZonesAerAll.CalcZone() ;
-
+else
     // calcul terrain le plus proche
     g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
-    }
-
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;

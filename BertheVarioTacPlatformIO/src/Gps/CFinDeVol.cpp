@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 24/08/2024
-/// \date modification : 05/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -104,11 +104,11 @@ if ( g_GlobalVar.m_VitesseKmh > VITESSE_FAIBLE )
 if ( fabs(g_GlobalVar.m_VitVertMS) > VZ_PETITE )
     return true ;
 
-// si igc et altitude superieur au deco de 5 metres
+// si igc et altitude superieur au dessus deco de 20 metres
 float AltiDessusDeco = g_GlobalVar.m_TerrainPosCur.m_AltiBaro - g_GlobalVar.m_TerrainPosDeco.m_AltiBaro ;
 if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped == false &&
      g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run == true &&
-     AltiDessusDeco > ALTI_DESSUS_DECO )
+     AltiDessusDeco > ALTI_DESSUS_DECO * 4 )
     return true ;
 
 return false ;

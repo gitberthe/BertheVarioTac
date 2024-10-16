@@ -130,6 +130,7 @@ CGlobalVar::BeepError() ;
 return ERREUR ;
 }
 
+/*
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Fonction static qui lance la tache qui lit les boutons
 void CAutoPages::LancerTacheTouch()
@@ -158,5 +159,5 @@ while (g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Run)
 g_GlobalVar.m_TaskArr[TOUCH_NUM_TASK].m_Stopped = true ;
 while( true )
     vTaskDelete(NULL) ;
-}
+} */
 

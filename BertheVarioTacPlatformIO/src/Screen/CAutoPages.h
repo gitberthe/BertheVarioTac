@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 16/10/2024
 ///
 
 #ifndef _CAUTOPAGE_
@@ -48,7 +48,7 @@ public :
         { m_MillisEcran0 = millis() ; } ;
 
     CMutex m_MutexTft ;
-    void LancerTacheTouch() ;
+    //void LancerTacheTouch() ;
 
 protected :
 
@@ -93,7 +93,7 @@ private :
     const int       m_SecondesRetourEcran0 = 12;///< auto retour ecran 0
     unsigned long   m_MillisEcran0 ;            ///< time out de retour ecran 1 vers 0
 
-    static void TacheTouch(void *param) ;
+    //static void TacheTouch(void *param) ;
 
 } ;
 

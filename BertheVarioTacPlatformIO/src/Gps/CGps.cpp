@@ -40,7 +40,8 @@ xTaskCreatePinnedToCore(TacheGpsTempsVol, "GpsTempsVol", TEMPS_STACK_SIZE , this
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Fonction static qui lit les caracteres du port serie Gps et traite la trame.
+/// \brief Fonction static qui lit les caracteres du port serie Gps et traite
+/// la trame.
 void CGps::TacheGpsSerial(void *param)
 {
 while (g_GlobalVar.m_TaskArr[SERIAL_NUM_TASK].m_Run)
