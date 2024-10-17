@@ -40,9 +40,9 @@
 //////////////////////////
 //#define GPS_DEBUG
 //#define PERFMON_DEBUG
-//#define NO_GPS_DEBUG
+#define NO_GPS_DEBUG
 //#define MAG_DEBUG
-//#define BRIGHT_DEBUG
+#define BRIGHT_DEBUG
 
 /////////////////////////////
 // define pour le materiel //

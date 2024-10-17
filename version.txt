@@ -1,3 +1,6 @@
+le 20241017a :
+ - modification fonction luminosite.
+
 le 20241016b :
  - optimisation memoire (suppression de taches et reduction buffer/stack).
 
