@@ -20,9 +20,11 @@ prix moyen sur aliexpess :
 - gps neo6mv2          3.11
 - QMC5883L magnet.     2.21
 - pcb jlpcb x 5        4.53
-- vis x 4
-- moule boitier        3.99
+- vis x 4 pcb
+- vis boitier * 3
+- durite silicone pcb  1
+- moule boitier        3.99 non utilisé
 - scratch
 - fibre de verre
 ---------------------------
-               total 107.46
+               total 108.46
