@@ -1,7 +1,8 @@
 prix moyen sur aliexpess :
 
-- resistance 3.6 ohms
-- resistances x2 4.7k
+- resistance 3.6 ohms       recup
+- resistances x2 4.7k       recup
+- potentiometre 10k         recup
 - resistance 100 ohms  1.18 non utilisées
 - haut parleur x5      5.43
 - fils rigide 20awg 5m 4.63
@@ -20,11 +21,12 @@ prix moyen sur aliexpess :
 - gps neo6mv2          3.11
 - QMC5883L magnet.     2.21
 - pcb jlpcb x 5        4.53
-- vis x 4 pcb
-- vis boitier * 3
+- vis pcb x 4 
+- vis boitier x 3
 - durite silicone pcb  1
 - moule boitier        3.99 non utilisé
-- scratch
-- fibre de verre
+- moule boitier        1    non utilisé
+- scratch 1m           5
+- fibre de verre 1m   12
 ---------------------------
-               total 108.46
+               total 126.46
