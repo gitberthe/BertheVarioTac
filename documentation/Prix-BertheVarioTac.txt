@@ -5,6 +5,7 @@ prix moyen sur aliexpess :
 - potentiometre 10k            recup
 - resistance 100 ohms     1.18 non utilisées
 - haut parleur x5         5.43
+- convert. logique x 10   2.67 non utilisés
 - fils rigide 20awg 5m    4.63
 - pcb 5*7cm               1    changement de conception
 - prises jst 1.25 x 60    5.38 
@@ -32,4 +33,4 @@ prix moyen sur aliexpess :
 - scratch 1m              5
 - fibre de verre 1m      12
 ------------------------------
-                  total 126.46
+                  total 129.13
