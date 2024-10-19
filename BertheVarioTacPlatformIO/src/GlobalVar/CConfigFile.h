@@ -68,7 +68,7 @@ public :
     friend CNbSatDelay ;
 
 protected :
-    int   m_sat_sec = 10 ;                   ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
+    int   m_sat_sec = 11 ;                   ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
 } ;
 
 #endif

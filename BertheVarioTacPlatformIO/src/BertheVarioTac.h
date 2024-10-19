@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 16/10/2024
+/// \date modification : 19/10/2024
 ///
 
 
@@ -40,9 +40,9 @@
 //////////////////////////
 //#define GPS_DEBUG
 //#define PERFMON_DEBUG
-#define NO_GPS_DEBUG
+//#define NO_GPS_DEBUG
 //#define MAG_DEBUG
-#define BRIGHT_DEBUG
+//#define BRIGHT_DEBUG
 
 /////////////////////////////
 // define pour le materiel //

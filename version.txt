@@ -1,3 +1,6 @@
+le 20241019a :
+ - [sat_sec] 11s par defaut pour 4 satellites, 0 pour 28 satellites.
+ 
 le 20241017a :
  - modification fonction luminosite.
 
