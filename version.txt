@@ -1,3 +1,6 @@
+le 20241021a :
+ - suppression fichier documentation obsolete.
+
 le 20241020a :
  - [sat_sec] 0 pour 30 satellites.
 
