@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 23/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -29,7 +29,8 @@ public :
     void PurgeBoutons( int DelaySec ) ;
     void GainMemoire() ;
 
-    CScreen         m_Screen ;
+    unsigned long   m_temps_debut ; ///< temps d'affichage de debut
+    CScreen         m_Screen ;      ///< ecran tactile
     CConfigFile     m_Config ;      ///< variables issues du fichier de config
     CFilesHistoVols m_HistoVol ;    ///< historique du vol precedent
     CHgt2Agl        m_Hgt2Agl ;     ///< pour determiner la hauteur sol

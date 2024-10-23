@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 17/10/2024
+/// \date modification : 23/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -24,6 +24,8 @@ m_pCapteurPression = NULL ;
 #ifdef MS5611_PRESS
  m_pCapteurPression = new CMS5611Pression ;///< capteur de pression
 #endif
+
+m_temps_debut = millis() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

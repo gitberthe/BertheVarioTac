@@ -36,7 +36,7 @@ g_GlobalVar.InitBattery() ;
 // initialisation de l'ecran tactile
 g_tft.InitScreen() ;
 
-// affichage numero de firmware
+// affaichage vbat
 AfficheEcranDebut() ;
 
 // init sdcard
@@ -156,6 +156,15 @@ if ( g_GlobalVar.m_ModeHttpOta )
             g_GlobalVar.Reboot() ;
         }
 
+    return ;
+    }
+
+/////////////////
+// ecran de debut
+if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 7 )
+    {
+    AfficheEcranDebut() ;
+    delay( 1000 ) ;
     return ;
     }
 
