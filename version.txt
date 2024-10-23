@@ -1,5 +1,6 @@
 le 20241023b :
  - ajout vbatt en premiere page.
+ - fonctionnement sur batterie ok (charge ok).
 
 le 20241023a :
  - photos en plus dans documentation concepteur.
