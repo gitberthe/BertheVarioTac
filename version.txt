@@ -1,3 +1,6 @@
+le 20241025b2 :
+ - changement de batterie pour une 4000mah 124065.
+
 le 20241025b :
  - memorisation cap si non present.
 
