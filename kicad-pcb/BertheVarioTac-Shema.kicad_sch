@@ -1221,7 +1221,7 @@
     (property "Value" "Battery_Cell" (at 199.39 23.4315 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "BertheShema:2 trous standard" (at 196.85 24.384 90)
+    (property "Footprint" "BertheShema:batterie" (at 196.85 24.384 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 196.85 24.384 90)
