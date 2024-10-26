@@ -1,3 +1,8 @@
+le 20241026a :
+ - changement luminosite maximum.
+ - pile CFinDeVol passe à 12 secondes.
+ - [sat_sec] 12s par defaut pour 4 satellites.
+ 
 le 20241025b2 :
  - changement de batterie pour une 4000mah 124065.
 
