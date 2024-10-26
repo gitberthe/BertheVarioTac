@@ -1,3 +1,6 @@
+le 20241026a2 :
+ - ajout procedure de reglage potentiometre dans documentation concepteur.
+
 le 20241026a :
  - changement luminosite maximum.
  - pile CFinDeVol passe à 12 secondes.
