@@ -1,3 +1,7 @@
+le 20241030c3 :
+ - abaissement frequences calcul et affichage pour eco energie.
+ - abaissement frequences scan serveur de son pour eco energie.
+
 le 20241030c2 :
  - luminosite = 1 pour plein soleil.
  - seuil jaune 40% barregraphe tension batterie.

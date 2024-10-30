@@ -107,14 +107,12 @@ void loop()
 
 // variables
 static int count_calcul = 0 ;
-static int count_10hz = 0 ;
 static int count_5hz = 0 ;
-static int count_2_5hz = 0 ;
 static bool WifiSetupFileMgr = true ;
 static bool WifiSetupOta = true ;
 
-// compteur 10 hz
-count_10hz++ ;
+// compteur 5 hz
+count_5hz++ ;
 
 ////////////////////////
 // si mode wifi file mgr
@@ -130,7 +128,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_pfilemgr->handleClient();
 
     // si ecran pressé on reboot
-    if ( !(count_10hz%1000) )
+    if ( !(count_5hz%1000) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -159,7 +157,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
     WifiOtaHandle() ;
 
     // si ecran pressé on reboot
-    if ( !(count_10hz%1000) )
+    if ( !(count_5hz%1000) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -176,7 +174,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
 
 /////////////////
 // ecran de debut
-if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 7 )
+if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 6 )
     {
     AfficheEcranDebut() ;
     delay( 1000 ) ;
@@ -184,8 +182,8 @@ if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 7 )
     }
 
 ////////
-// 10 hz
-delay( 100 ) ;
+// 5 hz
+delay( 200 ) ;
 
 // traitement de touch pad
 g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -193,32 +191,16 @@ g_GlobalVar.m_Screen.HandleTouchScreen() ;
 // scan les boutons tactiles
 g_GlobalVar.m_Screen.HandleButtons() ;
 
-///////
-// 5hz
-if ( count_10hz%2 )
-    return ;
-
-// compteur 5hz
-count_5hz++ ;
-
-// gestion des boutons
+// affichage des boutons
 g_GlobalVar.m_Screen.AfficheButtons() ;
-
-////////
-// 2.5hz
-if ( count_5hz%2 )
-    return ;
-
-// compteur 2.5 hz
-count_2_5hz++ ;
-
-// gestion des pages
-g_GlobalVar.m_Screen.SequencementPages() ;
 
 /////////
 // 1.25hz
-if ( count_2_5hz%2 )
+if ( count_5hz%4 )
     return ;
+
+// affichage des pages
+g_GlobalVar.m_Screen.SequencementPages() ;
 
 // reglage luminosite
 g_tft.setBrightness( g_GlobalVar.GetBrightness() );

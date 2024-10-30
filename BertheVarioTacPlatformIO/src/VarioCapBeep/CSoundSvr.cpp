@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 05/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -50,10 +50,10 @@ config.en_ch = DAC_CHANNEL_2 ; // DAC_GPIO26_CHANNEL ;
 StSoundRequest SoundRequest ;
 while (g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Run)
     {
-    // attente une milliseconde
+    // attente 10 millisecondes
     if( !xQueueReceive(g_GlobalVar.m_queue, &(SoundRequest), (TickType_t)0))
         {
-        delay( 1 ) ;
+        delay( 10 ) ;
         continue ;
         }
 
