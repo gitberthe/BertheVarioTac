@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 26/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -161,12 +161,12 @@ int CGlobalVar::GetBrightness() const
 {
 float ValCap = analogRead(BrightnessPin);
 float ValCap01 = ValCap/130. ; // varie alors de 0 pleine lumiere a 1 dans le noir
-const float MaxBright = 255/2 ;
+const float MaxBright = 255/3 ;
 float Brightness = MaxBright - MaxBright * ValCap01 + m_Config.m_luminosite  ;
-if ( Brightness < 5. )
-    Brightness = 5. ;
-if ( Brightness > 255. )
-    Brightness = 255. ;
+if ( Brightness < 1. )
+    Brightness = 1. ;
+if ( Brightness > MaxBright )
+    Brightness = MaxBright ;
 
 #ifdef BRIGHT_DEBUG
  Serial.print( "lum:" ) ;

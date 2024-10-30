@@ -1,3 +1,6 @@
+le 20241030a :
+ - changement luminosite minumum/maximum.
+ 
 le 20241026a2 :
  - ajout procedure de reglage potentiometre dans documentation concepteur.
 
