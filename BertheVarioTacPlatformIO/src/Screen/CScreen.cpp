@@ -209,7 +209,7 @@ else
     const int xb = 172 ;
     const int hb = 15 ;
     const int yb = 60 ;
-    const int lb = 66 ;
+    const int lb = 67 ;
     const float VbatBas = 3.3 ;
     const float Filtrage = 0.1 ;
     float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.2-VbatBas) ;

@@ -4,9 +4,8 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 23/10/2024
+/// \date modification : 30/10/2024
 ///
-
 
 //////////////////////
 // includes globaux //
@@ -28,6 +27,9 @@
 #include <soc/dac_channel.h>
 #include <driver/dac.h>
 #include <DFRobot_QMC5883.h>
+#include <esp_wifi.h>
+#include <esp_bt.h>
+#include <esp_pm.h>
 
 #include <math.h>
 #include <map>

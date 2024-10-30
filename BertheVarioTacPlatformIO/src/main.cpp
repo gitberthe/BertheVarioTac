@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 16/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -81,6 +81,21 @@ g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
 // lancement tache touch
 //g_GlobalVar.m_Screen.LancerTacheTouch() ;
+
+// desactivation du wifi pour autonomie batterie
+esp_wifi_stop() ;
+esp_wifi_deinit() ;
+
+// blue tooth
+//esp_bt_controller_disable();
+//esp_bt_controller_deinit();
+
+// mode economie d'energie
+esp_pm_config_esp32_t pm_config ;
+pm_config.max_freq_mhz = 100; // 160 240
+pm_config.min_freq_mhz = 40;
+pm_config.light_sleep_enable = true ;
+ESP_ERROR_CHECK(esp_pm_configure(&pm_config));
 }
 
 
@@ -221,6 +236,9 @@ if ( (count_calcul++)%2 )
 else
     // calcul terrain le plus proche
     g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
+
+// mode economie d'energie
+//esp_light_sleep_start() ;
 
 //tft.sleep() ;
 //tft.powerSaveOn() ;
