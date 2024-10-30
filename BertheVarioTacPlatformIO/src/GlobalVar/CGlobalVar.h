@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 23/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #ifndef _GLOBALVAR_
@@ -71,7 +71,7 @@ public :
     void        InitBattery() ;
     float       GetDiffAngle( float AngleA , float AngleB ) ;
     float       GetBatteryVoltage() const ;
-    int         GetBrightness() const ;
+    int         GetBrightness() ;
     static void BeepError(bool small = false) ;
     static void Reboot() ;
     static void BeepOk() ;

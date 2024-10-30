@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 16/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -80,12 +80,13 @@ if ( m_EtatAuto != NextStep )
     m_PageChanged = true ;
     g_GlobalVar.GainMemoire() ;
 
+    /*// anti rebond
     unsigned long time = millis() ;
     while( (millis()-time) < 200 )
         {
         ScreenRazButtons() ;
         delay(1) ;
-        }
+        }*/
     }
 // si meme page alors retour automatique ecran Vz si time out
 else
@@ -96,11 +97,10 @@ else
     // pas de retour Vz si modification tma ou wifi ou calibration
     if ( (m_CfgFileiChamps != -1 && m_EtatAuto == ECRAN_4_CfgFch ) ||
           m_EtatAuto == ECRAN_3b_TmaMod ||
-          //m_EtatAuto == ECRAN_7_WifiFileMgr ||
           (m_EtatAuto == ECRAN_6b_CalMag && m_CalibrationEnCours) )
         m_MillisEcran0 = millis() ;
 
-    // si page pas Vz
+    // si pas page Vz
     if ( m_EtatAuto != ECRAN_0_Vz )
         {
         // si time out

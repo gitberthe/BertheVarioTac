@@ -157,12 +157,14 @@ return val ;
 /// \brief Permet de lire la tension sur 4095 valeur de luminosite, avec VMax
 /// à 3.3v. Resistance GT36516 : 10lux = 5k, dark = 0.3M.
 /// ValCap semble varier de 0 en pleine lumiere a 130 dans le noir.
-int CGlobalVar::GetBrightness() const
+int CGlobalVar::GetBrightness()
 {
 float ValCap = analogRead(BrightnessPin);
 float ValCap01 = ValCap/130. ; // varie alors de 0 pleine lumiere a 1 dans le noir
-const float MaxBright = 255/5 ;
-float Brightness = MaxBright - MaxBright * ValCap01 + m_Config.m_luminosite  ;
+if ( m_Config.m_luminosite < 1 )
+    m_Config.m_luminosite = 1 ;
+const float MaxBright = 255./((float)m_Config.m_luminosite) ;
+float Brightness = MaxBright - MaxBright * ValCap01 ;
 if ( Brightness < 1. )
     Brightness = 1. ;
 if ( Brightness > MaxBright )

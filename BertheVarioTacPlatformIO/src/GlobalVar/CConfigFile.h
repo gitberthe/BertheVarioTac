@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 26/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #ifndef _CCONFIGFILE_
@@ -16,6 +16,8 @@
 #define TYPE_VAR_FLOAT 1
 #define TYPE_VAR_INT   2
 #define TYPE_VAR_BOOL  3
+
+class CGlobalVar ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Fichier de configuration de variables sur la carte SD.
@@ -35,7 +37,6 @@ public :
 
     void GetChar( int iVec , std::string & Name , std::string & Value ) const ;
 
-    int   m_luminosite = 0 ;                ///< valeur a ajouter à la mesure de la luminosite de l'ecran
     float m_coef_filtre_alti_baro = 0.4 ;   ///< coefficient de filtrage [0,1[ , 0.99 tres fort filtrage
     int   m_periode_integration_sec = 2 ;   ///< pour le calcul de la Vz
     int   m_vitesse_igc_kmh = 18 ;          ///< vitesse de declenchement enregistrement
@@ -66,9 +67,11 @@ public :
     static void ReplaceCharIn( std::string & str , char cfind , char creplace ) ;
 
     friend CNbSatDelay ;
+    friend CGlobalVar ;
 
 protected :
-    int   m_sat_sec = 12 ;                   ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
+    int   m_sat_sec = 12 ;                  ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
+    int   m_luminosite = 9 ;                ///< valeur de division de la luminosite maximum : 255/x
 } ;
 
 #endif

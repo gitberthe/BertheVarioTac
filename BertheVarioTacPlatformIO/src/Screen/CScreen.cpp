@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -166,7 +166,7 @@ else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     }
 else
     {
-    // effacement si txete d'erreur precedent
+    // effacement si texte d'erreur precedent
     if ( TextePrecedant )
         {
         TextePrecedant = false ;
@@ -204,6 +204,31 @@ else
         sprintf( TmpChar , " ^%1d^", ((int)(fabsf(DeriveAngle)/10)) ) ;
         m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
         }
+
+    // tension batterie
+    const int xb = 172 ;
+    const int hb = 15 ;
+    const int yb = 60 ;
+    const int lb = 66 ;
+    const float VbatBas = 3.3 ;
+    const float Filtrage = 0.1 ;
+    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.2-VbatBas) ;
+    static float Pourcentage = ValBat ;
+    Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
+    /*Pourcentage += 0.1 ;
+    if ( Pourcentage > 1. )
+        Pourcentage = 0. ;*/
+    uint16_t color_bat = TFT_GREEN ;
+    if ( Pourcentage < 0.1 )
+        {
+        Pourcentage = 0.1 ;
+        color_bat = TFT_RED ;
+        }
+    else if ( Pourcentage < 0.5 )
+        color_bat = TFT_YELLOW ;
+    g_tft.fillRect( xb                    , yb , lb * Pourcentage       , hb , color_bat ) ;
+    g_tft.fillRect( xb + lb * Pourcentage , yb , lb * ( 1.-Pourcentage) , hb , TFT_BLACK ) ;
+    g_tft.fillRect( xb                    , yb + hb , lb , 2 , color_bat ) ;
     }
 
 ///////////////
@@ -737,7 +762,7 @@ if ( IsPageChanged() )
     }
 
 // on modifie la luminosite en direct
-g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite ) ;
+g_tft.setBrightness( g_GlobalVar.GetBrightness() ) ;
 
 // texte bouton
 if ( s_CfgFileEnMod )

@@ -4,7 +4,7 @@
 /// \brief Encapsulation de l'ecran bas niveau
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -74,7 +74,7 @@ void CLGFX::InitScreen()
 {
 g_tft.begin();
 g_tft.setRotation(7);
-g_tft.setBrightness( g_GlobalVar.m_Config.m_luminosite );
+g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 uint16_t calData[] = { 317,3787,3847,3813,331,232,3860,238 };
 
 /*

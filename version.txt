@@ -1,4 +1,8 @@
-le 20241030a2 :
+le 20241030b :
+ - changement luminosite division.
+ - barregraphe tension batterie.
+
+ le 20241030a2 :
  - changement OTA.
 
 le 20241030a :
