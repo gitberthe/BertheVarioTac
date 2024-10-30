@@ -224,7 +224,7 @@ else
         Pourcentage = 0.1 ;
         color_bat = TFT_RED ;
         }
-    else if ( Pourcentage < 0.5 )
+    else if ( Pourcentage < 0.4 )
         color_bat = TFT_YELLOW ;
     g_tft.fillRect( xb                    , yb , lb * Pourcentage       , hb , color_bat ) ;
     g_tft.fillRect( xb + lb * Pourcentage , yb , lb * ( 1.-Pourcentage) , hb , TFT_BLACK ) ;

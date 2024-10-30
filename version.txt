@@ -1,5 +1,6 @@
 le 20241030c2 :
  - luminosite = 1 pour plein soleil.
+ - seuil jaune 40% barregraphe tension batterie.
 
 le 20241030c :
  - taille barregraphe batterie.
