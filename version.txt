@@ -1,3 +1,6 @@
+le 20241030a2 :
+ - changement OTA.
+
 le 20241030a :
  - changement luminosite minumum/maximum.
  
