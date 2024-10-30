@@ -1,5 +1,5 @@
 le 20241030c :
- - taille barregraphe baterie.
+ - taille barregraphe batterie.
  - de init wifi.
  - mode economie d'ebergie
 
