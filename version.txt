@@ -1,3 +1,6 @@
+le 20241030c4 :
+ - vbat max 4.3v pour barregraphe autonomie.
+
 le 20241030c3 :
  - abaissement frequences calcul et affichage pour eco energie.
  - abaissement frequences scan serveur de son pour eco energie.

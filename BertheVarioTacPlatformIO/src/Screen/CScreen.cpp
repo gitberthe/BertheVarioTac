@@ -212,7 +212,7 @@ else
     const int lb = 67 ;
     const float VbatBas = 3.3 ;
     const float Filtrage = 0.1 ;
-    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.2-VbatBas) ;
+    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.3-VbatBas) ;
     static float Pourcentage = ValBat ;
     Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
     /*Pourcentage += 0.1 ;
