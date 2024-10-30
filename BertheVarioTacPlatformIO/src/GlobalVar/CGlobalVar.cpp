@@ -161,7 +161,7 @@ int CGlobalVar::GetBrightness() const
 {
 float ValCap = analogRead(BrightnessPin);
 float ValCap01 = ValCap/130. ; // varie alors de 0 pleine lumiere a 1 dans le noir
-const float MaxBright = 255/3 ;
+const float MaxBright = 255/5 ;
 float Brightness = MaxBright - MaxBright * ValCap01 + m_Config.m_luminosite  ;
 if ( Brightness < 1. )
     Brightness = 1. ;

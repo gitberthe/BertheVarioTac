@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 14/10/2024
+/// \date modification : 30/10/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -19,23 +19,27 @@ CGlobalVar g_GlobalVar ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
-void onOTAStart() {
+void onOTAStart()
+{
   // Log when OTA has started
   //Serial.println("OTA update started!");
-  g_tft.println("OTA update started!");
+  g_tft.println(" OTA start!");
   // <Add your own code here>
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
-void onOTAProgress(size_t current, size_t final) {
+void onOTAProgress(size_t current, size_t final)
+{
+int static count = 0 ;
   // Log every 1 second
   /*if (millis() - ota_progress_millis > 1000) {
     ota_progress_millis = millis();
     Serial.printf("OTA Progress Current: %u bytes, Final: %u bytes\n", current, final);
   }*/
-
- g_tft.print(".");
+if ( !(count%7) )
+    g_tft.print(".");
+count++ ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +47,7 @@ void onOTAProgress(size_t current, size_t final) {
 void onOTAEnd(bool success) {
   // Log when OTA has finished
   if (success) {
-    g_tft.println("OTA update finished successfully!");
+    g_tft.println("\nOTA successfull!");
   } else {
     g_tft.println("There was an error during OTA update!");
   }
@@ -51,7 +55,7 @@ void onOTAEnd(bool success) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Initialisation du mote telechargement firmware.
 void WifiInitOta()
 {
 // arret des autres taches
