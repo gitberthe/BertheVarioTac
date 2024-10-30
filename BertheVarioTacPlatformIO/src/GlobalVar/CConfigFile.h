@@ -71,7 +71,7 @@ public :
 
 protected :
     int   m_sat_sec = 12 ;                  ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
-    int   m_luminosite = 9 ;                ///< valeur de division de la luminosite maximum : 255/x
+    int   m_luminosite = 1 ;                ///< valeur de division de la luminosite maximum : 255/x
 } ;
 
 #endif
