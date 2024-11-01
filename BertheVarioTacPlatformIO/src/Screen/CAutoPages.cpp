@@ -55,9 +55,7 @@ void CAutoPages::SequencementPages()
 {
 // appel de la fonction de l'automate vers l'etat suivant
 CAutoPages::EtatsAuto (CAutoPages::*pFunction)() = m_Automate[m_EtatAuto].m_pFunction ;
-m_MutexTft.PrendreMutex() ;
- EtatsAuto NextStep = (this->*pFunction)() ;
-m_MutexTft.RelacherMutex() ;
+EtatsAuto NextStep = (this->*pFunction)() ;
 
 //ScreenOff() ;
 // si centre de l'ecran presse

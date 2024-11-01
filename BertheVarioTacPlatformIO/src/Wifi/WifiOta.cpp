@@ -63,8 +63,6 @@ g_GlobalVar.StopAll() ;
 
 delay( 500 ) ;
 
-g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
-
 // raz des boutons
 g_GlobalVar.m_Screen.RazButtons() ;
 
@@ -102,8 +100,6 @@ ElegantOTA.begin(&g_server_ota);    // Start ElegantOTA
 ElegantOTA.onStart(onOTAStart);
 ElegantOTA.onProgress(onOTAProgress);
 ElegantOTA.onEnd(onOTAEnd);
-
-g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 g_server_ota.begin();
 }

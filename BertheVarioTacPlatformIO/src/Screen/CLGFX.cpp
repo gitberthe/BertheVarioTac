@@ -4,7 +4,7 @@
 /// \brief Encapsulation de l'ecran bas niveau
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -34,14 +34,18 @@ g_tft.fillRect(0, 0,240,320,TFT_WHITE);
 g_tft.endWrite();*/
 
 //if ( sync_berthe )
-lv_disp_flush_ready( disp );
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ lv_disp_flush_ready( disp );
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief lit le touch par et met a jour g_GlobalVar.m_Screen.
 void my_touchpad_read( lv_indev_drv_t * indev_driver, lv_indev_data_t * data )
 {
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 uint16_t touchX, touchY;
+
 bool touched = g_tft.getTouch( &touchX, &touchY);
 if( !touched )
     {
@@ -66,6 +70,7 @@ else
 
     g_GlobalVar.m_Screen.SetPressed( true ) ;
     }
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

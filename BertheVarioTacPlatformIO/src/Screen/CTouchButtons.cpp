@@ -120,8 +120,6 @@ return false ;
 /// \brief Affiche la position du touch pad et active les boutons en consequence
 void CTouchButtons::AfficheButtons()
 {
-g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
-
 const uint16_t ColorFond  = TFT_BLACK ;
 const uint16_t ColorTexte = TFT_WHITE ;
 
@@ -160,8 +158,6 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     g_tft.setTextSize(2) ;
     g_tft.print(m_Intitule[ib]);
     }
-
-g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,14 +184,20 @@ void CTouchButtons::SetText( const char * Txt3 , int ib )
 // taille du nouveau texte
 int len = strlen(Txt3 ) ;
 
-// pour forcer un reaffichage du text
-for ( int ic = 0 ; ic <= len && ic <= 2 ; ic++ )
+// si texte different pour forcer un reaffichage du text
+if ( len != strlen( m_Intitule[ib] ) )
+    m_PressedArrLast[ib] = !m_PressedArr[ib] ;
+else
     {
-    // si le texte a changé
-    if ( Txt3[ic] != m_Intitule[ib][ic] )
+    // pour forcer un reaffichage du text
+    for ( int ic = 0 ; ic <= len && ic <= 2 ; ic++ )
         {
-        m_PressedArrLast[ib] = !m_PressedArr[ib] ;
-        break ;
+        // si le texte a changé
+        if ( Txt3[ic] != m_Intitule[ib][ic] )
+            {
+            m_PressedArrLast[ib] = !m_PressedArr[ib] ;
+            break ;
+            }
         }
     }
 

@@ -17,13 +17,12 @@ CText2Screen::CText2Screen()
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Parametrage des variables
-void CText2Screen::SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite , bool Const )
+void CText2Screen::SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite )
 {
 m_x = x ;
 m_y = y ;
 m_Taille = taille ;
 m_Unite = Unite ;
-m_Const = Const ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,12 +42,9 @@ g_tft.setCursor( m_x , m_y ) ;
 g_tft.setTextSize(m_Taille) ;
 
 // effacement ancien texte si pas constant
-if ( ! m_Const  )
-    {
-    g_tft.setCursor( m_x , m_y ) ;
-    g_tft.setTextColor(TFT_BLACK) ;
-    g_tft.print(m_TextePrincipal.c_str());
-    }
+g_tft.setCursor( m_x , m_y ) ;
+g_tft.setTextColor(TFT_BLACK) ;
+g_tft.print(m_TextePrincipal.c_str());
 
 // nouveau text
 g_tft.setCursor( m_x , m_y ) ;

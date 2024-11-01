@@ -57,6 +57,8 @@ while (g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Run)
         continue ;
         }
 
+    //g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+
     // traitement de la demande
     if ( SoundRequest.m_Frequence > 0 )
         {
@@ -66,11 +68,15 @@ while (g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Run)
         dac_cw_generator_enable() ;
         }
 
+    //g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
+
     // attente pendant le son
     delay( SoundRequest.m_DelayMs ) ;
 
     // desactivation du son
-    dac_cw_generator_disable() ;
+    //g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+     dac_cw_generator_disable() ;
+    //g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     }
 
 g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = true ;

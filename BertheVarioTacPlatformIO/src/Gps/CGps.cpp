@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 12/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -70,6 +70,8 @@ void CGps::TacheGpsTempsVol(void *param)
 #ifdef _LG_DEBUG_
  Serial.println("tache temps de vol lancee");
 #endif
+
+g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
 
 // raz temps premier GGA
 CTrame::m_MillisPremierGGA = 0 ;
@@ -213,7 +215,6 @@ g_GlobalVar.m_HistoVol.m_VzMin =  10 ;
 
 // lancement tache fichier igc
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
-g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar , IGC_PRIORITY , NULL, IGC_CORE);
 
 // bip debut enregistrement
@@ -251,7 +252,11 @@ while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
 
     // historique du vol toutes les 5 sec
     if ( !(iboucleHistoVol%5) )
-        g_GlobalVar.m_HistoVol.EcritureFichier( g_GlobalVar.GetIgcFileName() ) ;
+        {
+        g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+         g_GlobalVar.m_HistoVol.EcritureFichier( g_GlobalVar.GetIgcFileName() ) ;
+        g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
+        }
     iboucleHistoVol++ ;
     }
 
@@ -270,13 +275,19 @@ void CGps::TacheGpsIgc(void *param)
  Serial.println("tache igc lancee");
 #endif
 
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
+
 // init fichier IGC
-g_GlobalVar.InitCurentIgc() ;
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ g_GlobalVar.InitCurentIgc() ;
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
     {
     // enregistrement position dans igc
-    g_GlobalVar.PushLoc2Igc() ;
+    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+     g_GlobalVar.PushLoc2Igc() ;
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     delay( 500 ) ;
 
     g_GlobalVar.m_FinDeVol.PushPos4FlihgtEnd() ;
@@ -300,7 +311,9 @@ while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
         }
     }
 
+g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = true ;
+
 while( true )
     vTaskDelete(NULL) ;
 }

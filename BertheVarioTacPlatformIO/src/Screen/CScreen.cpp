@@ -29,9 +29,7 @@ m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240 , 3 , 'm' ) ;
 /// \brief A appeler souvent pour le touch screen
 void CScreen::HandleTouchScreen()
 {
-m_MutexTft.PrendreMutex() ;
- lv_timer_handler(); /* let the GUI do its work */
-m_MutexTft.RelacherMutex() ;
+lv_timer_handler(); /* let the GUI do its work */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +48,15 @@ CAutoPages::EtatsAuto CScreen::EcranVz()
 {
 char TmpChar[50] ;
 static int count = 0 ;
+static bool ZoneHautMessageErreurLast = false ;
+bool ZoneHautMessageErreur ;
 count++ ;
+
+// si message d'erreur
+ZoneHautMessageErreur = g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS ||
+                        g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI ||
+                        g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE ||
+                        g_GlobalVar.m_Hgt2Agl.m_ErreurFichier ;
 
 // nouvelle page
 if ( IsPageChanged() || count == 1 )
@@ -67,6 +73,7 @@ if ( IsPageChanged() || count == 1 )
     // reaffichage des texts
     for ( int it = 0 ; it < m_T2SPageVzArr.size() ; it++ )
         m_T2SPageVzArr[it].ForceReaffichage() ;
+    ZoneHautMessageErreurLast = !ZoneHautMessageErreur ;
     }
 
 /////////////////////////////////////
@@ -74,7 +81,7 @@ if ( IsPageChanged() || count == 1 )
 float FinesseTerrainMinimum = 99. ;
 const CLocTerrain * pTerrain = g_GlobalVar.m_TerrainArr.GetTerrainProche( FinesseTerrainMinimum ) ;
 const int Longueur = 11  ;
-char TmpCharNomSite[Longueur+2] = "-----------" ;
+char TmpCharNomSite[] = "-----------" ;
 if ( pTerrain != NULL )
     {
     int inspp = 0 ;
@@ -99,90 +106,63 @@ uint16_t color = TFT_WHITE ;
 const int x1 = 68 , x2 = 240-72;
 const int y1 = 50 , y2 = 90;
 
+// si changement de mode message erreur/terrain reculade
+if ( ZoneHautMessageErreurLast != ZoneHautMessageErreur )
+    {
+    g_tft.fillRect( 0 , 0 , g_GlobalVar.m_Screen.m_Largeur , 89  , TFT_BLACK ) ;
+    if ( !ZoneHautMessageErreur )
+        {
+        g_tft.drawLine( x1 , y1 , x2  , y1 , TFT_WHITE ) ;
+        g_tft.drawLine( x1 , y1 , x1  , y2 , TFT_WHITE ) ;
+        g_tft.drawLine( x2 , y1 , x2  , y2 , TFT_WHITE ) ;
+        }
+    }
+ZoneHautMessageErreurLast = ZoneHautMessageErreur ;
+
 ////////////
 // dans zone
-static bool TextePrecedant = false ;
 if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     {
-    color = TFT_BLACK ;
-    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
-    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
-    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
-    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
     if ( g_GlobalVar.m_BeepAttenteGVZone )
         CGlobalVar::BeepError() ;
-    TextePrecedant = true ;
     }
 // limite zone alti
 else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
     {
-    color = TFT_BLACK ;
-    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
-    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
-    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
-    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
-    TextePrecedant = true ;
     }
 // limite zone frontiere
 else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
     {
-    color = TFT_BLACK ;
-    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
-    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
-    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
-    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_YELLOW) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
+    g_tft.setTextColor(TFT_YELLOW) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneEnLimite.c_str() ) ;
-    TextePrecedant = true ;
     }
 // erreur hgt file
 else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     {
-    color = TFT_BLACK ;
-    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
-    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
-    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
-    m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche("",color) ;
-    m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche("",color) ;
-    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.setCursor( 0 , 0 ) ;
     g_tft.setTextSize( 3 ) ;
+    g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print("** Erreur  **** Hgt File *");
     if ( g_GlobalVar.m_BeepAttenteGVZone )
         CGlobalVar::BeepError() ;
-    TextePrecedant = true ;
     }
 else
     {
-    // effacement si texte d'erreur precedent
-    if ( TextePrecedant )
-        {
-        TextePrecedant = false ;
-        g_tft.fillRect( 0 , 0 , g_GlobalVar.m_Screen.m_Largeur , y1 , TFT_BLACK ) ;
-        }
-
     // nom terrain
     sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 
     // reculade
-    g_tft.drawLine( x1 , y1 , x2  , y1 , color ) ;
-    g_tft.drawLine( x1 , y1 , x1  , y2 , color ) ;
-    g_tft.drawLine( x2 , y1 , x2  , y2 , color ) ;
-
     const float DeriveMilieu = 41. ;
     float DeriveAngle = g_GlobalVar.GetDiffAngle( g_GlobalVar.m_CapGpsDeg , g_GlobalVar.m_QMC5883Mag.GetCapDegres() ) ;
     if ( fabsf(DeriveAngle) >= 90. )
@@ -206,30 +186,38 @@ else
         m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
         }
 
-    // tension batterie
-    const int xb = 172 ;
-    const int hb = 15 ;
-    const int yb = 60 ;
-    const int lb = 67 ;
-    const float VbatBas = 3.3 ;
-    const float Filtrage = 0.1 ;
-    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.25-VbatBas) ;
-    static float Pourcentage = ValBat ;
-    Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
-    /*Pourcentage += 0.1 ;
-    if ( Pourcentage > 1. )
-        Pourcentage = 0. ;*/
-    uint16_t color_bat = TFT_GREEN ;
-    if ( Pourcentage < 0.1 )
+    // tout les 5 affichages
+    static int count_bat = 0 ;
+    count_bat++ ;
+    if ( !(count_bat%5) )
         {
-        Pourcentage = 0.1 ;
-        color_bat = TFT_RED ;
+        // tension batterie
+        const int xb = 172 ;
+        const int hb = 15 ;
+        const int yb = 60 ;
+        const int lb = 67 ;
+        const float VbatBas = 3.3 ;
+        const float Filtrage = 0.1 ;
+        float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.25-VbatBas) ;
+        static float Pourcentage = ValBat ;
+        Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
+        if ( Pourcentage > 1. )
+            Pourcentage = 1. ;
+        /*Pourcentage += 0.1 ;
+        if ( Pourcentage > 1. )
+            Pourcentage = 0. ;*/
+        uint16_t color_bat = TFT_GREEN ;
+        if ( Pourcentage < 0.1 )
+            {
+            Pourcentage = 0.1 ;
+            color_bat = TFT_RED ;
+            }
+        else if ( Pourcentage < 0.4 )
+            color_bat = TFT_YELLOW ;
+        g_tft.fillRect( xb                    , yb , lb * Pourcentage       , hb , color_bat ) ;
+        g_tft.fillRect( xb + lb * Pourcentage , yb , lb * ( 1.-Pourcentage) , hb , TFT_BLACK ) ;
+        g_tft.fillRect( xb                    , yb + hb , lb , 2 , color_bat ) ;
         }
-    else if ( Pourcentage < 0.4 )
-        color_bat = TFT_YELLOW ;
-    g_tft.fillRect( xb                    , yb , lb * Pourcentage       , hb , color_bat ) ;
-    g_tft.fillRect( xb + lb * Pourcentage , yb , lb * ( 1.-Pourcentage) , hb , TFT_BLACK ) ;
-    g_tft.fillRect( xb                    , yb + hb , lb , 2 , color_bat ) ;
     }
 
 ///////////////
@@ -341,8 +329,8 @@ if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
     }
 else
     g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
-// inutilise
-g_GlobalVar.m_Screen.SetText( "", 1 ) ;
+
+
 // si attente de vol
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
@@ -352,7 +340,7 @@ else
     g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 
 // si vol en cours
-if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run && ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
+if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
     g_GlobalVar.m_Screen.SetText( "Vo-" , 1 ) ;
 else
     g_GlobalVar.m_Screen.SetText( "" , 1 ) ;

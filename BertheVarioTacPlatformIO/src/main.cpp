@@ -118,6 +118,8 @@ count_5hz++ ;
 // si mode wifi file mgr
 if ( g_GlobalVar.m_ModeHttpFileMgr )
     {
+    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+
     // si init wifi
     if ( WifiSetupFileMgr )
         {
@@ -140,6 +142,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
             g_GlobalVar.Reboot() ;
         }
 
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     return ;
     }
 
@@ -147,6 +150,8 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
 // si mode wifi ota
 if ( g_GlobalVar.m_ModeHttpOta )
     {
+    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+
     // si init wifi
     if ( WifiSetupOta )
         {
@@ -169,6 +174,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
             g_GlobalVar.Reboot() ;
         }
 
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     return ;
     }
 
@@ -176,7 +182,9 @@ if ( g_GlobalVar.m_ModeHttpOta )
 // ecran de debut
 if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 6 )
     {
-    AfficheEcranDebut() ;
+    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+     AfficheEcranDebut() ;
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     delay( 1000 ) ;
     return ;
     }
@@ -186,15 +194,21 @@ if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 6 )
 delay( 100 ) ;
 
 // traitement de touch pad
-g_GlobalVar.m_Screen.HandleTouchScreen() ;
+//g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ g_GlobalVar.m_Screen.HandleTouchScreen() ;
+//g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 // scan les boutons tactiles
-bool Action = g_GlobalVar.m_Screen.HandleButtons() ;
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+ bool Action = g_GlobalVar.m_Screen.HandleButtons() ;
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 // affichage des boutons
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 g_tft.startWrite();
  g_GlobalVar.m_Screen.AfficheButtons() ;
 g_tft.endWrite();
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 ///////
 // 1 hz
@@ -205,6 +219,7 @@ if ( (count_5hz%10) && !Action )
 bool SpeedScreen = g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz ;
 
 // affichage des pages
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 if ( SpeedScreen )
     g_tft.startWrite();
 g_GlobalVar.m_Screen.SequencementPages() ;
@@ -213,6 +228,7 @@ if ( SpeedScreen )
 
 // reglage luminosite
 g_tft.setBrightness( g_GlobalVar.GetBrightness() );
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 #ifdef NO_GPS_DEBUG
  static int count_debug = 0 ;

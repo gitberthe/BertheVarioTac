@@ -248,8 +248,6 @@ while( !g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped || !g_GlobalVar.m_TaskArr[
 // reinit variables de boucle de taches
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
 g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = true ;
-g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
-g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = false ;
 
 // relance tache
 g_GlobalVar.LanceTacheGps(false) ;

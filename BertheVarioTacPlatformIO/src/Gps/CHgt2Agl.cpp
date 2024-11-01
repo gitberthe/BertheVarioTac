@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 01/04/2024
-/// \date modification : 22/09/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -26,6 +26,7 @@ char FileName[50] ;
 sprintf( FileName , "%s/%c%02d%c%03d.HGT" , REP_HGT_FILE , NS , LatRound , EO , LonRound ) ;
 
 // ouverture fichier
+g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 m_file = SD.open(FileName);
 if ( !m_file )
     {
@@ -34,6 +35,7 @@ if ( !m_file )
         m_ErreurFichier = true ;
     Serial.println("**** Failed to open .hgt file for reading ****");
     Serial.println( FileName ) ;
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     return -1 ;
     }
 
@@ -52,6 +54,7 @@ height[1] = getTileHeight(x + 1, y + 1);
 
 // fermeture fichier
 m_file.close();
+g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 float dy = fmodf(secondsLat, NB_SEC_PAR_TILE) / NB_SEC_PAR_TILE;
 float dx = fmodf(secondsLon, NB_SEC_PAR_TILE) / NB_SEC_PAR_TILE;

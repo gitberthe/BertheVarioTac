@@ -17,7 +17,7 @@ class CText2Screen
 public :
     CText2Screen() ;
 
-    void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' , bool Const = false ) ;
+    void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' ) ;
     void Affiche( const char * pChar , int color = TFT_WHITE ) ;
     void ChangeUnit( char c ) ;
     void ForceReaffichage()
@@ -30,7 +30,6 @@ private :
     uint16_t    m_x = 0 ;
     uint16_t    m_y = 0 ;
     uint16_t    m_Taille = 3 ;
-    bool        m_Const = false ;
     int32_t     m_XUnit ;
     int32_t     m_YUnit ;
 } ;
