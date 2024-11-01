@@ -1,3 +1,6 @@
+le 20241101c :
+ - modification ihm.
+
 le 20241101b :
  - optimisation affichage page Vz.
  - bug ecran/carte sd.
