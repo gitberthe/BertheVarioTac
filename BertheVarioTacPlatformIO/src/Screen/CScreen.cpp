@@ -48,6 +48,7 @@ CAutoPages::EtatsAuto CScreen::EcranVz()
 {
 char TmpChar[50] ;
 static int count = 0 ;
+static int count_bat = 0 ;
 static bool ZoneHautMessageErreurLast = false ;
 bool ZoneHautMessageErreur ;
 count++ ;
@@ -74,6 +75,7 @@ if ( IsPageChanged() || count == 1 )
     for ( int it = 0 ; it < m_T2SPageVzArr.size() ; it++ )
         m_T2SPageVzArr[it].ForceReaffichage() ;
     ZoneHautMessageErreurLast = !ZoneHautMessageErreur ;
+    count_bat = 0 ;
     }
 
 /////////////////////////////////////
@@ -186,33 +188,32 @@ else
         m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar) ;
         }
 
-    // tout les 5 affichages
-    static int count_bat = 0 ;
-    count_bat++ ;
-    if ( !(count_bat%5) )
+    // calcul pourcentage batterie
+    const float VbatBas = 3.3 ;
+    const float Filtrage = 0.1 ;
+    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.25-VbatBas) ;
+    static float Pourcentage = ValBat ;
+    Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
+    if ( Pourcentage > 1. )
+        Pourcentage = 1. ;
+    if ( Pourcentage < 0. )
+        Pourcentage = 0. ;
+
+    // tout les 5 affichages batterie
+    if ( !(count_bat++%5) )
         {
         // tension batterie
         const int xb = 172 ;
         const int hb = 15 ;
         const int yb = 60 ;
         const int lb = 67 ;
-        const float VbatBas = 3.3 ;
-        const float Filtrage = 0.1 ;
-        float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.25-VbatBas) ;
-        static float Pourcentage = ValBat ;
-        Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
-        if ( Pourcentage > 1. )
-            Pourcentage = 1. ;
         /*Pourcentage += 0.1 ;
         if ( Pourcentage > 1. )
             Pourcentage = 0. ;*/
         uint16_t color_bat = TFT_GREEN ;
         if ( Pourcentage < 0.1 )
-            {
-            Pourcentage = 0.1 ;
             color_bat = TFT_RED ;
-            }
-        else if ( Pourcentage < 0.4 )
+        else if ( Pourcentage < 0.35 )
             color_bat = TFT_YELLOW ;
         g_tft.fillRect( xb                    , yb , lb * Pourcentage       , hb , color_bat ) ;
         g_tft.fillRect( xb + lb * Pourcentage , yb , lb * ( 1.-Pourcentage) , hb , TFT_BLACK ) ;

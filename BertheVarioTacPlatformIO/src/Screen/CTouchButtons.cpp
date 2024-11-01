@@ -182,14 +182,14 @@ m_ScreenPressed = false ;
 void CTouchButtons::SetText( const char * Txt3 , int ib )
 {
 // taille du nouveau texte
-int len = strlen(Txt3 ) ;
+int len = strlen(Txt3) ;
 
 // si texte different pour forcer un reaffichage du text
 if ( len != strlen( m_Intitule[ib] ) )
     m_PressedArrLast[ib] = !m_PressedArr[ib] ;
 else
     {
-    // pour forcer un reaffichage du text
+    // comparaison de chaine
     for ( int ic = 0 ; ic <= len && ic <= 2 ; ic++ )
         {
         // si le texte a changé

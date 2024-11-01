@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"

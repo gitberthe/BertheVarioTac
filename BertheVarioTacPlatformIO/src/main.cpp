@@ -118,7 +118,6 @@ count_5hz++ ;
 // si mode wifi file mgr
 if ( g_GlobalVar.m_ModeHttpFileMgr )
     {
-    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
 
     // si init wifi
     if ( WifiSetupFileMgr )
@@ -142,7 +141,6 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
             g_GlobalVar.Reboot() ;
         }
 
-    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     return ;
     }
 
@@ -150,8 +148,6 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
 // si mode wifi ota
 if ( g_GlobalVar.m_ModeHttpOta )
     {
-    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
-
     // si init wifi
     if ( WifiSetupOta )
         {
@@ -174,7 +170,6 @@ if ( g_GlobalVar.m_ModeHttpOta )
             g_GlobalVar.Reboot() ;
         }
 
-    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     return ;
     }
 
