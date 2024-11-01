@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 26/09/2024
+/// \date modification : 01/11/2024
 ///
 
 #ifndef _TXT2SCREEN_
@@ -20,9 +20,12 @@ public :
     void SetPos( uint16_t x , uint16_t y , uint16_t taille , char Unite = ' ' , bool Const = false ) ;
     void Affiche( const char * pChar , int color = TFT_WHITE ) ;
     void ChangeUnit( char c ) ;
+    void ForceReaffichage()
+        { m_ForceAffichage = true ; } ;
 
 private :
     std::string m_TextePrincipal ;  ///< texte courant principal
+    bool        m_ForceAffichage = false ; ///< force un reaffichage
     char        m_Unite = ' ' ;
     uint16_t    m_x = 0 ;
     uint16_t    m_y = 0 ;

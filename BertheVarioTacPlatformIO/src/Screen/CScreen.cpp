@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -64,8 +64,9 @@ if ( IsPageChanged() || count == 1 )
     g_tft.drawLine( 0 ,230 , 240 ,230 , TFT_WHITE ) ;
     g_tft.drawLine( 120 ,230 , 120 ,270 , TFT_WHITE ) ;
 
-    g_GlobalVar.m_HistoVol.m_HistoDir.clear() ;
-    g_GlobalVar.m_Config.FreeVect() ;
+    // reaffichage des texts
+    for ( int it = 0 ; it < m_T2SPageVzArr.size() ; it++ )
+        m_T2SPageVzArr[it].ForceReaffichage() ;
     }
 
 /////////////////////////////////////
@@ -212,7 +213,7 @@ else
     const int lb = 67 ;
     const float VbatBas = 3.3 ;
     const float Filtrage = 0.1 ;
-    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.3-VbatBas) ;
+    float ValBat = (g_GlobalVar.GetBatteryVoltage()-VbatBas)/(4.25-VbatBas) ;
     static float Pourcentage = ValBat ;
     Pourcentage = Pourcentage * (1.-Filtrage) + Filtrage * ValBat ;
     /*Pourcentage += 0.1 ;
@@ -332,7 +333,12 @@ m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].Affiche(TmpChar) ;
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
-    g_GlobalVar.m_Screen.SetText( "Son" , 0 ) ;
+    {
+    if ( g_GlobalVar.m_BeepAttenteGVZone  )
+        g_GlobalVar.m_Screen.SetText( "So-" , 0 ) ;
+    else
+        g_GlobalVar.m_Screen.SetText( "So+" , 0 ) ;
+    }
 else
     g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
 // inutilise
@@ -391,6 +397,7 @@ if ( IsPageChanged() )
     {
     g_GlobalVar.m_HistoVol.LectureFichiers() ;
     lastivol = -1 ;
+    ScreenRaz() ;
     }
 
 if ( lastivol != ivol )

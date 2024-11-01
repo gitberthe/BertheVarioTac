@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -128,7 +128,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_pfilemgr->handleClient();
 
     // si ecran pressé on reboot
-    if ( !(count_5hz%1000) )
+    if ( !(count_5hz%100) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -157,7 +157,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
     WifiOtaHandle() ;
 
     // si ecran pressé on reboot
-    if ( !(count_5hz%1000) )
+    if ( !(count_5hz%100) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -182,25 +182,34 @@ if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 6 )
     }
 
 ////////
-// 5 hz
-delay( 200 ) ;
+// 10 hz
+delay( 100 ) ;
 
 // traitement de touch pad
 g_GlobalVar.m_Screen.HandleTouchScreen() ;
 
 // scan les boutons tactiles
-g_GlobalVar.m_Screen.HandleButtons() ;
+bool Action = g_GlobalVar.m_Screen.HandleButtons() ;
 
 // affichage des boutons
-g_GlobalVar.m_Screen.AfficheButtons() ;
+g_tft.startWrite();
+ g_GlobalVar.m_Screen.AfficheButtons() ;
+g_tft.endWrite();
 
-/////////
-// 1.25hz
-if ( count_5hz%4 )
+///////
+// 1 hz
+if ( (count_5hz%10) && !Action )
     return ;
 
+// si page Vz en cours
+bool SpeedScreen = g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz ;
+
 // affichage des pages
+if ( SpeedScreen )
+    g_tft.startWrite();
 g_GlobalVar.m_Screen.SequencementPages() ;
+if ( SpeedScreen )
+    g_tft.endWrite();
 
 // reglage luminosite
 g_tft.setBrightness( g_GlobalVar.GetBrightness() );

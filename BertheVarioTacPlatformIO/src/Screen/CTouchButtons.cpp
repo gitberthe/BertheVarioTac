@@ -4,11 +4,21 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 16/10/2024
+/// \date modification : 01/11/2024
 ///
 
 #include "../BertheVarioTac.h"
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CTouchButtons::CTouchButtons()
+{
+for ( int i = 0 ; i < m_NbButtons ; i++ )
+    {
+    m_PressedArr[i] = false ;
+    m_PressedArrLast[i] = true ;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoi si le bouton a ete appuye et le RAZ .
@@ -42,7 +52,7 @@ else
 if ( (millis()-m_TimePressed) < ANTI_REBONDS_MS )
     return ;
 
-m_Pressed = pressed ;
+m_ScreenPressed = pressed ;
 m_TimePressed = millis() ;
 }
 
@@ -58,7 +68,8 @@ return ret ;
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Lit la position du touch pad et active les boutons en consequence.
 /// Si on est en vol, la page menu par le centre de l'ecran n'est plus accessible.
-void CTouchButtons::HandleButtons()
+/// \return true si un bouton pressé.
+bool CTouchButtons::HandleButtons()
 {
 // pour tous les boutons
 int ib = 0 ;
@@ -67,28 +78,31 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     // verification zone clic
     if ( g_GlobalVar.m_Screen.m_XTouch > x && g_GlobalVar.m_Screen.m_XTouch < (x + g_GlobalVar.m_Screen.m_Largeur/m_NbButtons) &&
          g_GlobalVar.m_Screen.m_YTouch > (g_GlobalVar.m_Screen.m_Hauteur - m_HauteurBoutons) &&
-         g_GlobalVar.m_Screen.m_Pressed )
+         g_GlobalVar.m_Screen.m_ScreenPressed )
         {
         // bouton gauche centre ou droit
         m_PressedArr[ib] = true ;
         // desactivation g_tft
-        m_Pressed = false ;
+        m_ScreenPressed = false ;
         // desactivation centre écran
         m_CenterPressed = false ;
-        return ;
+        // return action
+        return true ;
         }
     }
 
-// si pas en vol ou modes wifi
+// si pas en vol ou modes wifi, action centre ecran possible
 if ( !g_GlobalVar.m_FinDeVol.IsInFlight() || g_GlobalVar.m_ModeHttpFileMgr || g_GlobalVar.m_ModeHttpOta )
     {
     // si toujours presse alors centre de l'ecran
-    if ( m_Pressed )
+    if ( m_ScreenPressed )
         {
         // centre pressé
         m_CenterPressed = true ;
         // desactivation g_tft
-        m_Pressed = false ;
+        m_ScreenPressed = false ;
+        // return action
+        return true ;
         }
     }
 else
@@ -96,8 +110,10 @@ else
     // centre pressé
     m_CenterPressed = false ;
     // desactivation g_tft
-    m_Pressed = false ;
+    m_ScreenPressed = false ;
     }
+
+return false ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,12 +126,16 @@ const uint16_t ColorFond  = TFT_BLACK ;
 const uint16_t ColorTexte = TFT_WHITE ;
 
 // pour tous les boutons
-g_tft.startWrite();
 int ib = 0 ;
 for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , ib++ )
     {
     // bord du boutons
     int ColorDouble = ColorFond ;
+
+    // pout affichage rapide non gourmand en CPU
+    if ( m_PressedArrLast[ib] == m_PressedArr[ib] )
+        continue ;
+    m_PressedArrLast[ib] = m_PressedArr[ib] ;
 
     // cerclage boutons
     if ( m_PressedArr[ib] )
@@ -140,13 +160,13 @@ for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen
     g_tft.setTextSize(2) ;
     g_tft.print(m_Intitule[ib]);
     }
-g_tft.endWrite();
 
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Remet les boutons à zero
+/// \param button == -1 : raz tpus boutons.
 void CTouchButtons::RazButtons( int button )
 {
 if ( button == -1 )
@@ -157,7 +177,7 @@ if ( button == -1 )
     }
 else
     m_PressedArr[button] = false ;
-m_Pressed = false ;
+m_ScreenPressed = false ;
 //delay( 100 ) ;
 }
 
@@ -165,7 +185,21 @@ m_Pressed = false ;
 /// \brief positionne le texte des boutons
 void CTouchButtons::SetText( const char * Txt3 , int ib )
 {
+// taille du nouveau texte
 int len = strlen(Txt3 ) ;
+
+// pour forcer un reaffichage du text
+for ( int ic = 0 ; ic <= len && ic <= 2 ; ic++ )
+    {
+    // si le texte a changé
+    if ( Txt3[ic] != m_Intitule[ib][ic] )
+        {
+        m_PressedArrLast[ib] = !m_PressedArr[ib] ;
+        break ;
+        }
+    }
+
+// positionnement texte bouton
 for ( int ic = 0 ; ic < 4 ; ic++ )
     {
     if ( ic < len )
