@@ -1,3 +1,6 @@
+le 20241121a :
+ - pose d'une batterie 4000mah modele 965068.
+
 le 20241101c :
  - modification ihm.
 
