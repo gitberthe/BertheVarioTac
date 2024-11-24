@@ -1,3 +1,10 @@
+le 20241124a :
+ - modification methode calcul Vz.
+ - [sat_sec] à 12 par défaut.
+ - [vitesse_igc_kmh] à 16 km/h par défaut.
+ - [coef_filtre_alti_baro] à 0,8 par défaut.
+ - suppression [periode_integration_sec].
+
 le 20241121a :
  - pose d'une batterie 4000mah modele 965068.
 

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 25/09/2024
+/// \date modification : 24/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -13,9 +13,8 @@
 /// \brief Init des tableau dist alti
 void CFinSol::InitDistAltiArr( float Dist , float Alti )
 {
-if ( m_Size == 0 )
+if ( m_pAltiArr == NULL || m_pDistArr == NULL )
     {
-    m_Size = g_GlobalVar.m_Config.m_periode_integration_sec ;
     m_pAltiArr = new float[m_Size] ;
     m_pDistArr = new float[m_Size] ;
 

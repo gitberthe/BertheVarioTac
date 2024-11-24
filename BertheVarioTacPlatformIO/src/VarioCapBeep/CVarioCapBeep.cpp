@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 05/10/2024
+/// \date modification : 24/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -28,49 +28,43 @@ xTaskCreatePinnedToCore(TacheGenereSonVario, "VarioBeep", VARIOBEEP_STACK_SIZE ,
 /// \brief Tache de mesure des capteurs et calcul de la VZ.
 void CVarioCapBeep::TacheVarioCapteur(void* param)
 {
-
-
 // variables
-int count = 0 ;
-float LastAlti ;
+const int DIV_SECONDES = 3 ;
+float AltiPressForVzArr[DIV_SECONDES+1] ;
 
 // premiere altitude
 g_GlobalVar.m_pCapteurPression->MesureAltitudeCapteur() ;
-g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_pCapteurPression->GetAltiMetres() ;
+float AltiBaroFiltree = g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_pCapteurPression->GetAltiBaroPureMetres() ;
 
-LastAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
+// pile des alti baro
+for ( int i = 0 ; i <= DIV_SECONDES ; i++ )
+    AltiPressForVzArr[i] = AltiBaroFiltree ;
 
-// boucle Vz
+// boucle Vz et cap magnetique
 while (g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run)
     {
-    // a 2 hz
-    count++ ;
-    delay( 500 ) ;
+    // a 3 hz
+    delay( 1000/DIV_SECONDES ) ;
 
     // lecture cap magnetique
     g_GlobalVar.m_QMC5883Mag.LectureCap() ;
 
     // mesure altitude recalee et mise a jour altitude courante
+    const float coef = g_GlobalVar.m_Config.m_coef_filtre_alti_baro ;
     g_GlobalVar.m_pCapteurPression->MesureAltitudeCapteur() ;
+    AltiBaroFiltree = (1.-coef) * g_GlobalVar.m_pCapteurPression->GetAltiBaroPureMetres() + coef * AltiBaroFiltree ;
     g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_pCapteurPression->GetAltiMetres() ;
 
-    // a 1 hz
-    //if ( count%2 )
-    //    continue ;
+    // decalage du tableau alti fifo par 0 sur x secondes
+    for ( int i = DIV_SECONDES ; i>0 ; i-- )
+        AltiPressForVzArr[ i ] = AltiPressForVzArr[ i - 1 ] ;
+    AltiPressForVzArr[ 0 ] = AltiBaroFiltree ;
 
     // calcul difference alti baro pure
-    float AltiBaro = g_GlobalVar.m_pCapteurPression->GetAltiBaroPureMetres() ;
-    float DiffAlti = AltiBaro - LastAlti ;
-    DiffAlti /= 2 ; // car 2hz
-    LastAlti = AltiBaro ;
-
-    // filtrage vz
-    float Vz = g_GlobalVar.m_VitVertMS ;
-    const float coef = g_GlobalVar.m_Config.m_coef_filtre_alti_baro ;
-    Vz = (1.-coef) * Vz + coef * DiffAlti ;
+    float DiffAlti = AltiPressForVzArr[ 0 ] - AltiPressForVzArr[ DIV_SECONDES ] ;
 
     // recopie de Vz
-    g_GlobalVar.m_VitVertMS = Vz ;
+    g_GlobalVar.m_VitVertMS = DiffAlti ;
     }
 
 g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Stopped = true ;
