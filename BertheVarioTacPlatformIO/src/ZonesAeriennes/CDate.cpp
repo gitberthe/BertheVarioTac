@@ -6,7 +6,7 @@
 ///
 /// \date 03/03/2016 : plus de librairie TRB.
 /// \date 11/11/2022 : passage de julien vers gregorien
-/// \date 25/09/2024 : derniere modification
+/// \date 25/11/2024 : derniere modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -127,6 +127,7 @@ else
     annee=C-4715;
 }
 
+/*
 /////////////////////////////////////////////////////////////////////////////
 /// \brief Donner le jour de la semaine en  fonction du jour julien. (voir TRBJulien.cpp)
 ///
@@ -158,6 +159,7 @@ if ( l_Q > 7. )
 
 return TabNomJours[l_Q-1] ;
 }
+*/
 
 /////////////////////////////////////////////////////////////////////////////
 /// \brief Donner si on est en week-end.
@@ -193,6 +195,7 @@ GetDateTU( annee, mois, jour, heure_tu_0_24 ) ;
 return ((annee % 4) == 0) && (((annee % 100) != 0) || ((annee % 400) == 0)) ;
 }
 
+/*
 /////////////////////////////////////////////////////////////////////////////
 /// \brief Passe de julien vers gregorien (d'apres wikipedia)
 void CDate::JulienVersGregorien()
@@ -243,6 +246,7 @@ for ( int id = 0 ; true ; id++ )
         }
     }
 }
+*/
 
 /////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoi le JJ de date arrondi a nb jours

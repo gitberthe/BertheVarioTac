@@ -4,7 +4,7 @@
 /// \brief Texte a afficher
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 25/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -29,7 +29,12 @@ m_Unite = Unite ;
 /// \brief Affichage sans flick.
 void CText2Screen::Affiche(const char* pChar , int color )
 {
-bool TextChange = m_TextePrincipal != pChar ;
+//bool TextChange = m_TextePrincipal != pChar ;
+bool TextChange = true ;
+
+// si le tete a changé
+if ( m_TextePrincipal != NULL )
+    TextChange = strcmp( m_TextePrincipal , pChar ) ;
 
 // si le texte n'a pas changé
 if ( !TextChange && !m_ForceAffichage )
@@ -44,14 +49,20 @@ g_tft.setTextSize(m_Taille) ;
 // effacement ancien texte si pas constant
 g_tft.setCursor( m_x , m_y ) ;
 g_tft.setTextColor(TFT_BLACK) ;
-g_tft.print(m_TextePrincipal.c_str());
+//g_tft.print(m_TextePrincipal.c_str());
+if ( m_TextePrincipal != NULL )
+    g_tft.print(m_TextePrincipal);
 
 // nouveau text
 g_tft.setCursor( m_x , m_y ) ;
 g_tft.setTextColor(color) ;
 g_tft.print(pChar);
 
-m_TextePrincipal = pChar ;
+if ( m_TextePrincipal != NULL )
+    delete [] m_TextePrincipal ;
+m_TextePrincipal = new char [ strlen(pChar) + 1 ] ;
+strcpy( m_TextePrincipal , pChar ) ;
+//m_TextePrincipal = pChar ;
 
 // unite
 /*if ( m_Taille == TXT_MOYEN )

@@ -5,7 +5,7 @@
 /// \brief Declaration CDate.
 ///
 /// \date 11/11/2021 : passage de julien vers gregorien
-/// \date 25/09/2024 : dernierre modification
+/// \date 25/11/2024 : dernierre modification
 ///
 
 #ifndef _CMJDATE_
@@ -28,13 +28,13 @@ public:
 
     void    GetDateTU( int & annee, int & mois, int & jour, float & heure_tu ) const ;
     void    SetDateTU( int annee, int mois, int jour, float heure_tu ) ;
-    void    JulienVersGregorien() ;
+    //void    JulienVersGregorien() ;
 
     float GetT_1900_UT() const;
     float GetT_J2000() const;
     float GetJD_TU() const
             { return m_JD_TU ; } ;
-    const char * GetNomJour() const;
+    //const char * GetNomJour() const;
     bool         IsWeekEnd() const;
     bool        IsBissextile() const ;
 

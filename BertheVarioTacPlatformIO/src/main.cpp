@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 25/11/2024
 ///
 
 #include "BertheVarioTac.h"
@@ -53,6 +53,7 @@ g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
 
 // lecture fichier de configuration
 g_GlobalVar.m_Config.LectureFichier() ;
+g_GlobalVar.m_Config.FreeVect() ;
 
 // reglage luminosite
 g_tft.setBrightness( g_GlobalVar.GetBrightness() );
@@ -175,7 +176,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
 
 /////////////////
 // ecran de debut
-if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 6 )
+if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 5 )
     {
     g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
      AfficheEcranDebut() ;
@@ -261,4 +262,6 @@ else
 //tft.powerSaveOff() ;
 //tft.wakeup() ;
 //tft.endTransaction();
+
+//uxTaskGetStackHighWaterMark(NULL) ;
 }

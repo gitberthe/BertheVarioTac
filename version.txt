@@ -1,3 +1,8 @@
+le 20241125a :
+ - modification Screen/lv_conf.h
+ - modification CText2Screen
+ - modification CDate
+ 
 le 20241124a :
  - modification methode calcul Vz.
  - [sat_sec] à 12 par défaut.
