@@ -19,12 +19,15 @@
 #include <iostream>
 
 #define UnMileEnMetres         (1852.)
+#define MilesParDegres         (60.)
+
 #define DIST_METRE_4_ZONE       50  ///< distance en metre pour le calcul/compression entre 2 points
 #define ANGLE_DEGRES_4_ZONE     6   ///< angle pour supression/compression si points alignés
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Classe de reduction du nombre de points par suppression de ceux plus
-/// proche du barycentre et distance minimum.
+/// \brief Classe de reduction du nombre de points par suppression de ceux qui
+/// sont espacés de 50 metres ou qui sont en ligne droite de 6°.
+/// Uilise par BVTZoneAerienne lors de la creation du fichier de zones.
 class CVecZoneReduce
 {
 public :

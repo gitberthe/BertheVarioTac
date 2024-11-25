@@ -5,7 +5,9 @@
 ///
 /// \date creation   : 23/03/2024
 /// \date 25/09/2024 : refonte calcul des zones Tma...
-/// \date 25/11/2024 : la compression de zone ce fait dans BVTZoneAerienne
+/// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
+///                    BVTZoneAerienne.
+/// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 /// \date 25/11/2024 : modification
 ///
 
@@ -123,10 +125,19 @@ TraiteBufferZoneAer( TmpChar ) ;
 
 m_File.close();
 
-// tri de la plus petite surface/altitude vers la plus grande
-//TriZonesSurface() ;
-
 delete [] TmpChar ;
+
+// allocation du buffer de zone lz4
+CZoneAer::ms_max_dst_size = LZ4_compressBound( CZoneAer::ms_MaxNombrePtsZone * 2 * sizeof(short) );
+CZoneAer::ms_compressed_data_lz4 = new char [CZoneAer::ms_max_dst_size] ;
+
+// compression des zones
+for ( int nz = 0 ; nz < m_NbZones ; nz++ )
+    {
+    CZoneAer * pZone = m_ZonesArr[nz] ;
+    pZone->CompressZone() ;
+    pZone->FreeFloat() ;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +229,7 @@ pZone->m_AltiBasse = atoi( pChar ) ;
 pChar = strtok( NULL , ";," ) ;
 std::vector<CVecZoneReduce::st_coord_poly*> VecPoly ;
 // reserve pour une grande zone
-VecPoly.reserve( 500 ) ;
+VecPoly.reserve( 400 ) ;
 while ( pChar != NULL )
     {
     // nouveau point
@@ -241,33 +252,19 @@ while ( pChar != NULL )
     //    break ;
     }
 
-/*CVecReduce VecReduce ;
-VecReduce.Set( VecPoly ) ;
-VecReduce.ReduceTo( DIST_METRE_4_ZONE ) ;*/
-
-/*// pour gnuplot
-Serial.println( "********************" ) ;
-for ( int iv = 0 ; iv < VecPoly.size() ; iv ++ )
-    {
-    Serial.print(VecPoly[iv]->m_Lon , 5 ) ;
-    Serial.print( " " ) ;
-    Serial.println(VecPoly[iv]->m_Lat , 5 ) ;
-    }
-Serial.println( "********************" ) ; //*/
-
 // recopie du vecteur de points vers le tableau de points
-pZone->m_PolygoneArr = new CVecZoneReduce::st_coord_poly * [ VecPoly.size() ] ;
-memcpy( pZone->m_PolygoneArr , & VecPoly[0] , VecPoly.size() * sizeof( CVecZoneReduce::st_coord_poly*) ) ;
-pZone->m_NbPts = VecPoly.size() ;
+pZone->m_PolyStLaLoArr = new CVecZoneReduce::st_coord_poly * [ VecPoly.size() ] ;
+memcpy( pZone->m_PolyStLaLoArr , & VecPoly[0] , VecPoly.size() * sizeof( CVecZoneReduce::st_coord_poly*) ) ;
+pZone->m_NbStLaLoPts = VecPoly.size() ;
 
 // calcul du barycentre
-CPolygone::CalcBarycentre( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
+CPolygone::CalcBarycentre( pZone->m_PolyStLaLoArr , pZone->m_NbStLaLoPts , pZone->m_Barycentre ) ;
 
 // calcul du rayon max
 pZone->m_RayonMetre = 0. ;
-for ( int is = 0 ; is < pZone->m_NbPts ; is++ )
+for ( int is = 0 ; is < pZone->m_NbStLaLoPts ; is++ )
     {
-    const CVecZoneReduce::st_coord_poly & PtsCour = *pZone->m_PolygoneArr[is] ;
+    const CVecZoneReduce::st_coord_poly & PtsCour = *pZone->m_PolyStLaLoArr[is] ;
     float dist = sqrtf( powf(pZone->m_Barycentre.m_Lat-PtsCour.m_Lat,2) + powf(pZone->m_Barycentre.m_Lon-PtsCour.m_Lon,2) ) * 60. * UnMileEnMetres  ;
     if ( dist > pZone->m_RayonMetre )
         pZone->m_RayonMetre = dist ;
@@ -275,6 +272,14 @@ for ( int is = 0 ; is < pZone->m_NbPts ; is++ )
 
 // pour prochain appel, buffer vide
 *buff = 0 ;
+
+// comptage du nombre de points maximum
+if ( CZoneAer::ms_MaxNombrePtsZone < pZone->m_NbStLaLoPts )
+    CZoneAer::ms_MaxNombrePtsZone = pZone->m_NbStLaLoPts ;
+
+// compression / decompression
+//pZone->CompressZone() ;
+//pZone->FreeFloat() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -645,7 +650,7 @@ std::vector<const CZoneAer *> VecZoneInAreaActivee ;// zones activable comme R_3
 const CZoneAer * pZoneProtegee = NULL ;             // zone protege
 for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     {
-    const CZoneAer & Zone = *m_ZonesArr[iz] ;
+    CZoneAer & Zone = *m_ZonesArr[iz] ;
 
     // si la zone n'est pas active
     if ( !Zone.m_Activee )
@@ -655,8 +660,18 @@ for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     float DistBaryMetres = sqrtf( powf(Zone.m_Barycentre.m_Lat-PtsEnCours.m_Lat,2) + powf(Zone.m_Barycentre.m_Lon-PtsEnCours.m_Lon,2) )  * 60. * UnMileEnMetres ;
     bool DansLeRayon = DistBaryMetres < Zone.m_RayonMetre ;
 
+    // si pas dans le rayon
+    if ( ! DansLeRayon )
+        continue ;
+
+    // decompression de la zone
+    Zone.UnCompressZone() ;
+
     // dedans la surface
-    bool IsInArea = DansLeRayon && CPolygone::IsIn( Zone.m_PolygoneArr , Zone.m_NbPts , PtsEnCours ) ;
+    bool IsInArea = CPolygone::IsIn( Zone.m_PolyStLaLoArr , Zone.m_NbStLaLoPts , PtsEnCours ) ;
+
+    // liberation des float
+    Zone.FreeFloat() ;
 
     // si dedans la surface
     if ( IsInArea )
@@ -823,7 +838,7 @@ m_Mutex.RelacherMutex() ;
 // pour toutes les zones recherche frontiere XY
 for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrIn != ZONE_DEDANS && g_GlobalVar.m_Config.m_XYMargin > 0 ; iz++ )
     {
-    const CZoneAer & Zone = *m_ZonesArr[iz] ;
+    CZoneAer & Zone = *m_ZonesArr[iz] ;
 
     // si la zone n'est pas active
     if ( !Zone.m_Activee )
@@ -831,14 +846,24 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrI
 
     // dans le du rayon + marge
     float DistBaryMetres = sqrtf( powf(Zone.m_Barycentre.m_Lat-PtsEnCours.m_Lat,2) + powf(Zone.m_Barycentre.m_Lon-PtsEnCours.m_Lon,2) )  * 60. * UnMileEnMetres ;
-    bool DansLeRayon = DistBaryMetres < Zone.m_RayonMetre ;
+    bool DansLeRayonMarge = DistBaryMetres < (Zone.m_RayonMetre+g_GlobalVar.m_Config.m_XYMargin) ;
+
+    // si pas dans le rayon + marge
+    if ( !DansLeRayonMarge )
+        continue ;
+
+    // decompression de la zone
+    Zone.UnCompressZone() ;
 
     // dedans la surface
-    bool IsInArea = DansLeRayon && CPolygone::IsIn( Zone.m_PolygoneArr , Zone.m_NbPts , PtsEnCours ) ;
+    bool IsInArea = CPolygone::IsIn( Zone.m_PolyStLaLoArr , Zone.m_NbStLaLoPts , PtsEnCours ) ;
     // proche de la frontiere de zone
-    bool IsNearFront = !IsInArea && CDistFront::IsNearFront( Zone.m_PolygoneArr , Zone.m_NbPts , PtsEnCours ) ;
+    bool IsNearFront = !IsInArea && CDistFront::IsNearFront( Zone.m_PolyStLaLoArr , Zone.m_NbStLaLoPts , PtsEnCours ) ;
     // determionation zone protege
     bool ZoneProtege = IsNearFront && (strstr( Zone.m_NomOri.c_str() , "PROTECT" ) != NULL) ;
+
+    // liberation des float
+    Zone.FreeFloat() ;
 
     // prise en compte de l'altitude
     bool IsNearFrontAlti ;
@@ -861,6 +886,7 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrI
         break ;
         }
     }
+
 
 // variables de sortie fontiere
 m_Mutex.PrendreMutex() ;

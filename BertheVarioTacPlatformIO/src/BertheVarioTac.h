@@ -30,6 +30,7 @@
 #include <esp_wifi.h>
 #include <esp_bt.h>
 #include <esp_pm.h>
+#include <lz4.h>
 
 #include <math.h>
 #include <map>

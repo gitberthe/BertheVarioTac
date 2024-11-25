@@ -3,8 +3,10 @@
 ///
 /// \brief
 ///
-/// \date creation     : 23/03/2024
-/// \date modification : 25/11/2024
+/// \date creation   : 23/03/2024
+/// \date 25/11/2024 : ajout de la compression des float en short et lz4.
+///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
+/// \date 25/11/2024 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -13,6 +15,8 @@
 #define ALTI_BASSE           0
 #define ALTI_PERIODE_SEMAINE 1
 #define ALTI_PERIODE_WEEKEND 2
+
+#define ResolCompress        (18.)
 
 // FL 195	5800 mètres
 // FL 175	5332 mètres
@@ -58,17 +62,30 @@ public :
     int     m_AltiBasse=-1 ;            ///< altitude basse de la zone par defaut
     CZoneAerDerogFfvl * m_pDerogFfvl = NULL ; ///< si zone avec derogation ffvl
 
+    void CompressZone() ;
+    void UnCompressZone() ;
+    void FreeFloat() ;
+
     friend class CZonesAerAll ;
 
     bool operator > ( const CZoneAer & Zone ) const ;
     bool operator < ( const CZoneAer & Zone ) const ;
 
 private :
-    CVecZoneReduce::st_coord_poly **m_PolygoneArr=NULL; ///< tableau des points de la zone
-    int                             m_NbPts = 0 ;       ///< nombre de points de la zone
+    static int      ms_max_dst_size ;           ///< taille du buffer lz4
+    static int      ms_MaxNombrePtsZone ;       ///< nombre de pts maximum d'une zone
+    static char*    ms_compressed_data_lz4 ;    ///< buffer de compression lz4
 
-    CVecZoneReduce::st_coord_poly   m_Barycentre ;      ///< pour une recherche rapide
-    float                           m_RayonMetre ;      ///< pour une recherche rapide
+private :
+    CVecZoneReduce::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
+    int                             m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
+
+    short                          *m_LowResShortArr=NULL;   ///< tableau des coordonnees relatives au barycentre pour compression short
+    char                           *m_CharLz4Arr=NULL ;      ///< tableau des short compresse lz4
+    short                           m_Lz4BuffSize ;          ///< taille du buffer des lz4
+
+    CVecZoneReduce::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
+    float                           m_RayonMetre ;          ///< pour une recherche rapide
 
     static bool ms_TriParNom ;  ///< pour un tri par nom
 } ;

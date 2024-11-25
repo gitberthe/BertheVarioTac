@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 25/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -1183,8 +1183,10 @@ g_tft.setTextSize(2) ;
 
 // date
 char TmpChar[20] ;
-g_tft.setCursor( 60  , 0 ) ;
-sprintf( TmpChar , "%04d-%02d-%02d" , g_GlobalVar.m_Annee , g_GlobalVar.m_Mois , g_GlobalVar.m_Jour ) ;
+g_tft.setCursor( 20  , 0 ) ;
+sprintf( TmpChar , "%04d-%02d-%02d %02d:%02d" , g_GlobalVar.m_Annee , g_GlobalVar.m_Mois , g_GlobalVar.m_Jour ,
+                                                (int)((g_GlobalVar.m_HeureSec/3600)%24),
+                                                (int)((g_GlobalVar.m_HeureSec/60)%60) ) ;
 g_tft.print( TmpChar ) ;
 
 const int DeltaY = 20 ;
