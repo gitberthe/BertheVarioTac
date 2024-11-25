@@ -1,3 +1,6 @@
+le 20241125c2 :
+ - modification doc utilisateur.
+
 le 20241125c :
  - ajout de la compression des float 32 bit en short 16 bits pour les CZoneAer.
    Resolution de 18m et zone imperativement dans le cercle de rayon 589km (sinon reboot)
