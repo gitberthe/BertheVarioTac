@@ -3,9 +3,10 @@
 ///
 /// \brief
 ///
-/// \date creation     : 23/03/2024
+/// \date creation   : 23/03/2024
 /// \date 25/09/2024 : refonte calcul des zones Tma...
-/// \date modification : 14/10/2024
+/// \date 25/11/2024 : la compression de zone ce fait dans BVTZoneAerienne
+/// \date 25/11/2024 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -131,7 +132,6 @@ delete [] TmpChar ;
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Cette fonction traite une ligne texte de zone et la met sous forme binaire
 /// dans le tableau m_ZonesArr.
-/// Reduction de zone a 300 pts MAX_PTS_4_ZONE par CVecReduce.
 /// Calcul aussi le barycentre et le rayon max de la zone pour une recheche rapide.
 void CZonesAerAll::TraiteBufferZoneAer( char * buff )
 {
@@ -216,13 +216,13 @@ pZone->m_AltiBasse = atoi( pChar ) ;
 
 // ajout des points du polygone
 pChar = strtok( NULL , ";," ) ;
-std::vector<CZoneAer::st_coord_poly*> VecPoly ;
+std::vector<CVecZoneReduce::st_coord_poly*> VecPoly ;
 // reserve pour une grande zone
-VecPoly.reserve( 2000 ) ;
+VecPoly.reserve( 500 ) ;
 while ( pChar != NULL )
     {
     // nouveau point
-    CZoneAer::st_coord_poly * ppts = new CZoneAer::st_coord_poly ;
+    CVecZoneReduce::st_coord_poly * ppts = new CVecZoneReduce::st_coord_poly ;
 
     // longitude
     ppts->m_Lon = atof( pChar ) ;
@@ -237,11 +237,13 @@ while ( pChar != NULL )
 
     //Serial.println( m_NbZones ) ;
     //Serial.println( esp_get_free_heap_size() ) ;
+    //if ( VecPoly.size() > 200 )
+    //    break ;
     }
 
-CVecReduce VecReduce ;
+/*CVecReduce VecReduce ;
 VecReduce.Set( VecPoly ) ;
-VecReduce.ReduceTo( DIST_METRE_4_ZONE ) ;
+VecReduce.ReduceTo( DIST_METRE_4_ZONE ) ;*/
 
 /*// pour gnuplot
 Serial.println( "********************" ) ;
@@ -254,19 +256,18 @@ for ( int iv = 0 ; iv < VecPoly.size() ; iv ++ )
 Serial.println( "********************" ) ; //*/
 
 // recopie du vecteur de points vers le tableau de points
-pZone->m_PolygoneArr = new CZoneAer::st_coord_poly * [ VecPoly.size() ] ;
-memcpy( pZone->m_PolygoneArr , & VecPoly[0] , VecPoly.size() * sizeof( CZoneAer::st_coord_poly*) ) ;
+pZone->m_PolygoneArr = new CVecZoneReduce::st_coord_poly * [ VecPoly.size() ] ;
+memcpy( pZone->m_PolygoneArr , & VecPoly[0] , VecPoly.size() * sizeof( CVecZoneReduce::st_coord_poly*) ) ;
 pZone->m_NbPts = VecPoly.size() ;
 
-// calcul de la surface et du barycentre
-//pZone->m_Area = CPolygone::GetAreaSize( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
+// calcul du barycentre
 CPolygone::CalcBarycentre( pZone->m_PolygoneArr , pZone->m_NbPts , pZone->m_Barycentre ) ;
 
 // calcul du rayon max
 pZone->m_RayonMetre = 0. ;
 for ( int is = 0 ; is < pZone->m_NbPts ; is++ )
     {
-    const CZoneAer::st_coord_poly & PtsCour = *pZone->m_PolygoneArr[is] ;
+    const CVecZoneReduce::st_coord_poly & PtsCour = *pZone->m_PolygoneArr[is] ;
     float dist = sqrtf( powf(pZone->m_Barycentre.m_Lat-PtsCour.m_Lat,2) + powf(pZone->m_Barycentre.m_Lon-PtsCour.m_Lon,2) ) * 60. * UnMileEnMetres  ;
     if ( dist > pZone->m_RayonMetre )
         pZone->m_RayonMetre = dist ;
@@ -609,7 +610,7 @@ int         RetNbrLimite = ZONE_EN_DEHORS ;
 char        TmpChar[100] ;
 
 // test dans la zone, position courante
-CZoneAer::st_coord_poly PtsEnCours ;
+CVecZoneReduce::st_coord_poly PtsEnCours ;
 PtsEnCours.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat ;
 PtsEnCours.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon ;
 

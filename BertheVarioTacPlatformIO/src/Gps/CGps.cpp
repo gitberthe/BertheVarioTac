@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 01/11/2024
+/// \date modification : 25/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -214,8 +214,11 @@ g_GlobalVar.m_HistoVol.m_VzMax = -10 ;
 g_GlobalVar.m_HistoVol.m_VzMin =  10 ;
 
 // lancement tache fichier igc
-g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
-xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar , IGC_PRIORITY , NULL, IGC_CORE);
+if ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run  )
+    {
+    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
+    xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar , IGC_PRIORITY , NULL, IGC_CORE);
+    }
 
 // bip debut enregistrement
 CGlobalVar::BeepOk() ;

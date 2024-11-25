@@ -1,3 +1,10 @@
+le 20241125b :
+ - la creation du fichier de zone aeriennes se fait desormais avec BVTZoneAerienne.
+ - la reduction du nombre de points de zone ce fait desormais dans BVTZoneAerienne.
+ - dans BVTZoneAerienne 2 methodes de reduction de zone, par distance entre points
+   de 50 metres, et angle plat de 6 degres.
+ - format de zonesaer.txt inchangé.
+ 
 le 20241125a :
  - modification Screen/lv_conf.h
  - modification CText2Screen

@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 25/11/2024
 ///
 
 //////////////////////
@@ -75,6 +75,7 @@
 #include "Geometrie/CDroite3D.h"
 #include "Geometrie/CMatrice3D.h"
 #include "Geometrie/Segments.h"
+#include "ZonesAeriennes/CVecZoneReduce.h"
 #include "ZonesAeriennes/CDate.h"
 #include "ZonesAeriennes/CZoneAer.h"
 #include "ZonesAeriennes/CDistFront.h"
@@ -125,7 +126,6 @@
 // constantes //
 ////////////////
 
-#define UnMileEnMetres         (1852.)
 #define T_PI                   (3.1415926535)
 
 ///////////
