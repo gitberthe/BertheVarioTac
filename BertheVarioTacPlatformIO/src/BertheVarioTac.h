@@ -4,8 +4,10 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 25/11/2024
+/// \date modification : 26/11/2024
 ///
+
+//#define NO_OTA
 
 //////////////////////
 // includes globaux //
@@ -17,8 +19,10 @@
 #include <SPI.h>
 #include <SD.h>
 #include <WiFi.h>
-#include <WiFiClient.h>
-#include <WebServer.h>
+#ifndef NO_OTA
+ #include <WiFiClient.h>
+ #include <WebServer.h>
+#endif
 #include <FS.h>
 #include <ESPFMfGK.h>
 #include <SFE_BMP180.h>
@@ -31,6 +35,7 @@
 #include <esp_bt.h>
 #include <esp_pm.h>
 #include <lz4.h>
+
 
 #include <math.h>
 #include <map>
@@ -228,5 +233,7 @@ void WifiInitFileMgr() ;
 void WifiInitOta() ;
 void WifiOtaHandle() ;
 
-extern WebServer g_server_ota ;
+#ifndef NO_OTA
+ extern WebServer * g_pserver_ota ;
+#endif
 extern char g_NumVersion[] ;

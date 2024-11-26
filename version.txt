@@ -1,3 +1,6 @@
+le 20241126d :
+ - ota en pointeur.
+
 le 20241126c :
  - verification si compression lz4 efficace.
 

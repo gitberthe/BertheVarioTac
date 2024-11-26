@@ -4,15 +4,17 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 30/10/2024
+/// \date modification : 26/11/2024
 ///
 
 #include "BertheVarioTac.h"
-#include <ElegantOTA.h>
-
-WebServer  g_server_ota(80);
 
 CGlobalVar g_GlobalVar ;
+
+#ifndef NO_OTA
+#include <ElegantOTA.h>
+
+WebServer * g_pserver_ota = NULL ; // (80);
 
 
 //unsigned long ota_progress_millis = 0;
@@ -53,6 +55,7 @@ void onOTAEnd(bool success) {
   }
   // <Add your own code here>
 }
+#endif // NO_OTA
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Initialisation du mote telechargement firmware.
@@ -91,17 +94,21 @@ while (WiFi.status() != WL_CONNECTED)
 g_tft.print( " " ) ;
 g_tft.println( WiFi.localIP() ) ;
 
-g_server_ota.on("/", []() {
-    g_server_ota.send(200, "text/plain", "ElegantOTA BertVarioTac.");});
+#ifndef NO_OTA
+g_pserver_ota = new WebServer(80) ;
 
-ElegantOTA.begin(&g_server_ota);    // Start ElegantOTA
+g_pserver_ota->on("/", []() {
+    g_pserver_ota->send(200, "text/plain", "ElegantOTA BertVarioTac.");});
+
+ElegantOTA.begin(g_pserver_ota);    // Start ElegantOTA
 
 // ElegantOTA callbacks
 ElegantOTA.onStart(onOTAStart);
 ElegantOTA.onProgress(onOTAProgress);
 ElegantOTA.onEnd(onOTAEnd);
 
-g_server_ota.begin();
+g_pserver_ota->begin();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +119,8 @@ g_server_ota.begin();
 /// upload_url = http://192.168.148.237
 void WifiOtaHandle()
 {
-g_server_ota.handleClient();
+#ifndef NO_OTA
+g_pserver_ota->handleClient();
 ElegantOTA.loop();
+#endif
 }
