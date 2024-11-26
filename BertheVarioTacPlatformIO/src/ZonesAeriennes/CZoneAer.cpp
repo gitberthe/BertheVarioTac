@@ -76,12 +76,13 @@ void CZoneAer::CompressZone()
 if ( m_PolyStLaLoArr == NULL )
     return ;
 
-// si deja compresse en int
-if ( m_LowResShortArr != NULL )
+// si deja compresse en short/lz4
+if ( m_CharLz4Arr != NULL )
     return ;
 
 // allocation du tableau de short
-m_LowResShortArr = new short [m_NbStLaLoPts*sizeof(short)*2] ;
+short short_size = m_NbStLaLoPts*2 ;
+short * LowResShortArr = new short [short_size] ;
 
 // verification que la zone n'est pas trop grande
 if ( m_RayonMetre >= 589.*1000. )
@@ -91,16 +92,17 @@ if ( m_RayonMetre >= 589.*1000. )
     }
 
 // passage en short
-for ( int ip = 0 ; ip < m_NbStLaLoPts*2 ; )
+int ipshort = 0 ;
+for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
-    const CVecZoneReduce::st_coord_poly * pStPts = m_PolyStLaLoArr[ip/2] ;
+    const CVecZoneReduce::st_coord_poly * pStPts = m_PolyStLaLoArr[ipstruct] ;
 
-    m_LowResShortArr[ip++] = (short)(((float)(pStPts->m_Lat - m_Barycentre.m_Lat)) * MilesParDegres * UnMileEnMetres / ResolCompress) ;
-    m_LowResShortArr[ip++] = (short)(((float)(pStPts->m_Lon - m_Barycentre.m_Lon)) * MilesParDegres * UnMileEnMetres / ResolCompress) ;
+    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lat - m_Barycentre.m_Lat) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
+    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lon - m_Barycentre.m_Lon) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
     }
 
 // compression lz4
-m_Lz4BuffSize = LZ4_compress_default( (const char*) m_LowResShortArr , ms_compressed_data_lz4, m_NbStLaLoPts*2*sizeof(short) , ms_max_dst_size );
+m_Lz4BuffSize = LZ4_compress_default( (const char*) LowResShortArr , ms_compressed_data_lz4, short_size*sizeof(short) , ms_max_dst_size );
 // allocation buffer lz4 local
 m_CharLz4Arr = new char [ m_Lz4BuffSize ] ;
 // recopie locale
@@ -108,6 +110,9 @@ memcpy( m_CharLz4Arr , ms_compressed_data_lz4 , m_Lz4BuffSize ) ;
 
 // supression des float
 FreeFloat() ;
+
+// destruction buffer temporaire
+delete [] LowResShortArr ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,13 +128,6 @@ if ( m_PolyStLaLoArr != NULL )
     delete [] m_PolyStLaLoArr ;
     m_PolyStLaLoArr = NULL ;
     }
-
-// destruction buffer short
-if ( m_LowResShortArr != NULL )
-    {
-    delete [] m_LowResShortArr ;
-    m_LowResShortArr = NULL ;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -140,27 +138,27 @@ void CZoneAer::UnCompressZone()
 FreeFloat() ;
 
 // allocation buffer short
-int short_size = m_NbStLaLoPts*2 ;
-m_LowResShortArr = new short [short_size] ;
+short short_size = m_NbStLaLoPts*2 ;
+short * LowResShortArr = new short [short_size] ;
 
 // decompression lz4
-LZ4_decompress_safe( m_CharLz4Arr , (char*) m_LowResShortArr , m_Lz4BuffSize , short_size*sizeof(short) ) ;
+LZ4_decompress_safe( m_CharLz4Arr , (char*) LowResShortArr , m_Lz4BuffSize , short_size*sizeof(short) ) ;
 
 // allocation du tableau st *
 m_PolyStLaLoArr = new CVecZoneReduce::st_coord_poly * [m_NbStLaLoPts] ;
 
 // passage en float
-for ( int ip = 0 ; ip < m_NbStLaLoPts*2 ; )
+int ipshort = 0 ;
+for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
     // ajout du points
     CVecZoneReduce::st_coord_poly * pStPts = new CVecZoneReduce::st_coord_poly ;
-    m_PolyStLaLoArr[ip/2] = pStPts ;
+    m_PolyStLaLoArr[ipstruct] = pStPts ;
 
-    pStPts->m_Lat = ((float)m_LowResShortArr[ip++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lat ;
-    pStPts->m_Lon = ((float)m_LowResShortArr[ip++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lon ;
+    pStPts->m_Lat = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lat ;
+    pStPts->m_Lon = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lon ;
     }
 
 // destruction buffer short
-delete [] m_LowResShortArr ;
-m_LowResShortArr = NULL ;
+delete [] LowResShortArr ;
 }

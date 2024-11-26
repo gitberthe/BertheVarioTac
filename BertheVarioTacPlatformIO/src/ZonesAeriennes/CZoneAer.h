@@ -73,7 +73,7 @@ public :
     bool operator < ( const CZoneAer & Zone ) const ;
 
 private :
-    static int      ms_max_dst_size ;           ///< taille du buffer lz4
+    static int      ms_max_dst_size ;           ///< taille du buffer lz4 de compression
     static int      ms_MaxNombrePtsZone ;       ///< nombre de pts maximum d'une zone
     static char*    ms_compressed_data_lz4 ;    ///< buffer de compression lz4
 
@@ -81,9 +81,8 @@ private :
     CVecZoneReduce::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
     short                           m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
-    short                          *m_LowResShortArr=NULL;   ///< tableau des coordonnees relatives au barycentre pour compression short
     char                           *m_CharLz4Arr=NULL ;      ///< tableau des short compresse lz4
-    short                           m_Lz4BuffSize ;          ///< taille du buffer des lz4
+    short                           m_Lz4BuffSize ;          ///< taille du buffer des short compresses lz4
 
     CVecZoneReduce::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
     float                           m_RayonMetre ;          ///< pour une recherche rapide
