@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 25/11/2024 : modification
+/// \date 26/11/2024 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -31,13 +31,13 @@
 class CZoneAerDerogFfvl
 {
 public :
-    int     m_AltiBassePeriodeSemaine=-1;///< altitude basse dans la periode en semaine
-    int     m_AltiBassePeriodeWeekEnd=-1;///< altitude basse dans la periode en week-end
-    int     m_PeriodeDebutJour = -1 ;   ///< periode debut jour pour altitude
-    int     m_PeriodeFinJour   = -1 ;   ///< periode fin jour pour altitude
-    int     m_PeriodeDebutMois = -1 ;   ///< periode debut mois pour altitude
-    int     m_PeriodeFinMois   = -1 ;   ///< periode fin mois pour altitude
-    int     m_AltiAPrendreEnCompte = ALTI_BASSE ;   ///< altitude a prendre en compte fonction de la date
+    short     m_AltiBassePeriodeSemaine=-1;///< altitude basse dans la periode en semaine
+    short     m_AltiBassePeriodeWeekEnd=-1;///< altitude basse dans la periode en week-end
+    short     m_PeriodeDebutJour = -1 ;   ///< periode debut jour pour altitude
+    short     m_PeriodeFinJour   = -1 ;   ///< periode fin jour pour altitude
+    short     m_PeriodeDebutMois = -1 ;   ///< periode debut mois pour altitude
+    short     m_PeriodeFinMois   = -1 ;   ///< periode fin mois pour altitude
+    short     m_AltiAPrendreEnCompte = ALTI_BASSE ;   ///< altitude a prendre en compte fonction de la date
 } ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,11 +55,12 @@ public :
     int     GetAltiBasse() const ;
     bool    HavePeriod() const
                 { return m_pDerogFfvl != NULL ; } ;
-    std::string  m_NomAff ;             ///< nom court de la zone a afficher
-    std::string  m_NomOri ;             ///< nom entier de la zone dans fichier origine
-    bool    m_Activee = true ;          ///< zone activee
-    bool    m_DansFchActivation = false;///< si dans fichier d'activation de zones pour reecriture apres configuration menu
-    int     m_AltiBasse=-1 ;            ///< altitude basse de la zone par defaut
+
+    std::string         m_NomAff ;             ///< nom court de la zone a afficher
+    std::string         m_NomOri ;             ///< nom entier de la zone dans fichier origine
+    bool                m_Activee = true ;          ///< zone activee
+    bool                m_DansFchActivation = false;///< si dans fichier d'activation de zones pour reecriture apres configuration menu
+    short               m_AltiBasse=-1 ;            ///< altitude basse de la zone par defaut
     CZoneAerDerogFfvl * m_pDerogFfvl = NULL ; ///< si zone avec derogation ffvl
 
     void CompressZone() ;
@@ -78,7 +79,7 @@ private :
 
 private :
     CVecZoneReduce::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
-    int                             m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
+    short                           m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
     short                          *m_LowResShortArr=NULL;   ///< tableau des coordonnees relatives au barycentre pour compression short
     char                           *m_CharLz4Arr=NULL ;      ///< tableau des short compresse lz4

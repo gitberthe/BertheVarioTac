@@ -1,3 +1,6 @@
+le 20241126a :
+ - modification dans Screen/lv_conf.h
+
 le 20241125c2 :
  - modification doc utilisateur.
 

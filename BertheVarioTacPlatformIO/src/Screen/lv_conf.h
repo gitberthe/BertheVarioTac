@@ -24,10 +24,10 @@
  *====================*/
 
 /*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
-#define LV_COLOR_DEPTH 16
+#define LV_COLOR_DEPTH 8
 
 /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
-#define LV_COLOR_16_SWAP 1
+#define LV_COLOR_16_SWAP 0
 
 /*Enable more complex drawing routines to manage screens transparency.
  *Can be used if the UI is above another layer, e.g. an OSD menu or video player.
@@ -68,7 +68,7 @@
 
 /*Number of the intermediate memory buffer used during rendering and other internal processing mechanisms.
  *You will see an error log message if there wasn't enough buffers. */
-#define LV_MEM_BUF_MAX_NUM 16
+#define LV_MEM_BUF_MAX_NUM 8
 
 /*Use the standard `memcpy` and `memset` instead of LVGL's own functions. (Might or might not be faster).*/
 #define LV_MEMCPY_MEMSET_STD 0
@@ -78,10 +78,10 @@
  *====================*/
 
 /*Default display refresh period. LVG will redraw changed areas with this period time*/
-#define LV_DISP_DEF_REFR_PERIOD 16      /*[ms]*/
+#define LV_DISP_DEF_REFR_PERIOD 100 // 16      /*[ms]*/
 
 /*Input device read period in milliseconds*/
-#define LV_INDEV_DEF_READ_PERIOD 30     /*[ms]*/
+#define LV_INDEV_DEF_READ_PERIOD 100 // 30     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
  *It removes the need to manually update the tick with `lv_tick_inc()`)*/
@@ -105,7 +105,7 @@
 
 /*Enable complex draw engine.
  *Required to draw shadow, gradient, rounded corners, circles, arc, skew lines, image transformations or any masks*/
-#define LV_DRAW_COMPLEX 1
+#define LV_DRAW_COMPLEX 0
 #if LV_DRAW_COMPLEX != 0
 
     /*Allow buffering some shadow calculation.
@@ -271,7 +271,7 @@
     #define LV_SPRINTF_USE_FLOAT 0
 #endif  /*LV_SPRINTF_CUSTOM*/
 
-#define LV_USE_USER_DATA 1
+#define LV_USE_USER_DATA 0
 
 /*Garbage Collector settings
  *Used if lvgl is bound to higher level language and the memory is managed by that language*/
@@ -331,7 +331,7 @@
 #define LV_FONT_MONTSERRAT_8  0
 #define LV_FONT_MONTSERRAT_10 0
 #define LV_FONT_MONTSERRAT_12 0
-#define LV_FONT_MONTSERRAT_14 1
+#define LV_FONT_MONTSERRAT_14 0
 #define LV_FONT_MONTSERRAT_16 0
 #define LV_FONT_MONTSERRAT_18 0
 #define LV_FONT_MONTSERRAT_20 0
@@ -366,7 +366,8 @@
 //#define LV_FONT_CUSTOM_DECLARE
 
 /*Always set a default font*/
-#define LV_FONT_DEFAULT &lv_font_montserrat_14
+//#define LV_FONT_DEFAULT &lv_font_montserrat_8
+#define CONFIG_LV_FONT_DEFAULT NULL
 
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
@@ -374,7 +375,7 @@
 #define LV_FONT_FMT_TXT_LARGE 0
 
 /*Enables/disables support for compressed fonts.*/
-#define LV_USE_FONT_COMPRESSED 0
+#define LV_USE_FONT_COMPRESSED 1
 
 /*Enable subpixel rendering*/
 #define LV_USE_FONT_SUBPX 0
@@ -393,7 +394,7 @@
  * - LV_TXT_ENC_UTF8
  * - LV_TXT_ENC_ASCII
  */
-#define LV_TXT_ENC LV_TXT_ENC_UTF8
+#define LV_TXT_ENC LV_TXT_ENC_ASCII
 
 /*Can break (wrap) texts on these chars*/
 #define LV_TXT_BREAK_CHARS " ,.;:-_"
@@ -537,7 +538,7 @@
  *----------*/
 
 /*A simple, impressive and very complete theme*/
-//#define LV_USE_THEME_DEFAULT 1
+#define LV_USE_THEME_DEFAULT 0
 #if LV_USE_THEME_DEFAULT
 
     /*0: Light mode; 1: Dark mode*/
@@ -551,10 +552,10 @@
 #endif /*LV_USE_THEME_DEFAULT*/
 
 /*A very simple theme that is a good starting point for a custom theme*/
-#define LV_USE_THEME_BASIC 1
+#define LV_USE_THEME_BASIC 0
 
 /*A theme designed for monochrome displays*/
-#define LV_USE_THEME_MONO 1
+#define LV_USE_THEME_MONO 0
 
 /*-----------
  * Layouts
