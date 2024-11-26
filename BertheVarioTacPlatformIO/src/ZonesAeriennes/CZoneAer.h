@@ -81,8 +81,9 @@ private :
     CVecZoneReduce::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
     short                           m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
-    char                           *m_CharLz4Arr=NULL ;      ///< tableau des short compresse lz4
-    short                           m_Lz4BuffSize ;          ///< taille du buffer des short compresses lz4
+    char                           *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
+    short                           m_Lz4BuffSize ;         ///< taille du buffer des short compresses lz4
+    bool                            m_CompressLz4 ;         ///< indique si les donnees sont compressee lz4
 
     CVecZoneReduce::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
     float                           m_RayonMetre ;          ///< pour une recherche rapide

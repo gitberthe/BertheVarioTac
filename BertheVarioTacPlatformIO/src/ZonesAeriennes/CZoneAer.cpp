@@ -103,16 +103,30 @@ for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
 
 // compression lz4
 m_Lz4BuffSize = LZ4_compress_default( (const char*) LowResShortArr , ms_compressed_data_lz4, short_size*sizeof(short) , ms_max_dst_size );
-// allocation buffer lz4 local
-m_CharLz4Arr = new char [ m_Lz4BuffSize ] ;
-// recopie locale
-memcpy( m_CharLz4Arr , ms_compressed_data_lz4 , m_Lz4BuffSize ) ;
+
+// verification si compression efficace
+if ( m_Lz4BuffSize >= short_size*sizeof(short) )
+    {
+    // taille du buffer et indicateur compression
+    m_CompressLz4 = false ;
+    m_Lz4BuffSize = short_size*sizeof(short) ;
+    // deplacement buffer short non compresse
+    m_CharLz4Arr = (char*) LowResShortArr ;
+    }
+else
+    {
+    // indicateur compression
+    m_CompressLz4 = true ;
+    // allocation buffer lz4 local
+    m_CharLz4Arr = new char [ m_Lz4BuffSize ] ;
+    // recopie compressee
+    memcpy( m_CharLz4Arr , ms_compressed_data_lz4 , m_Lz4BuffSize ) ;
+    // destruction buffer short
+    delete [] LowResShortArr ;
+    }
 
 // supression des float
 FreeFloat() ;
-
-// destruction buffer temporaire
-delete [] LowResShortArr ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +156,10 @@ short short_size = m_NbStLaLoPts*2 ;
 short * LowResShortArr = new short [short_size] ;
 
 // decompression lz4
-LZ4_decompress_safe( m_CharLz4Arr , (char*) LowResShortArr , m_Lz4BuffSize , short_size*sizeof(short) ) ;
+if ( m_CompressLz4 )
+    LZ4_decompress_safe( m_CharLz4Arr , (char*) LowResShortArr , m_Lz4BuffSize , short_size*sizeof(short) ) ;
+else
+    memcpy( LowResShortArr , m_CharLz4Arr , short_size*sizeof(short) ) ;
 
 // allocation du tableau st *
 m_PolyStLaLoArr = new CVecZoneReduce::st_coord_poly * [m_NbStLaLoPts] ;

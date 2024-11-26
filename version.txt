@@ -1,3 +1,6 @@
+le 20241126c :
+ - verification si compression lz4 efficace.
+
 le 20241126b :
  - correction bug fuite memoire decompression zone.
 
