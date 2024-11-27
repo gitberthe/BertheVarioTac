@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 25/11/2024
+/// \date modification : 26/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -95,7 +95,7 @@ if ( m_RayonMetre >= 589.*1000. )
 int ipshort = 0 ;
 for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
-    const CVecZoneReduce::st_coord_poly * pStPts = m_PolyStLaLoArr[ipstruct] ;
+    const CZoneAer::st_coord_poly * pStPts = m_PolyStLaLoArr[ipstruct] ;
 
     LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lat - m_Barycentre.m_Lat) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
     LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lon - m_Barycentre.m_Lon) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
@@ -162,14 +162,14 @@ else
     memcpy( LowResShortArr , m_CharLz4Arr , short_size*sizeof(short) ) ;
 
 // allocation du tableau st *
-m_PolyStLaLoArr = new CVecZoneReduce::st_coord_poly * [m_NbStLaLoPts] ;
+m_PolyStLaLoArr = new CZoneAer::st_coord_poly * [m_NbStLaLoPts] ;
 
 // passage en float
 int ipshort = 0 ;
 for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
     // ajout du points
-    CVecZoneReduce::st_coord_poly * pStPts = new CVecZoneReduce::st_coord_poly ;
+    CZoneAer::st_coord_poly * pStPts = new CZoneAer::st_coord_poly ;
     m_PolyStLaLoArr[ipstruct] = pStPts ;
 
     pStPts->m_Lat = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lat ;

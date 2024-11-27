@@ -1,3 +1,10 @@
+le 20241127a :
+ - modification BVTZoneAerienne en CompZoneAerienne.
+ - deplacement de CVecZoneReduce.h/cpp.
+ - l'algorithme de CompZoneAerienne de reduction de zone est desormais la 
+   distance à la droite < 7 metres, distance entre points < 40 metres et
+   angle entre points < 5 degres.
+
 le 20241126d :
  - ota en pointeur.
 

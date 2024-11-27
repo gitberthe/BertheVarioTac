@@ -4,20 +4,20 @@
 /// \brief
 ///
 /// \date creation     : 28/03/2024
-/// \date modification : 25/11/2024
+/// \date modification : 26/11/2024
 ///
 
 #include "../BertheVarioTac.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoie true si on est proche de la frontiere.
-bool CDistFront::IsNearFront( CVecZoneReduce::st_coord_poly ** PolygoneArr , int NbPts , CVecZoneReduce::st_coord_poly PtEnCours )
+bool CDistFront::IsNearFront( CZoneAer::st_coord_poly ** PolygoneArr , int NbPts , CZoneAer::st_coord_poly PtEnCours )
 {
 
 // verification distance de tous les points
 for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
     {
-    const CVecZoneReduce::st_coord_poly & pts = *PolygoneArr[ipts] ;
+    const CZoneAer::st_coord_poly & pts = *PolygoneArr[ipts] ;
     float dist = sqrtf( powf(pts.m_Lat-PtEnCours.m_Lat,2) + powf(pts.m_Lon-PtEnCours.m_Lon,2) ) ;
     dist *= 60 * UnMileEnMetres ;
     if ( dist <= g_GlobalVar.m_Config.m_XYMargin )
@@ -30,8 +30,8 @@ for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
 // pour toutes les droites des points 2 a 2
 for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
     {
-    CVecZoneReduce::st_coord_poly PosA ;
-    CVecZoneReduce::st_coord_poly PosB ;
+    CZoneAer::st_coord_poly PosA ;
+    CZoneAer::st_coord_poly PosB ;
     if ( ipts != NbPts - 1 )
         {
         PosA = *PolygoneArr[ipts] ;

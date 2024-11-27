@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 25/11/2024 : modification
+/// \date 26/11/2024 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -227,13 +227,13 @@ pZone->m_AltiBasse = atoi( pChar ) ;
 
 // ajout des points du polygone
 pChar = strtok( NULL , ";," ) ;
-std::vector<CVecZoneReduce::st_coord_poly*> VecPoly ;
+std::vector<CZoneAer::st_coord_poly*> VecPoly ;
 // reserve pour une grande zone
 VecPoly.reserve( 400 ) ;
 while ( pChar != NULL )
     {
     // nouveau point
-    CVecZoneReduce::st_coord_poly * ppts = new CVecZoneReduce::st_coord_poly ;
+    CZoneAer::st_coord_poly * ppts = new CZoneAer::st_coord_poly ;
 
     // longitude
     ppts->m_Lon = atof( pChar ) ;
@@ -253,8 +253,8 @@ while ( pChar != NULL )
     }
 
 // recopie du vecteur de points vers le tableau de points
-pZone->m_PolyStLaLoArr = new CVecZoneReduce::st_coord_poly * [ VecPoly.size() ] ;
-memcpy( pZone->m_PolyStLaLoArr , & VecPoly[0] , VecPoly.size() * sizeof( CVecZoneReduce::st_coord_poly*) ) ;
+pZone->m_PolyStLaLoArr = new CZoneAer::st_coord_poly * [ VecPoly.size() ] ;
+memcpy( pZone->m_PolyStLaLoArr , & VecPoly[0] , VecPoly.size() * sizeof( CZoneAer::st_coord_poly*) ) ;
 pZone->m_NbStLaLoPts = VecPoly.size() ;
 
 // calcul du barycentre
@@ -264,7 +264,7 @@ CPolygone::CalcBarycentre( pZone->m_PolyStLaLoArr , pZone->m_NbStLaLoPts , pZone
 pZone->m_RayonMetre = 0. ;
 for ( int is = 0 ; is < pZone->m_NbStLaLoPts ; is++ )
     {
-    const CVecZoneReduce::st_coord_poly & PtsCour = *pZone->m_PolyStLaLoArr[is] ;
+    const CZoneAer::st_coord_poly & PtsCour = *pZone->m_PolyStLaLoArr[is] ;
     float dist = sqrtf( powf(pZone->m_Barycentre.m_Lat-PtsCour.m_Lat,2) + powf(pZone->m_Barycentre.m_Lon-PtsCour.m_Lon,2) ) * 60. * UnMileEnMetres  ;
     if ( dist > pZone->m_RayonMetre )
         pZone->m_RayonMetre = dist ;
@@ -615,7 +615,7 @@ int         RetNbrLimite = ZONE_EN_DEHORS ;
 char        TmpChar[100] ;
 
 // test dans la zone, position courante
-CVecZoneReduce::st_coord_poly PtsEnCours ;
+CZoneAer::st_coord_poly PtsEnCours ;
 PtsEnCours.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat ;
 PtsEnCours.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon ;
 

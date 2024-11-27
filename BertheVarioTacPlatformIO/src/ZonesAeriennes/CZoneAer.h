@@ -48,6 +48,13 @@ public :
 class CZoneAer
 {
 public :
+    /// \brief un point du polygone
+    struct st_coord_poly
+        {
+        float m_Lat ;   ///< latitude en degres
+        float m_Lon ;   ///< longitude en degres
+        } ;
+
     ~CZoneAer() ;
 
     static  void TriParNom( bool Tri )
@@ -78,14 +85,14 @@ private :
     static char*    ms_compressed_data_lz4 ;    ///< buffer de compression lz4
 
 private :
-    CVecZoneReduce::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
+    CZoneAer::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
     short                           m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
     char                           *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
     short                           m_Lz4BuffSize ;         ///< taille du buffer des short compresses lz4
     bool                            m_CompressLz4 ;         ///< indique si les donnees sont compressee lz4
 
-    CVecZoneReduce::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
+    CZoneAer::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
     float                           m_RayonMetre ;          ///< pour une recherche rapide
 
     static bool ms_TriParNom ;  ///< pour un tri par nom

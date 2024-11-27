@@ -81,7 +81,6 @@
 #include "Geometrie/CDroite3D.h"
 #include "Geometrie/CMatrice3D.h"
 #include "Geometrie/Segments.h"
-#include "ZonesAeriennes/CVecZoneReduce.h"
 #include "ZonesAeriennes/CDate.h"
 #include "ZonesAeriennes/CZoneAer.h"
 #include "ZonesAeriennes/CDistFront.h"
@@ -133,6 +132,8 @@
 ////////////////
 
 #define T_PI                   (3.1415926535)
+#define UnMileEnMetres         (1852.)
+#define MilesParDegres         (60.)
 
 ///////////
 // macro //
