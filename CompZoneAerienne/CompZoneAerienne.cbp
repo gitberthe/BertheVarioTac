@@ -33,14 +33,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="src/CompZoneAerienne.cpp" />
-		<Unit filename="src/CompZoneAerienne.h" />
 		<Unit filename="src/CDroite2D.cpp" />
 		<Unit filename="src/CDroite2D.h" />
+		<Unit filename="src/CGroupeAligne.cpp" />
+		<Unit filename="src/CGroupeAligne.h" />
+		<Unit filename="src/CNuage2Droite.cpp" />
+		<Unit filename="src/CNuage2Droite.h" />
 		<Unit filename="src/CVecZoneReduce.cpp" />
 		<Unit filename="src/CVecZoneReduce.h" />
 		<Unit filename="src/CVecteur2D.cpp" />
 		<Unit filename="src/CVecteur2D.h" />
+		<Unit filename="src/CompZoneAerienne.cpp" />
+		<Unit filename="src/CompZoneAerienne.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
