@@ -10,7 +10,7 @@
 #pragma once
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Classe de tri des groupes de points aligné par ordre decroissant
+/// \brief Classe pour tri des groupes de points aligné par ordre croissant de taille.
 class CGroupeAligne
 {
 public :
@@ -30,7 +30,7 @@ class CVecGroupAligne : public std::vector<CGroupeAligne>
 } ;
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Classe de tri de points par longitude
+/// \brief Classe de reorganisation de points par longitude.
 class CSortPts
 {
 public :
@@ -43,5 +43,4 @@ public :
             { return m_Lon > pts.m_Lon ; } ;
     bool operator < ( const CSortPts & pts ) const
             { return m_Lon < pts.m_Lon ; } ;
-
 } ;

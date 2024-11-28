@@ -18,9 +18,11 @@ double MoyenneLat = 0 ;
 double MoyenneLon = 0 ;
 const long size = VecNuage.size() ;
 
+// croite par defaut si un point
 if ( size <= 1 )
     return CDroite2D() ;
 
+// calcul moyenne lat et lon
 for ( long i = 0 ; i  < size ; i++ )
     {
     const CVecZoneReduce::st_coord_poly* pStruct = VecNuage[i] ;
@@ -35,6 +37,7 @@ double Sy = 0 ;
 double Sxy = 0 ;
 double Sx2 = 0 ;
 
+// calcul coefficients
 for ( long i = 0 ; i  < size ; i++ )
     {
     const CVecZoneReduce::st_coord_poly* pStruct = VecNuage[i] ;
@@ -47,9 +50,11 @@ for ( long i = 0 ; i  < size ; i++ )
 double S_xy = Sxy - Sx*Sy/size ;
 double S_xx = Sx2 - pow(Sx,2)/size ;
 
+// elaboration droite
 m_ax = S_xy/S_xx ;
 m_b = MoyenneLat - m_ax * MoyenneLon ;
 
+// creation droite 2d
 CDroite2D Droite ;
 GetDroite( Droite ) ;
 return Droite ;

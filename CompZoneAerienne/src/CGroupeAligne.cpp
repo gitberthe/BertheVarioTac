@@ -16,6 +16,7 @@ void CSortPts::Sort( std::vector<CVecZoneReduce::st_coord_poly*> & VecToSort )
 long size  = VecToSort.size() ;
 std::vector< CSortPts > VectCSortPts ;
 
+// constrauction vecteur de points a trier
 for ( long i = 0 ; i < size ; i++ )
     {
     CSortPts SortPts ;
@@ -24,10 +25,11 @@ for ( long i = 0 ; i < size ; i++ )
     VectCSortPts.push_back( SortPts ) ;
     }
 
+// tri vecteur
 std::sort( VectCSortPts.begin() , VectCSortPts.end() ) ;
 
+// reoganisation croissante/decroisante
 std::vector<CVecZoneReduce::st_coord_poly*> VecSorted ;
-
 if ( VecToSort[0]->m_Lon < VecToSort[VecToSort.size()-1]->m_Lon )
     {
     for ( long i = 0 ; i < size ; i++ )
@@ -39,5 +41,6 @@ else
         VecSorted.push_back( VecToSort[ VectCSortPts[i].m_ipts ] ) ;
     }
 
+// recopie veteur de sortie
 VecToSort = VecSorted ;
 }
