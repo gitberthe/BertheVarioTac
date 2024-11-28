@@ -10,9 +10,8 @@
 #include "CompZoneAerienne.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Reduit le vecteur en nombre de points. Prends les points 3 a 3 et
-/// supprime le points du centre s'il est a une distance trop importante de la
-/// droite qui relie les 2 autres.
+/// \brief Reduit le vecteur en nombre de points. Cumul de 3 methodes. Par distance
+/// à une droite, par angle d'alignement et distance entre les points si parametre != -1.
 void CVecZoneReduce::ReduceToDistanceDroiteAngleDistancePoint( int DistanceMetresEcartDroite , int MemeDirectionEnDegres , int DistanceMetresEntrePoints )
 {
 // temps que points a deleter
@@ -194,7 +193,7 @@ return ret ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Reduit
+/// \brief Reduit les zones par approximation de nuage de points par une droite.
 void CVecZoneReduce::ReduceNuageDroite( float DistanceMetresEcartDroite )
 {
 std::vector<st_coord_poly*> VecReduce ;
