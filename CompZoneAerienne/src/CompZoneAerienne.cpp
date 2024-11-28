@@ -15,7 +15,7 @@
 using namespace std;
 using namespace nlohmann ;
 
-char NumVer[]="20241127a" ;
+char NumVer[]="20241128a" ;
 
 // centre clermont
 float LatCentreDeg = 45.783329 ;
@@ -131,8 +131,11 @@ for ( long iz = VecZone.size() -1 ; iz >= 0 ; iz-- )
 
     // compression de points
     VecZoneReduce.Set( Zone.m_VecPts ) ;
-    VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( DIST_METRE_DROITE , -1 , DIST_METRE_PTS ) ;
-    VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( -1 , ANGLE_DEGRES , -1 ) ;
+    //VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( DIST_METRE_DROITE , -1 , DIST_METRE_PTS ) ;
+    //VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( -1 , ANGLE_DEGRES , -1 ) ;
+    //VecZoneReduce.ReduceMultiDistanceDroite( DIST_METRE_MULTI_DROITE ) ;
+    VecZoneReduce.ReduceNuageDroite( DIST_METRE_NUAGE_DROITE ) ;
+    //VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( -1 , ANGLE_DEGRES , DIST_METRE_PTS ) ;
 
     // ecriture
     cout << Zone.m_Name << ";" << Zone.m_Bottom << ";" ;
@@ -157,6 +160,55 @@ for ( long iz = VecZone.size() -1 ; iz >= 0 ; iz-- )
     cerr << iz << " " << Zone.m_Name << " " << NbPtsAvantComp << " > " << NbPtsApresComp << endl ;
 
     }
+
+/*
+std::vector<CVecZoneReduce::st_coord_poly*> VecTest ;
+CVecZoneReduce::st_coord_poly* pSt ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 22 ;
+pSt->m_Lat = 18 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 22 ;
+pSt->m_Lat = 19 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 23 ;
+pSt->m_Lat = 20 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 26 ;
+pSt->m_Lat = 18 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 31 ;
+pSt->m_Lat = 23 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 32 ;
+pSt->m_Lat = 24 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 34 ;
+pSt->m_Lat = 22 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 37 ;
+pSt->m_Lat = 25 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 41 ;
+pSt->m_Lat = 29 ;
+VecTest.push_back( pSt ) ;
+pSt = new CVecZoneReduce::st_coord_poly ;
+pSt->m_Lon = 42 ;
+pSt->m_Lat = 27 ;
+VecTest.push_back( pSt ) ;
+
+CNuage2Droite N2D ;
+N2D.ApproxDroite( VecTest ) ;
+CDroite2D Droite ;
+N2D.GetDroite( Droite ) ; */
 
 return 0;
 }
