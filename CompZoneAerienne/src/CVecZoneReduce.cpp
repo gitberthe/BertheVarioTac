@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Reduit le vecteur en nombre de points. Cumul de 3 methodes. Par distance
-/// à une droite, par angle d'alignement et distance entre les points si parametre != -1.
+/// à une droite,distance entre les points et par angle d'alignement si parametre != -1.
 void CVecZoneReduce::ReduceToDistanceDroiteAngleDistancePoint( int DistanceMetresEcartDroite , int MemeDirectionEnDegres , int DistanceMetresEntrePoints )
 {
 // temps que points a deleter
