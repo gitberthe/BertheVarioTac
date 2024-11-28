@@ -3,6 +3,7 @@
 ///
 /// \brief Ce programme se propose de creer un fichier texte des zones aeriennes,
 /// autour d'un point centrale et dans un rayon, pour le BertheVarioTac.
+///  Fichiers gnuplots avant/apres compression pour chaque zone dans zones_gnuplot.
 ///
 /// \date creation     : 23/03/2024
 /// \date 25/11/2024 : ajout de compression de zone par distance entre points et par
