@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date 26/11/2024 : creation
-/// \date 27/11/2024 : modification
+/// \date 28/11/2024 : modification
 ///
 
 #ifndef _BVTZonesAerienne_
@@ -49,6 +49,8 @@
 #include "CVecteur2D.h"
 #include "CDroite2D.h"
 #include "CVecZoneReduce.h"
+#include "CNuage2Droite.h"
+#include "CGroupeAligne.h"
 
 #define IN_ZONE_FILE    "data/20240615_ffvl-cfd.geojson"
 #define UnMilesEnMetres (1852.)

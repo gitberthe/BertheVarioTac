@@ -1,3 +1,6 @@
+le 20241128d :
+ - reorganisation fichier/commentaires CompZoneAerienne.
+ 
 le 20241128c :
  - modification CompZoneAerienne, reduction zone par droite proche 
    de nuage de points.
