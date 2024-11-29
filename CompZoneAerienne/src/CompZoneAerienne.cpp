@@ -8,7 +8,7 @@
 /// \date creation     : 23/03/2024
 /// \date 25/11/2024 : ajout de compression de zone par distance entre points et par
 ///                    angle de meme direction.
-/// \date 27/11/2024 : modification
+/// \date 29/11/2024 : modification
 ///
 
 #include "CompZoneAerienne.h"
@@ -16,7 +16,7 @@
 using namespace std;
 using namespace nlohmann ;
 
-char NumVer[]="20241128a" ;
+char NumVer[]="20241129a" ;
 
 // centre clermont
 float LatCentreDeg = 45.783329 ;
@@ -137,6 +137,7 @@ for ( long iz = VecZone.size() -1 ; iz >= 0 ; iz-- )
     //VecZoneReduce.ReduceMultiDistanceDroite( DIST_METRE_MULTI_DROITE ) ;
     VecZoneReduce.ReduceNuageDroite( DIST_METRE_NUAGE_DROITE ) ;
     //VecZoneReduce.ReduceToDistanceDroiteAngleDistancePoint( -1 , ANGLE_DEGRES , DIST_METRE_PTS ) ;
+    //VecZoneReduce.ReduceNuageBravaisPearson( DIST_METRE_NUAGE_DROITE_BP , COEF_BRAVAIS_PEARSON ) ;
 
     // ecriture
     cout << Zone.m_Name << ";" << Zone.m_Bottom << ";" ;

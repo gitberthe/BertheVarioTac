@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 28/11/2024
-/// \date modification : 28/11/2024
+/// \date modification : 29/11/2024
 ///
 
 #pragma once
@@ -15,6 +15,8 @@ class CGroupeAligne
 {
 public :
     std::vector<CVecZoneReduce::st_coord_poly*> m_Vect ;
+
+    double GetBravaisPearson() ;
 
     bool operator > ( const CGroupeAligne & group ) const
             { return m_Vect.size() > group.m_Vect.size() ; } ;

@@ -328,39 +328,141 @@ for ( size_t ip = 0 ; ip < VecReduce.size() ; ip++ )
 VecReduce.push_back( ppt ) ;
 }
 
-/*float CVecZoneReduce::GetBravaisPearson( const std::vector<long> &VecIPts )
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+void CVecZoneReduce::ReduceNuageBravaisPearson( double DistanceMetresEcartDroite , double CoefBravaisPearson )
 {
-std::vector<const st_coord_poly*> VecpStruct ;
-for ( long ip = 0 ; ip < (long)VecIPts.size() ; ip++ )
-    VecpStruct.push_back( (*m_pVecOrigine)[VecIPts[ip]] ) ;
+std::vector<st_coord_poly*> VecReduce ;
+const long size = m_pVecOrigine->size() ;
 
-double MoyenneLat = 0 ;
-double MoyenneLon = 0 ;
-const long size = VecpStruct.size() ;
+CVecGroupAligne VecGroupAligne ;
 
-if ( size <= 2 )
-    return 1. ;
-
-for ( long i = 0 ; i  < size ; i++ )
+// pour tous les points
+long NbPts = 0 ;
+const int debpts = 3 ;
+for ( long ipall = 0 ; ipall < size ; ipall+=1 )
     {
-    const st_coord_poly* pStruct = VecpStruct[i] ;
-    MoyenneLat += pStruct->m_Lat ;
-    MoyenneLon += pStruct->m_Lon ;
-    }
-MoyenneLat /= size ;
-MoyenneLon /= size ;
+    // nombre de points croissant/glissant
+    double CoefBravaisPearsonOld = -DBL_MAX ;
+    CGroupeAligne GroupeAligneOld ;
+    CGroupeAligne GroupeAligneCur ;
+    for ( NbPts = debpts ; NbPts + ipall < size ; NbPts++ )
+        {
+        // vecteur des points en cours
+        GroupeAligneCur.m_Vect.clear() ;
+        for ( long ipts = 0 ; ipts < NbPts ; ipts++ )
+            if ( ipall+ipts < size )
+                GroupeAligneCur.m_Vect.push_back( (*m_pVecOrigine)[ipall+ipts] ) ;
 
-double Num = 0 ;
-double SumDenLat = 0 ;
-double SumDenLon = 0 ;
-for ( long i = 0 ; i  < size ; i++ )
+        // verif taille
+        if ( GroupeAligneCur.m_Vect.size() < debpts )
+            break ;
+
+        // progression du coefficent BP
+        //double CoefBravaisPearsonCur = GroupeAligneCur.GetBravaisPearson() ;
+        //CoefBravaisPearsonCur = pow( CoefBravaisPearsonCur , 1./(1.+0.9*((1E-17)*GroupeAligneCur.m_Vect.size())) ) ;
+        bool Break = false ;
+        //if ( CoefBravaisPearsonOld > -DBL_MAX && abs(CoefBravaisPearsonCur) < 0.999*abs(CoefBravaisPearsonOld) )
+            {
+            std::vector< CPoint2D > Vectxpts ;
+            for ( long ipb = 0 ; ipb < (long)GroupeAligneCur.m_Vect.size() ; ipb++ )
+                Vectxpts.push_back( CPoint2D( GroupeAligneCur.m_Vect[ipb]->m_Lon , GroupeAligneCur.m_Vect[ipb]->m_Lat) ) ;
+
+            CNuage2Droite Nuage ;
+            CDroite2D Droite = Nuage.ApproxDroite( GroupeAligneCur.m_Vect ) ;
+            // calcul de la distance a la droite a chaque point
+            for ( long ipts = 0 ; ipts < NbPts ; ipts++ )
+                {
+                // vecteur perpendiculaire à l'avant dernier point rajouté
+
+                CPoint2D PtProj = Droite.GetProjectionDuPoint( Vectxpts[ipts] ) ;
+                CVecteur2D VecPerendiculaire( PtProj , Vectxpts[ipts] ) ;
+
+                // destruction de points si distance a la droite sufisante
+                if ( DistanceMetresEcartDroite > 0 && VecPerendiculaire.GetNorm() * MilesParDegres * UnMileEnMetres > DistanceMetresEcartDroite )
+                    {
+                    Break = true ;
+                    break ;
+                    }
+                }
+            if ( Break )
+                break ;
+            }
+
+        // recopie vecteur
+        //CoefBravaisPearsonOld = CoefBravaisPearsonCur ;
+        GroupeAligneOld = GroupeAligneCur ;
+        }
+
+    // memorisation groupe
+    NbPts = GroupeAligneOld.m_Vect.size() ;
+    /*if ( NbPts <= debpts )
+        {
+        NbPts = debpts  ;
+        //NbPts = 2 ;
+        continue ;
+        }*/
+
+    if ( GroupeAligneOld.m_Vect.size() > debpts )
+        VecGroupAligne.push_back( GroupeAligneOld ) ;
+    }
+
+std::sort(VecGroupAligne.begin(),VecGroupAligne.end()) ;
+
+/*if ( VecGroupAligne.size() )
+    for ( long ip = 0 ; ip < (long) m_pVecOrigine->size() ; ip++ )
+        {
+        st_coord_poly* StPoly = (*m_pVecOrigine)[ip] ;
+        StPoly->m_PtADetuire = true ;
+        StPoly->m_PtAppartientAUnGroup = false ;
+        }*/
+
+// on ne garde que le premier et le dernier
+//for ( size_t ig = 0 ; ig < VecGroupAligne.size() ; ig++ )
+for ( long ig = VecGroupAligne.size() - 1 ; ig > 0 ; ig-- )
     {
-    const st_coord_poly* pStruct = VecpStruct[i] ;
-    Num += (pStruct->m_Lat-MoyenneLat)*(pStruct->m_Lon-MoyenneLon) ;
-    SumDenLat += pow(pStruct->m_Lat-MoyenneLat,2) ;
-    SumDenLon += pow(pStruct->m_Lon-MoyenneLon,2) ;
+    std::vector<st_coord_poly*> & VecAligne = VecGroupAligne[ig].m_Vect ;
+
+    // tri vecteur par longitude
+    CSortPts::Sort( VecAligne ) ;
+
+    bool JamaisTraite = true ;
+
+    for ( size_t ip = 0 ; ip < VecAligne.size() ; ip++ )
+        if ( VecAligne[ip]->m_PtAppartientAUnGroup == true )
+            {
+            JamaisTraite = false ;
+            break ;
+            }
+
+    if ( JamaisTraite  )
+        {
+        //bool cont = false ;
+        // si les bouts sont deja detuit
+        //for ( size_t ip = 0 ; ip < VecAligne.size() ; ip++ )
+        //if ( VecAligne[0]->m_PtADetuire || VecAligne[VecAligne.size()-1]->m_PtADetuire )
+        //    continue ;
+        //    if ( VecAligne[ip]->m_PtADetuire )
+        //        cont = true ;
+
+        //if ( cont )
+        //    continue ;
+        for ( size_t ip = 1 ; ip < VecAligne.size()-1 ; ip++ )
+            VecAligne[ip]->m_PtADetuire = true ;
+        for ( size_t ip = 0 ; ip < VecAligne.size() ; ip++ )
+            VecAligne[ip]->m_PtAppartientAUnGroup = true ;
+
+        VecAligne[0]->m_PtADetuire = false ;
+        VecAligne[VecAligne.size()-1]->m_PtADetuire = false ;
+        }
     }
 
-return Num / sqrt(SumDenLat*SumDenLon) ;
-} */
-
+// reduction vecteur de sortie
+for ( size_t ip = 0 ; ip < m_pVecOrigine->size() ; ip++ )
+    {
+    if ( ! (*m_pVecOrigine)[ip]->m_PtADetuire )
+        VecReduce.push_back( (*m_pVecOrigine)[ip] ) ;
+    }
+// recopie du vecteur reduit
+*m_pVecOrigine = VecReduce ;
+}
