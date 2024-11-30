@@ -16,14 +16,14 @@
 using namespace std;
 using namespace nlohmann ;
 
-char NumVer[]="20241130a" ;
+char NumVer[]="20241130b" ;
 
 // centre clermont
-float LatCentreDeg = 45.783329 ;
-float LonCentreDeg =  3.08333 ;
+double LatCentreDeg = 45.783329 ;
+double LonCentreDeg =  3.08333 ;
 
 // rayon 120km
-float RayonDeg = 120. * 1000. / UnMilesEnMetres / 60. ;
+double RayonDeg = 120. * 1000. / UnMilesEnMetres / 60. ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Zone aerienne pour tri suivant nombre de points. Pour optimization
@@ -93,7 +93,7 @@ for ( long iz = 0 ; iz < NbAreas ; iz++ )
     bool DansPerimetre = false ;
     for ( long nbc = 0 ; nbc < (long)Zone.m_VecPts.size() ; nbc++ )
         {
-        float DistanceAngu = sqrtf( powf( Zone.m_VecPts[nbc]->m_Lon - LonCentreDeg , 2 ) + powf( Zone.m_VecPts[nbc]->m_Lat - LatCentreDeg , 2 ) ) ;
+        double DistanceAngu = sqrtf( powf( Zone.m_VecPts[nbc]->m_Lon - LonCentreDeg , 2 ) + powf( Zone.m_VecPts[nbc]->m_Lat - LatCentreDeg , 2 ) ) ;
         if ( DistanceAngu < RayonDeg )
             {
             DansPerimetre = true ;
@@ -148,7 +148,7 @@ for ( long iz = VecZone.size() -1 ; iz >= 0 ; iz-- )
     // ecriture pour fichier texte
     cout << Zone.m_Name << ";" << Zone.m_Bottom << ";" ;
     for ( long nbc = 0 ; nbc < (long)Zone.m_VecPts.size() ; nbc++ )
-        cout << "" << Zone.m_VecPts[nbc]->m_Lon << "," << Zone.m_VecPts[nbc]->m_Lat << ";" ;
+        cout << "" << setprecision(8) << Zone.m_VecPts[nbc]->m_Lon << "," << Zone.m_VecPts[nbc]->m_Lat << ";" ;
     cout << endl ;
 
     // fichier de zone pour gnuplot apres compression

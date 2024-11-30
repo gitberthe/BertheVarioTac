@@ -25,15 +25,15 @@
 // macro //
 ///////////
 
-#define FABS(x)     fabsf(x)
-#define SQRT(x)     sqrtf(x)
-#define SIN(x)      sinf(x)
-#define COS(x)      cosf(x)
-#define ACOS(x)     acosf(x)
-#define POW(x,y)    powf(x,y)
-#define FMOD(x,y)   fmodf(x,y)
-#define FLOOR(x)    floorf(x)
-#define MODF(x,y)   modff(x,y)
+#define FABS(x)     fabs(x)
+#define SQRT(x)     sqrt(x)
+#define SIN(x)      sin(x)
+#define COS(x)      cos(x)
+#define ACOS(x)     acos(x)
+#define POW(x,y)    pow(x,y)
+#define FMOD(x,y)   fmod(x,y)
+#define FLOOR(x)    floor(x)
+#define MODF(x,y)   modf(x,y)
 
 #define MIN( a , b )   (((a)<(b)) ? (a) : (b))
 #define MAX( a , b )   (((a)>(b)) ? (a) : (b))

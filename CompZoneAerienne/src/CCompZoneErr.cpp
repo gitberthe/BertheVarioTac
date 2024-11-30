@@ -24,7 +24,7 @@ for ( long ipbz = 0 ; ipbz < (long)BigZone.size() ; ipbz++ )
     for ( long ipsz = 0 ; ipsz < (long)SmallZone.size() ; ipsz++ )
         {
         CVecZoneReduce::st_coord_poly* ptdeb=SmallZone[0] ;
-        CVecZoneReduce::st_coord_poly* ptfin=SmallZone[(long)SmallZone.size()-1] ;
+        CVecZoneReduce::st_coord_poly* ptfin=SmallZone[((long)SmallZone.size())-1] ;
         if ( ipsz < ((long)SmallZone.size()-1) )
             {
             ptdeb = SmallZone[ipsz] ;
@@ -78,7 +78,7 @@ CPoint2D PtProj = Droite.GetProjectionDuPoint(Pt) ;
 
 // si en dehors du segment de droite
 CVecteur2D VecPtSurDroite( PtA , PtProj ) ;
-if ( VecPtSurDroite.GetNorm() > VecDroite.GetNorm() || VecPtSurDroite.GetAngleDeg( VecDroite ) > 90 )
+if ( VecPtSurDroite.GetNorm() > VecDroite.GetNorm() ) //|| VecPtSurDroite.GetAngleDeg( VecDroite ) > 90 )
     return -1;
 
 // distance à la droite

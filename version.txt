@@ -1,3 +1,6 @@
+le 20241130b :
+ - augmentation des decimales et precision dans zonesaer.txt.
+
 le 20241130a :
  - Erreur moyenne des courbes pour CompZoneAerienne.
 
