@@ -8,10 +8,10 @@
 1732896195 source:/home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CVecZoneReduce.cpp
 	"CompZoneAerienne.h"
 
-1732895113 source:/home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CompZoneAerienne.cpp
+1732934321 source:/home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CompZoneAerienne.cpp
 	"CompZoneAerienne.h"
 
-1732849349 /home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CompZoneAerienne.h
+1732932041 /home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CompZoneAerienne.h
 	<iostream>
 	<fstream>
 	<vector>
@@ -21,12 +21,14 @@
 	<algorithm>
 	<limits>
 	<cfloat>
+	<unistd.h>
 	"nlohmann/json.hpp"
 	"CVecteur2D.h"
 	"CDroite2D.h"
 	"CVecZoneReduce.h"
 	"CNuage2Droite.h"
 	"CGroupeAligne.h"
+	"CCompZoneErr.h"
 
 1723492221 /home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/nlohmann/json.hpp
 	<algorithm>
@@ -236,5 +238,10 @@
 1732848597 /home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CGroupeAligne.h
 
 1732832064 source:/home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CNuage2Droite.cpp
+	"CompZoneAerienne.h"
+
+1732932423 /home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CCompZoneErr.h
+
+1732936847 source:/home/internet/Documents/PlatformIO/Projects/BertheVarioTac/CompZoneAerienne/src/CCompZoneErr.cpp
 	"CompZoneAerienne.h"
 
