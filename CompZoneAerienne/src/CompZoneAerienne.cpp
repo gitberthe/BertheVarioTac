@@ -16,7 +16,7 @@
 using namespace std;
 using namespace nlohmann ;
 
-char NumVer[]="20241201a" ;
+char NumVer[]="20241201b" ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief
@@ -54,7 +54,7 @@ sprintf( TmpChar , "rm -rf %s/zones_gnuplot/*.txt %s/zones_gnuplot/*.png", path.
 system( TmpChar ) ;
 
 // verification ligne de commande
-if ( (strcmp(argv[1],"--batch") != 0 && argc < 4) || (strcmp(argv[1],"--batch") == 0 && argc < 4) )
+if ( argc < 2 || (strcmp(argv[1],"--batch") != 0 && argc < 4) || (strcmp(argv[1],"--batch") == 0 && argc < 4) )
     {
     cerr << argv[0] << " lat_deg lon_deg rayon_km " << endl ;
     cerr << argv[0] << " --batch terconnu.txt rayon_km " << endl ;
