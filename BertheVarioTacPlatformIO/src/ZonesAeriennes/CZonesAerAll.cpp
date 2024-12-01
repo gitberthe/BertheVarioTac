@@ -661,8 +661,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_GlobalVar.m_AltitudeSolHgt = g_GlobalVar.m_Hgt2Agl.GetGroundZ( g_GlobalVar.m_TerrainPosCur.m_Lon , g_GlobalVar.m_TerrainPosCur.m_Lat ) ;
 
 // pour toutes les zones, determination si dans surface
-std::vector<const CZoneAer *> VecZoneInAreaNorm ;   // zones normale comme TMA
-std::vector<const CZoneAer *> VecZoneInAreaActivee ;// zones activable comme R_368B
+std::vector<const CZoneAer *> VecZoneInArea ;   // zones normale comme TMA ou RTBA
 const CZoneAer * pZoneProtegee = NULL ;             // zone protege
 for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     {
@@ -695,23 +694,20 @@ for ( long iz = 0 ; iz < m_NbZones ; iz++ )
         // zone protege
         if ( strstr( Zone.m_NomOri.c_str() , "PROTECT" ) != NULL || strstr( Zone.m_NomOri.c_str() , "FFVL-Prot " ) != NULL )
             pZoneProtegee = & Zone ;
-        // zone activable
-        else if ( Zone.m_DansFchActivation )
-            VecZoneInAreaActivee.push_back( & Zone ) ;
         // zone normale
         else
-            VecZoneInAreaNorm.push_back( & Zone ) ;
+            VecZoneInArea.push_back( & Zone ) ;
         }
     }
 
 // tri des zones par altitude croissante
-TriZonesAltitude( VecZoneInAreaNorm ) ;
+TriZonesAltitude( VecZoneInArea ) ;
 /*Serial.println( "debut de tri" ) ;
 for ( int iz = 0 ; iz < VecZoneInAreaNorm.size() ; iz++ )
     Serial.println( VecZoneInAreaNorm[iz]->GetAltiBasse() ) ;*/
 
 // cas des zones normales
-if ( VecZoneInAreaNorm.size() == 0 )
+if ( VecZoneInArea.size() == 0 )
     {
     RetStrIn = "aucune_zone" ;
     RetNbrIn = ZONE_EN_DEHORS ;
@@ -719,10 +715,10 @@ if ( VecZoneInAreaNorm.size() == 0 )
 else
     {
     // zone la plus basse
-    const CZoneAer * pZone = VecZoneInAreaNorm[0] ;
+    const CZoneAer * pZone = VecZoneInArea[0] ;
     // si la zone du dessus a une derogation elle est prioritaire
-    if ( VecZoneInAreaNorm.size() > 1 && VecZoneInAreaNorm[1]->HavePeriod() )
-        pZone = VecZoneInAreaNorm[1] ;
+    if ( VecZoneInArea.size() > 1 && VecZoneInArea[1]->HavePeriod() )
+        pZone = VecZoneInArea[1] ;
 
     // variables de zone
     int  PlafondZone = pZone->GetAltiBasse() ;
@@ -797,7 +793,7 @@ else
         }
     }
 
-// pour toutes les zones activables recherche dedans si pas deja dedans une comme TMA
+/*// pour toutes les zones activables recherche dedans si pas deja dedans une comme TMA
 for ( int iz = 0 ; iz < VecZoneInAreaActivee.size() && RetNbrIn != ZONE_DEDANS ; iz++ )
     {
     const CZoneAer & Zone = *VecZoneInAreaActivee[iz] ;
@@ -822,7 +818,7 @@ for ( int iz = 0 ; iz < VecZoneInAreaActivee.size() && RetNbrIn != ZONE_DEDANS ;
         RetNbrLimite = ZONE_LIMITE_ALTI ;
         RetStrLimite = TmpChar ;
         }
-    }
+    }*/
 
 
 // si zone protege et pas deja dedans une comme TMA ou activable
@@ -900,7 +896,6 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrI
 
     // prise en compte de l'altitude
     bool IsNearFrontAlti ;
-    int  AltiZone = 0 ;
     if ( ZoneProtege )
         IsNearFrontAlti = IsNearFront && (g_GlobalVar.m_TerrainPosCur.m_AltiBaro <= (PlafondZoneProtegee+g_GlobalVar.m_Config.m_AltiMargin)) ;
     else
