@@ -16,8 +16,6 @@
 #define ALTI_PERIODE_SEMAINE 1
 #define ALTI_PERIODE_WEEKEND 2
 
-#define ResolCompress        (10.)
-
 // FL 195	5800 mètres
 // FL 175	5332 mètres
 // FL 155	4722 mètres
@@ -85,17 +83,19 @@ private :
     static char*    ms_compressed_data_lz4 ;    ///< buffer de compression lz4
 
 private :
-    CZoneAer::st_coord_poly **m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
-    short                           m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
+    CZoneAer::st_coord_poly **  m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
+    short                       m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
-    char                           *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
-    short                           m_Lz4BuffSize ;         ///< taille du buffer des short compresses lz4
-    bool                            m_CompressLz4 ;         ///< indique si les donnees sont compressee lz4
+    char                        *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
+    short                       m_Lz4BuffSize ;         ///< taille du buffer des short compresses lz4
+    bool                        m_CompressLz4 ;         ///< indique si les donnees sont compressee lz4
 
-    CZoneAer::st_coord_poly   m_Barycentre ;          ///< pour une recherche rapide
-    float                           m_RayonMetre ;          ///< pour une recherche rapide
+    CZoneAer::st_coord_poly     m_Barycentre ;          ///< pour une recherche rapide
+    float                       m_RayonMetre ;          ///< pour une recherche rapide
 
-    static bool ms_TriParNom ;  ///< pour un tri par nom
+    short                       m_ResolutionMetre ;     ///< resolution en metre de la zone lors de compression short
+
+    static bool                 ms_TriParNom ;  ///< pour un tri par nom
 } ;
 
 #endif

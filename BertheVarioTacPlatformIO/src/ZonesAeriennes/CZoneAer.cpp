@@ -68,7 +68,8 @@ return -1 ;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Compresse la zone en tableau de int de resolution en metre de ResolCompress.
+/// \brief Compresse la zone en tableau de short de resolution variable.
+/// (de 1 a 7 metres, 2 metres en moyenne)
 /// Puis compression des short en char lz4.
 void CZoneAer::CompressZone()
 {
@@ -84,8 +85,14 @@ if ( m_CharLz4Arr != NULL )
 short short_size = m_NbStLaLoPts*2 ;
 short * LowResShortArr = new short [short_size] ;
 
+// short maximum en float
+const float ShortMax = 32767. ;
+
+// resolution entiere minimum
+m_ResolutionMetre = ceilf( m_RayonMetre / ShortMax ) ;
+
 // verification que la zone n'est pas trop grande
-const float RayonMaxZoneEnMetre = 32767. * ResolCompress ;
+const float RayonMaxZoneEnMetre = ShortMax * m_ResolutionMetre ;
 if ( m_RayonMetre >= RayonMaxZoneEnMetre )
     {
     Serial.println( "zone aerienne trop grande") ;
@@ -99,8 +106,8 @@ for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
     const CZoneAer::st_coord_poly * pStPts = m_PolyStLaLoArr[ipstruct] ;
 
-    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lat - m_Barycentre.m_Lat) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
-    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lon - m_Barycentre.m_Lon) * MilesParDegres * UnMileEnMetres / ResolCompress)) ;
+    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lat - m_Barycentre.m_Lat) * MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre))) ;
+    LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lon - m_Barycentre.m_Lon) * MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre))) ;
     }
 
 // compression lz4
@@ -174,8 +181,8 @@ for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     CZoneAer::st_coord_poly * pStPts = new CZoneAer::st_coord_poly ;
     m_PolyStLaLoArr[ipstruct] = pStPts ;
 
-    pStPts->m_Lat = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lat ;
-    pStPts->m_Lon = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ResolCompress) + m_Barycentre.m_Lon ;
+    pStPts->m_Lat = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre)) + m_Barycentre.m_Lat ;
+    pStPts->m_Lon = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre)) + m_Barycentre.m_Lon ;
     }
 
 // destruction buffer short
