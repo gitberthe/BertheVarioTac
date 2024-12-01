@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 26/11/2024 : modification
+/// \date 01/12/2024 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -16,7 +16,7 @@
 #define ALTI_PERIODE_SEMAINE 1
 #define ALTI_PERIODE_WEEKEND 2
 
-#define ResolCompress        (18.)
+#define ResolCompress        (10.)
 
 // FL 195	5800 mètres
 // FL 175	5332 mètres

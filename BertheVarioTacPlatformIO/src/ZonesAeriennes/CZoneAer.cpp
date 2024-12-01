@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 26/11/2024
+/// \date modification : 01/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -68,7 +68,7 @@ return -1 ;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Compresse la zone en tableau de int de resolution 18m et maximum +-589km.
+/// \brief Compresse la zone en tableau de int de resolution en metre de ResolCompress.
 /// Puis compression des short en char lz4.
 void CZoneAer::CompressZone()
 {
@@ -85,9 +85,11 @@ short short_size = m_NbStLaLoPts*2 ;
 short * LowResShortArr = new short [short_size] ;
 
 // verification que la zone n'est pas trop grande
-if ( m_RayonMetre >= 589.*1000. )
+const float RayonMaxZoneEnMetre = 32767. * ResolCompress ;
+if ( m_RayonMetre >= RayonMaxZoneEnMetre )
     {
     Serial.println( "zone aerienne trop grande") ;
+    g_GlobalVar.BeepError() ;
     g_GlobalVar.Reboot() ;
     }
 
