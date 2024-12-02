@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 01/12/2024 : modification
+/// \date 02/12/2024 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -196,6 +196,26 @@ m_ZonesArr[m_NbZones-1] = pZone ;
 // recopie nom de zone
 pZone->m_NomOri = pChar ;
 pZone->m_NomAff = pChar ;
+
+// zone protege PROTECT ou FFVL-Prot dans chaine
+bool IsProtect = (strstr( pChar , "PROTECT" ) != NULL) || (strstr( pChar , "FFVL-Prot" ) != NULL) ;
+IsProtect = IsProtect && (strstr( pChar , "m/sol" ) != NULL) ;
+if ( IsProtect )
+    {
+    // detertimation plafond zone proetegee
+    if ( strstr( pChar , "1000m/sol" ) != NULL )
+        pZone->m_HauteurSolZoneProtege = 1000 ;
+    else if ( strstr( pChar , "500m/sol" ) != NULL )
+        pZone->m_HauteurSolZoneProtege = 500 ;
+    else if ( strstr( pChar , "300m/sol" ) != NULL )
+        pZone->m_HauteurSolZoneProtege = 300 ;
+    else if ( strstr( pChar , "150m/sol" ) != NULL )
+        pZone->m_HauteurSolZoneProtege = 150 ;
+    else if ( strstr( pChar , "50m/sol" ) != NULL )
+        pZone->m_HauteurSolZoneProtege = 50 ;
+    else
+        pZone->m_HauteurSolZoneProtege = 1000 ;
+    }
 
 // zone protegee on enleve "reserve naturelle nationale de la vallee de"
 int iespacemax = 3 ;
@@ -692,7 +712,7 @@ for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     if ( IsInArea )
         {
         // zone protege
-        if ( strstr( Zone.m_NomOri.c_str() , "PROTECT" ) != NULL || strstr( Zone.m_NomOri.c_str() , "FFVL-Prot " ) != NULL )
+        if ( Zone.IsProtect() )
             pZoneProtegee = & Zone ;
         // zone normale
         else
@@ -826,17 +846,8 @@ int HauteurSolZoneProtegee = 1000 ;
 int PlafondZoneProtegee = g_GlobalVar.m_AltitudeSolHgt+HauteurSolZoneProtegee ;
 if ( pZoneProtegee != NULL && RetNbrIn != ZONE_DEDANS )
     {
-    // detertimation plafond zone proetegee
-    if ( strstr( pZoneProtegee->m_NomOri.c_str() , "1000m/sol" ) != NULL )
-        HauteurSolZoneProtegee = 1000 ;
-    else if ( strstr( pZoneProtegee->m_NomOri.c_str() , "500m/sol" ) != NULL )
-        HauteurSolZoneProtegee = 500 ;
-    else if ( strstr( pZoneProtegee->m_NomOri.c_str() , "300m/sol" ) != NULL )
-        HauteurSolZoneProtegee = 300 ;
-    else if ( strstr( pZoneProtegee->m_NomOri.c_str() , "150m/sol" ) != NULL )
-        HauteurSolZoneProtegee = 150 ;
-    else if ( strstr( pZoneProtegee->m_NomOri.c_str() , "50m/sol" ) != NULL )
-        HauteurSolZoneProtegee = 50 ;
+    // hauteur zone protegee
+    HauteurSolZoneProtegee = pZoneProtegee->GetHauteurSolZoneProtect() ;
 
     // actualisation plafond zone protege
     PlafondZoneProtegee = g_GlobalVar.m_AltitudeSolHgt+HauteurSolZoneProtegee ;
@@ -889,7 +900,7 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrI
     // proche de la frontiere de zone
     bool IsNearFront = !IsInArea && CDistFront::IsNearFront( Zone.m_PolyStLaLoArr , Zone.m_NbStLaLoPts , PtsEnCours ) ;
     // determionation zone protege
-    bool ZoneProtege = IsNearFront && (strstr( Zone.m_NomOri.c_str() , "PROTECT" ) != NULL) ;
+    bool ZoneProtege = IsNearFront && Zone.IsProtect() ;
 
     // liberation des float
     Zone.FreeFloat() ;

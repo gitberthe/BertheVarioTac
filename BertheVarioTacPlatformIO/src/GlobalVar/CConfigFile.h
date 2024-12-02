@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 24/11/2024
+/// \date modification : 02/12/2024
 ///
 
 #ifndef _CCONFIGFILE_
@@ -37,7 +37,7 @@ public :
 
     void GetChar( int iVec , std::string & Name , std::string & Value ) const ;
 
-    float m_coef_filtre_alti_baro = 0.8 ;   ///< coefficient de filtrage [0,1[ , 0.99 tres fort filtrage
+    float m_coef_filtre_alti_baro = 0.9 ;   ///< coefficient de filtrage [0,1[ , 0.99 tres fort filtrage
     int   m_vitesse_igc_kmh = 16 ;          ///< vitesse de declenchement enregistrement
     int   m_temps_igc_sec = 4 ;             ///< nombre de secondes de vitesse pour declenchement
     float m_vz_igc_ms = 0.7 ;               ///< vz de vitesse pour declenchement

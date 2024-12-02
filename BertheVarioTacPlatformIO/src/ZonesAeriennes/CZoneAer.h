@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 01/12/2024 : modification
+/// \date 02/12/2024 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -60,6 +60,10 @@ public :
     int     GetAltiBasse() const ;
     bool    HavePeriod() const
                 { return m_pDerogFfvl != NULL ; } ;
+    bool    IsProtect() const
+                { return m_HauteurSolZoneProtege > 0 ; } ;
+    short   GetHauteurSolZoneProtect() const
+                { return m_HauteurSolZoneProtege ; } ;
 
     std::string         m_NomAff ;             ///< nom court de la zone a afficher
     std::string         m_NomOri ;             ///< nom entier de la zone dans fichier origine
@@ -94,6 +98,7 @@ private :
     float                       m_RayonMetre ;          ///< pour une recherche rapide
 
     short                       m_ResolutionMetre ;     ///< resolution en metre de la zone lors de compression short
+    short                       m_HauteurSolZoneProtege = -1 ; ///< hauteur de la zone protegee
 
     static bool                 ms_TriParNom ;  ///< pour un tri par nom
 } ;

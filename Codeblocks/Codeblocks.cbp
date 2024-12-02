@@ -116,8 +116,6 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CDistFront.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CPolygone.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CPolygone.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CVecZoneReduce.cpp" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CVecZoneReduce.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZoneAer.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZoneAer.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesAerAll.cpp" />
