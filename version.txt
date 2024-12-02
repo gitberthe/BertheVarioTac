@@ -1,3 +1,6 @@
+le 20241202c :
+ - Gain memoire doublon nom de CZoneAer.
+ 
 le 20241202b :
  - Modification buffer de points CZoneAer.
  

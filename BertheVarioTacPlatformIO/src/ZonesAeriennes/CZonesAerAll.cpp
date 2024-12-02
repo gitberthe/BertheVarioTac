@@ -170,9 +170,15 @@ if ( pChar == NULL || *pChar == 0 || *pChar == '#' )
     return NULL ;
     }
 
-// on ne prend pas en compte les zone 1.20, 5.20, 4.20...
+/*// on ne prend pas en compte les zone 1.20, 5.20, 4.20...
 //if ( strstr( pChar , ".20" ) )
-//    return ;
+//    return NULL ;
+if ( strstr( pChar , " 5 App" ) )
+    return NULL ;
+if ( strstr( pChar , " 4 App" ) )
+    return NULL ;
+if ( strstr( pChar , " 2 App" ) )
+    return NULL ;*/
 
 // nouvelle zone
 CZoneAer * pZone = new CZoneAer ;
@@ -194,7 +200,7 @@ else
 m_ZonesArr[m_NbZones-1] = pZone ;
 
 // recopie nom de zone
-pZone->m_NomOri = pChar ;
+//std::string NomOri = pChar ;
 pZone->m_NomAff = pChar ;
 
 // zone protege PROTECT ou FFVL-Prot dans chaine
@@ -253,7 +259,7 @@ for ( int ic = 0 ; ic < pZone->m_NomAff.size() ; ic++ )
         break ;
         }
     }
-pZone->m_NomOri.shrink_to_fit();
+//pZone->m_NomOri.shrink_to_fit();
 pZone->m_NomAff.shrink_to_fit();
 
 // altitude de basse zone
@@ -375,7 +381,7 @@ if ( pChar == NULL || *pChar == 0 || *pChar == '#' || *pChar == '\n' )
     }
 
 std::string NomOri = pChar ;
-NomOri += ' ' ;     // caractere de fin de champ pour recherche sans bug
+//NomOri += ' ' ;     // caractere de fin de champ pour recherche sans bug
 std::string NomAff = strtok( NULL ,";");
 std::string PeriodeDeb = strtok( NULL ,";");
 std::string PeriodeFin = strtok( NULL ,";");
@@ -388,6 +394,7 @@ CZoneAer * pZone = Find( NomOri.c_str() ) ;
 if ( pZone == NULL )
     {
     Serial.println("zone aerienne non trouvée periode") ;
+    g_GlobalVar.BeepError() ;
     *buff = 0 ;
     return ;
     }
@@ -572,7 +579,7 @@ std::string Activation = pActivation ;
 for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     {
     const CZoneAer & Zone = *m_ZonesArr[iz] ;
-    if ( strstr( Zone.m_NomOri.c_str() , NomOri.c_str() ) )
+    if ( strstr( Zone.m_NomAff.c_str() , NomOri.c_str() ) )
         {
         CZoneAer * pZone = m_ZonesArr[iz] ;
 
@@ -596,7 +603,8 @@ CZoneAer * CZonesAerAll::Find( const char * NomOri )
 for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     {
     const CZoneAer & Zone = *m_ZonesArr[iz] ;
-    if ( strstr( Zone.m_NomOri.c_str() , NomOri ) )
+    //if ( strstr( Zone.m_NomAff.c_str() , NomOri ) )
+    if ( Zone.m_NomAff == NomOri )
         return m_ZonesArr[iz] ;
     }
 
@@ -630,6 +638,7 @@ CSortArray::m_Size = VecZones.size() ;
 CZoneAer::TriParNom( false ) ;
 TriSchellMetzner(true) ; */
 CZoneAer::TriParNom( false ) ;
+
 std::sort(VecZones.begin(), VecZones.end(),MySortFunction);
 //std::reverse(VecZones.begin(),VecZones.end());
 }
@@ -737,8 +746,12 @@ else
     // zone la plus basse
     const CZoneAer * pZone = VecZoneInArea[0] ;
     // si la zone du dessus a une derogation elle est prioritaire
-    if ( VecZoneInArea.size() > 1 && VecZoneInArea[1]->HavePeriod() )
-        pZone = VecZoneInArea[1] ;
+    for ( int iz= 0 ; iz < VecZoneInArea.size() ; iz++ )
+        if ( VecZoneInArea[iz]->HavePeriod() )
+            {
+            pZone = VecZoneInArea[iz] ;
+            break ;
+            }
 
     // variables de zone
     int  PlafondZone = pZone->GetAltiBasse() ;

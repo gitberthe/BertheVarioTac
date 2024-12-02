@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 30/03/2024
-/// \date modification : 28/09/2024
+/// \date modification : 02/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -132,7 +132,8 @@ while ( pChar != NULL )
     for ( int iz = 0 ; iz < m_NbZones ; iz++ )
         {
         const CZoneAer & Zone = *m_ZonesArr[iz] ;
-        if ( strstr( Zone.m_NomOri.c_str() , pChar ) )
+        //if ( strstr( Zone.m_NomAff.c_str() , pChar ) )
+        if ( Zone.m_NomAff == pChar )
             {
             CZoneAer * pZone = m_ZonesArr[iz] ;
 
