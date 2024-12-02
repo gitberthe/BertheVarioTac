@@ -1,3 +1,6 @@
+le 20241202b :
+ - Modification buffer de points CZoneAer.
+ 
 le 20241202a :
  - Modification affichage CompZoneAerienne.
  - Modification determination zone protegee CZoneAer.

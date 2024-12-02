@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 01/12/2024
+/// \date modification : 02/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -21,8 +21,6 @@ CZoneAer::~CZoneAer()
 {
 if ( m_PolyStLaLoArr != NULL )
     {
-    for ( int ip = 0 ; ip < m_NbStLaLoPts ; ip++ )
-        delete m_PolyStLaLoArr[ip] ;
     delete [] m_PolyStLaLoArr ;
     m_PolyStLaLoArr = NULL ;
     m_NbStLaLoPts = 0 ;
@@ -104,7 +102,7 @@ if ( m_RayonMetre >= RayonMaxZoneEnMetre )
 int ipshort = 0 ;
 for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
-    const CZoneAer::st_coord_poly * pStPts = m_PolyStLaLoArr[ipstruct] ;
+    const CZoneAer::st_coord_poly * pStPts = & m_PolyStLaLoArr[ipstruct] ;
 
     LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lat - m_Barycentre.m_Lat) * MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre))) ;
     LowResShortArr[ipshort++] = (short)((float)((pStPts->m_Lon - m_Barycentre.m_Lon) * MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre))) ;
@@ -146,8 +144,6 @@ void CZoneAer::FreeFloat()
 // destruction buffer structure float lat/lon
 if ( m_PolyStLaLoArr != NULL )
     {
-    for ( int ip = 0 ; ip < m_NbStLaLoPts ; ip++ )
-        delete m_PolyStLaLoArr[ip] ;
     delete [] m_PolyStLaLoArr ;
     m_PolyStLaLoArr = NULL ;
     }
@@ -171,15 +167,14 @@ else
     memcpy( LowResShortArr , m_CharLz4Arr , short_size*sizeof(short) ) ;
 
 // allocation du tableau st *
-m_PolyStLaLoArr = new CZoneAer::st_coord_poly * [m_NbStLaLoPts] ;
+m_PolyStLaLoArr = new CZoneAer::st_coord_poly [m_NbStLaLoPts] ;
 
 // passage en float
 int ipshort = 0 ;
 for ( int ipstruct = 0 ; ipstruct < m_NbStLaLoPts ; ipstruct++ )
     {
     // ajout du points
-    CZoneAer::st_coord_poly * pStPts = new CZoneAer::st_coord_poly ;
-    m_PolyStLaLoArr[ipstruct] = pStPts ;
+    CZoneAer::st_coord_poly * pStPts = & m_PolyStLaLoArr[ipstruct] ;
 
     pStPts->m_Lat = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre)) + m_Barycentre.m_Lat ;
     pStPts->m_Lon = ((float)LowResShortArr[ipshort++]) / (MilesParDegres * UnMileEnMetres / ((float)m_ResolutionMetre)) + m_Barycentre.m_Lon ;

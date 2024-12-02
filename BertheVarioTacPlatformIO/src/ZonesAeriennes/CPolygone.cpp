@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 26/11/2024
+/// \date modification : 02/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -12,12 +12,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Test si on est dans le polygone de la zone. Methode par droites secantes.
 /// \return true si points dans polygone
-bool CPolygone::IsIn( CZoneAer::st_coord_poly ** PtsArr , int NbPts , const CZoneAer::st_coord_poly & PtsToTest )
+bool CPolygone::IsIn( CZoneAer::st_coord_poly * PtsArr , int NbPts , const CZoneAer::st_coord_poly & PtsToTest )
 {
 // test si le point est un des sommets du polygone
 for ( int ip = 0 ; ip < NbPts ; ip++ )
-    if ( PtsArr[ip]->m_Lat == PtsToTest.m_Lat &&
-         PtsArr[ip]->m_Lon == PtsToTest.m_Lon )
+    if ( PtsArr[ip].m_Lat == PtsToTest.m_Lat &&
+         PtsArr[ip].m_Lon == PtsToTest.m_Lon )
         return true ;
 
 // comptage du nombre d'intersections avec le polygone
@@ -32,17 +32,17 @@ for ( int ip = 0 ; ip < NbPts ; ip++ )
     // points du segmant de zone
     if ( ip < (NbPts-1) )
         {
-        ptA1.x = PtsArr[ip]->m_Lat ;
-        ptA1.y = PtsArr[ip]->m_Lon ;
-        ptB1.x = PtsArr[ip+1]->m_Lat ;
-        ptB1.y = PtsArr[ip+1]->m_Lon ;
+        ptA1.x = PtsArr[ip].m_Lat ;
+        ptA1.y = PtsArr[ip].m_Lon ;
+        ptB1.x = PtsArr[ip+1].m_Lat ;
+        ptB1.y = PtsArr[ip+1].m_Lon ;
         }
     else
         {
-        ptA1.x = PtsArr[ip]->m_Lat ;
-        ptA1.y = PtsArr[ip]->m_Lon ;
-        ptB1.x = PtsArr[0]->m_Lat ;
-        ptB1.y = PtsArr[0]->m_Lon ;
+        ptA1.x = PtsArr[ip].m_Lat ;
+        ptA1.y = PtsArr[ip].m_Lon ;
+        ptB1.x = PtsArr[0].m_Lat ;
+        ptB1.y = PtsArr[0].m_Lon ;
         }
 
     if ( doIntersect( ptA1 , ptB1 , ptTest , ptLoin ) )
@@ -59,7 +59,7 @@ return false ;
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Test si on est dans le polygone de la zone. Methode somme des angles.
 /// \return true si points dans polygone
-bool CPolygone::IsInOld( CZoneAer::st_coord_poly ** PtsArr , int NbPts , const CZoneAer::st_coord_poly & PtsToTest )
+bool CPolygone::IsInOld( CZoneAer::st_coord_poly * PtsArr , int NbPts , const CZoneAer::st_coord_poly & PtsToTest )
 {
 //Serial.print( "nb pts:" ) ;
 //Serial.println( NbPts ) ;
@@ -75,8 +75,8 @@ for ( int is = 0 ; is < NbPts ; is++ )
         ideb = is ;
         ifin  = 0 ;
         }
-    const CZoneAer::st_coord_poly & PtsCourDebut = *PtsArr[ideb] ;
-    const CZoneAer::st_coord_poly & PtsCourFin   = *PtsArr[ifin] ;
+    const CZoneAer::st_coord_poly & PtsCourDebut = PtsArr[ideb] ;
+    const CZoneAer::st_coord_poly & PtsCourFin   = PtsArr[ifin] ;
     CVecteur3D VecteurDebut( PtsCourDebut.m_Lon - PtsToTest.m_Lon , PtsCourDebut.m_Lat - PtsToTest.m_Lat , 0. ) ;
     CVecteur3D VecteurFin(   PtsCourFin.m_Lon   - PtsToTest.m_Lon , PtsCourFin.m_Lat   - PtsToTest.m_Lat , 0. ) ;
 
@@ -99,14 +99,14 @@ return false ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Calcul le barycentre
-void CPolygone::CalcBarycentre( CZoneAer::st_coord_poly ** PtsArr , int NbPts , CZoneAer::st_coord_poly & PtsBarycentre )
+void CPolygone::CalcBarycentre( CZoneAer::st_coord_poly * PtsArr , int NbPts , CZoneAer::st_coord_poly & PtsBarycentre )
 {
 // calcul du baricentre
 PtsBarycentre.m_Lat = 0 ;
 PtsBarycentre.m_Lon = 0 ;
 for ( int is = 0 ; is < NbPts ; is++ )
     {
-    const CZoneAer::st_coord_poly & PtsCour = *PtsArr[is] ;
+    const CZoneAer::st_coord_poly & PtsCour = PtsArr[is] ;
     PtsBarycentre.m_Lat += PtsCour.m_Lat ;
     PtsBarycentre.m_Lon += PtsCour.m_Lon ;
     }
@@ -116,7 +116,7 @@ PtsBarycentre.m_Lon /= NbPts ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoi l'aire du polygone
-float CPolygone::GetAreaSize( CZoneAer::st_coord_poly ** PtsArr , int NbPts , CZoneAer::st_coord_poly & PtsBarycentre )
+float CPolygone::GetAreaSize( CZoneAer::st_coord_poly * PtsArr , int NbPts , CZoneAer::st_coord_poly & PtsBarycentre )
 {
 float SommeTriangle = 0 ;
 
@@ -133,8 +133,8 @@ for ( int is = 0 ; is < NbPts ; is++ )
         ideb = is ;
         ifin  = 0 ;
         }
-    const CZoneAer::st_coord_poly & PtsCourDebut = *PtsArr[ideb] ;
-    const CZoneAer::st_coord_poly & PtsCourFin   = *PtsArr[ifin] ;
+    const CZoneAer::st_coord_poly & PtsCourDebut = PtsArr[ideb] ;
+    const CZoneAer::st_coord_poly & PtsCourFin   = PtsArr[ifin] ;
     CVecteur3D VecteurDebut( PtsCourDebut.m_Lon - PtsBarycentre.m_Lon , PtsCourDebut.m_Lat - PtsBarycentre.m_Lat , 0. ) ;
     CVecteur3D VecteurFin(   PtsCourFin.m_Lon   - PtsBarycentre.m_Lon , PtsCourFin.m_Lat   - PtsBarycentre.m_Lat , 0. ) ;
 

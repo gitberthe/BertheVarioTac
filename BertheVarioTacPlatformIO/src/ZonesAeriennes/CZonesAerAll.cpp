@@ -94,7 +94,7 @@ char * TmpChar = new char [TaillMaxChar+1] ;
 int ic = 0 ;
 
 // allocation pour 1000 points maximum
-CZoneAer::ms_max_dst_size = LZ4_compressBound( 1000 * 2 * sizeof(short) );
+CZoneAer::ms_max_dst_size = LZ4_compressBound( MAX_POINTS_ZONE * 2 * sizeof(short) );
 CZoneAer::ms_compressed_data_lz4 = new char [CZoneAer::ms_max_dst_size] ;
 
 // ouverture fichier
@@ -262,24 +262,24 @@ pZone->m_AltiBasse = atoi( pChar ) ;
 
 // ajout des points du polygone
 pChar = strtok( NULL , ";," ) ;
-std::vector<CZoneAer::st_coord_poly*> VecPoly ;
+std::vector<CZoneAer::st_coord_poly> VecPoly ;
 // reserve pour une grande zone
-VecPoly.reserve( 400 ) ;
+VecPoly.reserve( MAX_POINTS_ZONE ) ;
 while ( pChar != NULL )
     {
     // nouveau point
-    CZoneAer::st_coord_poly * ppts = new CZoneAer::st_coord_poly ;
+    CZoneAer::st_coord_poly pts ;
 
     // longitude
-    ppts->m_Lon = atof( pChar ) ;
+    pts.m_Lon = atof( pChar ) ;
     pChar = strtok( NULL , ";," ) ;
 
     // latitude
-    ppts->m_Lat = atof( pChar ) ;
+    pts.m_Lat = atof( pChar ) ;
     pChar = strtok( NULL , ";," ) ;
 
     // ajout au vecteur
-    VecPoly.push_back( ppts ) ;
+    VecPoly.push_back( pts ) ;
 
     //Serial.println( m_NbZones ) ;
     //Serial.println( esp_get_free_heap_size() ) ;
@@ -288,8 +288,8 @@ while ( pChar != NULL )
     }
 
 // recopie du vecteur de points vers le tableau de points
-pZone->m_PolyStLaLoArr = new CZoneAer::st_coord_poly * [ VecPoly.size() ] ;
-memcpy( pZone->m_PolyStLaLoArr , & VecPoly[0] , VecPoly.size() * sizeof( CZoneAer::st_coord_poly*) ) ;
+pZone->m_PolyStLaLoArr = new CZoneAer::st_coord_poly [ VecPoly.size() ] ;
+memcpy( pZone->m_PolyStLaLoArr , VecPoly.data() , VecPoly.size() * sizeof( CZoneAer::st_coord_poly ) ) ;
 pZone->m_NbStLaLoPts = VecPoly.size() ;
 
 // calcul du barycentre
@@ -299,7 +299,7 @@ CPolygone::CalcBarycentre( pZone->m_PolyStLaLoArr , pZone->m_NbStLaLoPts , pZone
 pZone->m_RayonMetre = 0. ;
 for ( int is = 0 ; is < pZone->m_NbStLaLoPts ; is++ )
     {
-    const CZoneAer::st_coord_poly & PtsCour = *pZone->m_PolyStLaLoArr[is] ;
+    const CZoneAer::st_coord_poly & PtsCour = pZone->m_PolyStLaLoArr[is] ;
     float dist = sqrtf( powf(pZone->m_Barycentre.m_Lat-PtsCour.m_Lat,2) + powf(pZone->m_Barycentre.m_Lon-PtsCour.m_Lon,2) ) * 60. * UnMileEnMetres  ;
     if ( dist > pZone->m_RayonMetre )
         pZone->m_RayonMetre = dist ;

@@ -87,7 +87,7 @@ private :
     static char*    ms_compressed_data_lz4 ;    ///< buffer de compression lz4
 
 private :
-    CZoneAer::st_coord_poly **  m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
+    CZoneAer::st_coord_poly *   m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
     short                       m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
     char                        *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
