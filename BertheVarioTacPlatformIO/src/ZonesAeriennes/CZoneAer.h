@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 02/12/2024 : modification
+/// \date 03/12/2024 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -65,8 +65,7 @@ public :
     short   GetHauteurSolZoneProtect() const
                 { return m_HauteurSolZoneProtege ; } ;
 
-    std::string         m_NomAff ;             ///< nom court de la zone a afficher
-    //std::string         m_NomOri ;             ///< nom entier de la zone dans fichier origine
+    char *              m_pNomAff ;             ///< nom court de la zone a afficher
     bool                m_Activee = true ;          ///< zone activee
     bool                m_DansFchActivation = false;///< si dans fichier d'activation de zones pour reecriture apres configuration menu
     short               m_AltiBasse=-1 ;            ///< altitude basse de la zone par defaut

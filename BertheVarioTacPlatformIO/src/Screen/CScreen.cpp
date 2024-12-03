@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/11/2024
+/// \date modification : 03/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -679,7 +679,7 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     // nom des zones
     if ( VecZonesMod[iz]->m_Activee )
         {
-        strcpy( TmpChar , VecZonesMod[iz]->m_NomAff.c_str() ) ;
+        strcpy( TmpChar , VecZonesMod[iz]->m_pNomAff ) ;
         // remplacement des espaces
         int ic = 0 ;
         while ( TmpChar[ic] != 0 )
@@ -691,7 +691,7 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
         }
     else
         {
-        sprintf( TmpChar , "-%s" ,  VecZonesMod[iz]->m_NomAff.c_str() ) ;
+        sprintf( TmpChar , "-%s" ,  VecZonesMod[iz]->m_pNomAff ) ;
         TmpChar[9] = 0 ;
         // remplacement des espaces
         int ic = 0 ;
@@ -999,7 +999,7 @@ if ( NumTma >= 0 && NumTma < VecAffZones.size() )
     {
     CZoneAer * pZone = VecAffZones[NumTma] ;
     for ( int iz = 0 ; iz < VecAffZones.size() ; iz++ )
-        if ( VecAffZones[iz]->m_NomAff == pZone->m_NomAff )
+        if ( ! strcmp( VecAffZones[iz]->m_pNomAff , pZone->m_pNomAff ) )
             VecZone2Mod.push_back( VecAffZones[iz] ) ;
     }
 
@@ -1027,7 +1027,7 @@ else
     // nom
     //g_tft.setCursor(0, 35);
     CZoneAer * pZone = VecAffZones[NumTma] ;
-    g_tft.print(pZone->m_NomAff.c_str());
+    g_tft.print(pZone->m_pNomAff);
     // activation
     g_tft.setCursor(0, 60);
     g_tft.print( "Active:");

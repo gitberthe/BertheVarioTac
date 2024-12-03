@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 02/12/2024
+/// \date modification : 03/12/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -32,7 +32,7 @@ if ( m_PolyStLaLoArr != NULL )
 bool CZoneAer::operator > ( const CZoneAer & Zone ) const
 {
 if ( ms_TriParNom )
-    return (strcmp( m_NomAff.c_str() , Zone.m_NomAff.c_str() ) > 0 ) ;
+    return (strcmp( m_pNomAff , Zone.m_pNomAff ) > 0 ) ;
 
 //return m_Area > Zone.m_Area ;
 return GetAltiBasse() > Zone.GetAltiBasse() ;
@@ -43,7 +43,7 @@ return GetAltiBasse() > Zone.GetAltiBasse() ;
 bool CZoneAer::operator < ( const CZoneAer & Zone ) const
 {
 if ( ms_TriParNom )
-    return ( strcmp( m_NomAff.c_str() , Zone.m_NomAff.c_str() ) < 0 ) ;
+    return ( strcmp( m_pNomAff , Zone.m_pNomAff ) < 0 ) ;
 
 //return m_Area < Zone.m_Area ;
 return GetAltiBasse() < Zone.GetAltiBasse() ;
