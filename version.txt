@@ -1,6 +1,6 @@
 le 20250121a
  - mise a jour doc concepteur.
- - ajout d'un fichier de modif BertheVario à importter dans BertheVarioTac.
+ - ajout d'un fichier de modif BertheVario à importer dans BertheVarioTac.
 
 le 20241209a :
  - CompZoneAerienne.exe windows 10, zonesaer.txt inchangé.
