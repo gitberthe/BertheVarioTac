@@ -1,0 +1,22 @@
+ - temps de vol en float.
+ - numero du vol en page histo.
+ - fuite memoire mode rando.
+ - ajout de fichier ptremarq.txt identique terconnu.txt mais uniquement en rando-vol.
+ - compte rendu ecran lors activation/de-activation zone
+ - ajout des pts terrains connus en guidage rando.
+ - declenchement vol par Vz instantané.
+ - temperature page sys.
+ - [vz_igc_ms] à 0,5 par défaut.
+ - ajout cap gps mode randonnee.
+ - modification GetAltiMetres(). Plus de reset m_DiffAltiFchAgl.
+  du coup plus de faux depart de vol cause Vz. (a voir Vz départ de vol à la baisse)
+ - changement priorite tache son et autres taches.
+ - remise prealarme sonore frontiere zone et proche altitude.
+ - modification nom points gps memorisable en page TMA dessous.
+ - modification zone CTR Rodez
+ - meilleur nom de zone protegee.
+ - correction bug nom zone RTBA 143 ou 593.
+ - [vitesse_igc_kmh] à 14 par defaut.
+ - [coef_filtre_alti_baro] à 0.85 par defaut.
+ - Gain memoire doublon nom de CZoneAer.
+ - Modification determination zone protegee CZoneAer.
