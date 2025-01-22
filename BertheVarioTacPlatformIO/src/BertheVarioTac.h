@@ -51,6 +51,7 @@
 //#define NO_GPS_DEBUG
 //#define MAG_DEBUG
 //#define BRIGHT_DEBUG
+//#define DEBUG_RANDO_VOl
 
 /////////////////////////////
 // define pour le materiel //

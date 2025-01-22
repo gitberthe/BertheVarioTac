@@ -18,22 +18,22 @@ class CRandoVol
 public :
     enum EtatRando
         {
-        InitRando ,
-        InitAfficheMenu ,
+        ConfirmeRando ,
+        AttenteGps ,
+        InitMenu ,
         AfficheMenu ,
-        InitTrace ,
-        Navigation
+        //InitTrace ,
+        //Navigation
         } ;
 
     void LireFichiersGpx() ;
 
-    EtatRando m_EtatRando         = InitRando ; ///< pour le sequencement init/menu/rando
     bool      m_OrientationCapGps = false ;      ///< orientation carte de trace
 
     const char * GetTrackName( int i ) const ;
 
-    std::vector<CFileGpx*>  m_VecGpx ;  ///< vecteur des traces Gpx
-
+    std::vector<CFileGpx*>  m_VecGpx ;          ///< vecteur des traces Gpx
+    CFileGpx*               m_pFileGpx = NULL ; ///< fichier selectionne
 private :
     void SortGpxFromCurPos() ;
 } ;

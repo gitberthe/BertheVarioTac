@@ -1,5 +1,6 @@
 le 20250122c :
  - modification doc concepteur.
+ - ebauche mode rando.
 
 le 20250122b :
  - update de librairie.
