@@ -1,6 +1,4 @@
-le 2025-01-12 :
-
-- recopier la tache Gps de berthevario et surtout la non relance pour stationnarite cause stabilisation gps.
+le 2025-01-22 :
 
 - boitier
 
