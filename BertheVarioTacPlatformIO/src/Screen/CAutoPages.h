@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 16/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #ifndef _CAUTOPAGE_
@@ -29,10 +29,13 @@ public :
         ECRAN_4_CfgFch ,
         ECRAN_5_TmaDessous ,
         ECRAN_6_Sys ,
-        ECRAN_7_WifiFileMgr ,
-        ECRAN_8_Menu ,
         ECRAN_6b_CalMag ,
         ECRAN_6c_TelechFirm ,
+        ECRAN_7_WifiFileMgr ,
+        ECRAN_8_Menu ,
+        ECRAN_9a_RandoVolMenu ,
+        ECRAN_9b_RandoVolCarte ,
+        ECRAN_9c_RandoVolInfo ,
         ERREUR ,
         FIN
         } ;
@@ -66,6 +69,10 @@ protected :
 
     virtual EtatsAuto EcranTmaMod() = 0 ;
     virtual EtatsAuto EcranConfimeArchIgcFch() = 0 ;
+
+    virtual CAutoPages::EtatsAuto EcranRandoVolMenu() = 0 ;
+    virtual CAutoPages::EtatsAuto EcranRandoVolCarte() = 0 ;
+    virtual CAutoPages::EtatsAuto EcranRandoVolInfo() = 0 ;
 
     virtual void ScreenRaz( bool SaufBoutons = true ) = 0 ;
     virtual void ScreenRazButtons() = 0 ;

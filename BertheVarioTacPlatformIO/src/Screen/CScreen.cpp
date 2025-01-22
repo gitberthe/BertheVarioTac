@@ -1288,7 +1288,7 @@ const int largeur = 100 ;
 const int hauteur = 45 ;
 ItemMenu.m_x = 20 ;
 ItemMenu.m_y = 15 ;
-for ( int im = 0 ; im < 8 ; im++ )
+for ( int im = 0 ; im < 9 ; im++ )
     {
     switch ( im )
         {
@@ -1323,6 +1323,10 @@ for ( int im = 0 ; im < 8 ; im++ )
         case 7 :
             ItemMenu.m_Intitule = "Wif" ;
             ItemMenu.m_Page = ECRAN_7_WifiFileMgr ;
+            break ;
+        case 8 :
+            ItemMenu.m_Intitule = "Ran" ;
+            ItemMenu.m_Page = ECRAN_9a_RandoVolMenu ;
             break ;
         default :
             ItemMenu.m_Intitule = "Def" ;
@@ -1457,4 +1461,126 @@ if ( g_GlobalVar.BoutonCentre() )
 
 
 return ECRAN_6c_TelechFirm ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Ecran rando-vol menu.
+CAutoPages::EtatsAuto CScreen::EcranRandoVolMenu()
+{
+static int Confirme = 0 ;
+
+// si page changee
+if ( IsPageChanged() )
+    {
+    Confirme = 0 ;
+
+    ScreenRaz() ;
+    g_tft.setCursor( 0 , 40 ) ;
+    g_tft.print( "Confirmer mode rando?" ) ;
+
+    g_GlobalVar.m_Screen.SetText( "Can" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Ran",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can" , 2 ) ;
+    }
+
+if ( Confirme == 1 )
+    {
+    Confirme = 2 ;
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "m-" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "sel",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "m+" , 2 ) ;
+
+    // arret des taches
+    g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = false ;
+
+    // destruction des zones
+    g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
+    // gain memoire
+    g_GlobalVar.GainMemoire() ;
+    }
+
+// bouton centre
+if ( g_GlobalVar.BoutonCentre() )
+    {
+    if ( Confirme == 0 )
+        {
+        Confirme = 1 ;
+        return ECRAN_9a_RandoVolMenu ;
+        }
+    else if ( Confirme == 2 )
+        return ECRAN_9b_RandoVolCarte ;
+    }
+
+// bouton gauche
+if ( g_GlobalVar.BoutonGauche() )
+    {
+    if ( Confirme == 0 )
+        return ECRAN_0_Vz ;
+    // selection pt/fichier
+    else if ( Confirme == 1 )
+        {
+        }
+    }
+
+// bouton droit
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    if ( Confirme == 0 )
+        return ECRAN_0_Vz ;
+    // selection pt/fichier
+    else if ( Confirme == 1 )
+        {
+        }
+    }
+
+return ECRAN_9a_RandoVolMenu ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Ecran rando-vol carte.
+CAutoPages::EtatsAuto CScreen::EcranRandoVolCarte()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "z-" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Inf",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "z+" , 2 ) ;
+    }
+
+// ecran info
+if ( g_GlobalVar.BoutonCentre() )
+    return ECRAN_9c_RandoVolInfo ;
+
+return ECRAN_9b_RandoVolCarte ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Ecran rando-vol info.
+CAutoPages::EtatsAuto CScreen::EcranRandoVolInfo()
+{
+if ( IsPageChanged() )
+    {
+    ScreenRaz() ;
+
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "Car" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Cap" , 2 ) ;
+    }
+
+// reboot
+if ( g_GlobalVar.BoutonCentre() )
+    CGlobalVar::Reboot() ;
+
+// carte
+if ( g_GlobalVar.BoutonGauche() )
+    return ECRAN_9b_RandoVolCarte ;
+
+return ECRAN_9c_RandoVolInfo ;
 }

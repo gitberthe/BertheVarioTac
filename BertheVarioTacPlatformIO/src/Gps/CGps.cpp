@@ -217,23 +217,24 @@ g_GlobalVar.m_HistoVol.m_VzMax = -10 ;
 g_GlobalVar.m_HistoVol.m_VzMin =  10 ;
 
 // lancement tache fichier igc
-if ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run  )
+if ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     {
     g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = true ;
     xTaskCreatePinnedToCore(TacheGpsIgc, "IgcTask", IGC_STACK_SIZE , & g_GlobalVar , IGC_PRIORITY , NULL, IGC_CORE);
     }
 
-// bip debut enregistrement
-CGlobalVar::BeepOk() ;
-CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
-//delay(200);
-CGlobalVar::BeepOk() ;
-CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
-//delay(200);
-CGlobalVar::BeepOk() ;
+if ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
+    {
+    // bip debut enregistrement
+    CGlobalVar::BeepOk() ;
+    CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
+    CGlobalVar::BeepOk() ;
+    CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
+    CGlobalVar::BeepOk() ;
 
-// pos et temps debut de stationnarite
-g_GlobalVar.m_FinDeVol.InitFinDeVol() ;
+    // pos et temps debut de stationnarite
+    g_GlobalVar.m_FinDeVol.InitFinDeVol() ;
+    }
 
 // mise a jour du temps de vol toutes les secondes
 while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)

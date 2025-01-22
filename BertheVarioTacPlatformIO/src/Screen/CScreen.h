@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 14/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #ifndef _CSCREEN_
@@ -61,6 +61,9 @@ private :
     CAutoPages::EtatsAuto EcranTelechargementFirmware() ;
     CAutoPages::EtatsAuto EcranMenu() ;
     CAutoPages::EtatsAuto EcranCalibreMagnetique() ;
+    CAutoPages::EtatsAuto EcranRandoVolMenu() ;
+    CAutoPages::EtatsAuto EcranRandoVolCarte() ;
+    CAutoPages::EtatsAuto EcranRandoVolInfo() ;
 
     CAutoPages::EtatsAuto EcranTmaMod() ;
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;

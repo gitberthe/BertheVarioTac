@@ -1,3 +1,7 @@
+le 20250122b :
+ - update de librairie.
+ - ebauche mode rando.
+
 le 20250122a :
  - ajout affichage tma hauteur sol pour zone protect.
  - mise en conformite/import BertheVario

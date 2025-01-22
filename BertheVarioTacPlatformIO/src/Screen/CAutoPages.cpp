@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -30,6 +30,9 @@ m_Automate[ECRAN_7_WifiFileMgr].m_pFunction= & CAutoPages::EcranWifiFileMgr ;
 m_Automate[ECRAN_8_Menu].m_pFunction     = & CAutoPages::EcranMenu ;
 m_Automate[ECRAN_6b_CalMag].m_pFunction  = & CAutoPages::EcranCalibreMagnetique ;
 m_Automate[ECRAN_6c_TelechFirm].m_pFunction= & CAutoPages::EcranTelechargementFirmware ;
+m_Automate[ECRAN_9a_RandoVolMenu].m_pFunction  = &CAutoPages::EcranRandoVolMenu ;
+m_Automate[ECRAN_9b_RandoVolCarte].m_pFunction  = & CAutoPages::EcranRandoVolCarte ;
+m_Automate[ECRAN_9c_RandoVolInfo].m_pFunction= & CAutoPages::EcranRandoVolInfo ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +64,11 @@ EtatsAuto NextStep = (this->*pFunction)() ;
 // si centre de l'ecran presse
 if ( g_GlobalVar.m_Screen.IsCenterPressed() )
     {
-    SetVzEtatAuto() ;
+    // si pas mode rando
+    if ( m_EtatAuto != ECRAN_9a_RandoVolMenu &&
+         m_EtatAuto != ECRAN_9b_RandoVolCarte &&
+         m_EtatAuto != ECRAN_9c_RandoVolInfo )
+        SetVzEtatAuto() ;
     return ;
     }
 
@@ -98,8 +105,11 @@ else
           (m_EtatAuto == ECRAN_6b_CalMag && m_CalibrationEnCours) )
         m_MillisEcran0 = millis() ;
 
-    // si pas page Vz
-    if ( m_EtatAuto != ECRAN_0_Vz )
+    // si pas page Vz ni rando
+    if ( m_EtatAuto != ECRAN_0_Vz &&
+         m_EtatAuto != ECRAN_9a_RandoVolMenu &&
+         m_EtatAuto != ECRAN_9b_RandoVolCarte &&
+         m_EtatAuto != ECRAN_9c_RandoVolInfo )
         {
         // si time out
         if( (millis()-m_MillisEcran0)/1000 > m_SecondesRetourEcran0 )

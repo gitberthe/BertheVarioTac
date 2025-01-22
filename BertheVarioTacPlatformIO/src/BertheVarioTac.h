@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 26/11/2024
+/// \date modification : 22/01/2025
 ///
 
 //#define NO_OTA
@@ -100,6 +100,8 @@
 #include "VarioCapBeep/CVarioCapBeep.h"
 #include "VarioCapBeep/CSoundSvr.h"
 #include "QMC5883L/CQMC5883Mag.h"
+#include "RandoVol/CFileGpx.h"
+#include "RandoVol/CRandoVol.h"
 
 ////////////////////////
 // definition des pin //

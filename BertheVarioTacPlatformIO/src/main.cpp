@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/11/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -46,7 +46,7 @@ g_GlobalVar.InitSDCard() ;
 g_GlobalVar.InitI2C() ;
 
 // lecture fichier terrains
-g_GlobalVar.m_TerrainArr.LireFichierTerrains() ;
+g_GlobalVar.m_TerrainArr.LireFichierTerrains(TERRAIN_FCH) ;
 
 // lecture fichier zones aeriennes
 g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;

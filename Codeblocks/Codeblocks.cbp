@@ -90,6 +90,10 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/Perfmon/perfmon.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/QMC5883L/CQMC5883Mag.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/QMC5883L/CQMC5883Mag.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/RandoVol/CFileGpx.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/RandoVol/CFileGpx.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/RandoVol/CRandoVol.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/RandoVol/CRandoVol.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/SDCard/CSDCard.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/SDCard/CSDCard.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.cpp" />

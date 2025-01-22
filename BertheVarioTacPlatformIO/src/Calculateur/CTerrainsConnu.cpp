@@ -4,10 +4,23 @@
 /// \brief
 ///
 /// \date creation     : 17/03/2024
-/// \date modification : 02/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief
+CTerrainsConnu::~CTerrainsConnu()
+{
+if ( m_pTerrainsArr != NULL )
+    {
+    for ( int it = 0 ; it < CSortArray::m_Size ; it++ )
+        if ( m_pTerrainsArr[it] != & g_GlobalVar.m_TerrainPosDeco )
+            delete m_pTerrainsArr[it] ;
+    delete [] m_pTerrainsArr ;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Positionne la finesse par rapport a la position courante.
@@ -21,11 +34,11 @@ float DeltaLat = fabsf( Lat_y ) * 60. * UnMileEnMetres ;
 float DeltaLon = fabsf( Lon_x ) * 60. * UnMileEnMetres ;
 float DeltaAlt = g_GlobalVar.m_TerrainPosCur.m_AltiBaro - m_AltiBaro ;
 
-float DistanceMetres = sqrtf( powf(DeltaLat,2.) + powf(DeltaLon,2.) ) ;
+m_DistanceMetres = sqrtf( powf(DeltaLat,2.) + powf(DeltaLon,2.) ) ;
 //m_GisementDeg    = 180 - 180. / T_PI * atan2f( Lat_y , Lon_x ) - 90.  ;
 
 if ( DeltaAlt > 0. )
-    m_Finesse = DistanceMetres / DeltaAlt ;
+    m_Finesse = m_DistanceMetres / DeltaAlt ;
 else
     m_Finesse = FINESSE_IMPOSSIBLE ;
 }
@@ -52,13 +65,13 @@ return false ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Lecture du fichier de terrains et ajout position de debut de vol.
-void CTerrainsConnu::LireFichierTerrains()
+void CTerrainsConnu::LireFichierTerrains(const char * NameFch)
 {
 char * TmpChar = new char [10000] ;
 int ic = 0 ;
 
 // ouverture fichier
-File file = SD.open(TERRAIN_FCH);
+File file = SD.open(NameFch);
 if ( !file )
     {
     Serial.println("Failed to open file for reading");
@@ -118,13 +131,21 @@ for ( int i = 0 ; i < VecLigne.size() ; i++ )
         }
     }
 
+// liberation terrain
+if ( m_pTerrainsArr != NULL )
+    {
+    for ( int it = 0 ; it < CSortArray::m_Size ; it++ )
+        if ( m_pTerrainsArr[it] != & g_GlobalVar.m_TerrainPosDeco )
+            delete m_pTerrainsArr[it] ;
+    delete [] m_pTerrainsArr ;
+    }
 // ajout des terrains au tableau local
 m_pTerrainsArr = new CLocTerrain* [VecTerrain.size() + 1] ;
-int iter = 0 ;
-for ( ; iter < VecTerrain.size() ; iter++ )
+CSortArray::m_Size = VecTerrain.size() + 1  ;
+for ( int iter = 0 ; iter < VecTerrain.size() ; iter++ )
     m_pTerrainsArr[iter] = VecTerrain[iter] ;
-m_pTerrainsArr[iter++] = & g_GlobalVar.m_TerrainPosDeco ;
-CSortArray::m_Size = iter ;
+// ajout pos deco
+m_pTerrainsArr[VecTerrain.size()] = & g_GlobalVar.m_TerrainPosDeco ;
 
 // liberation memoire des lignes
 for ( int i = 0 ; i < VecLigne.size() ; i++ )
