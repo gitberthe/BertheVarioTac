@@ -4,7 +4,7 @@
 /// \brief Fichier du capteur de pression
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 07/09/2024
+/// \date modification : 22/01/2025
 ///
 
 #ifndef _CMS5611_
@@ -26,12 +26,12 @@ public :
     void MesureAltitudeCapteur() ;
 
     float GetAltiMetres() override ;
+    float GetTemperatureDegres() override ;
 
 private :
     void  Read() ;
     float GetPressureMb() ;
     float GetAltiPressionCapteurMetres() ;
-    float GetTemperatureDegres() ;
 
     float CalcAltitude(float pressure_mb_x100 , float seaLevelPressure = 101325 ) ;
 } ;

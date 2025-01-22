@@ -1,4 +1,14 @@
-le 20250121a
+le 20250122a :
+ - ajout affichage tma hauteur sol pour zone protect.
+ - mise en conformite/import BertheVario
+  . tache gps
+  . tache son
+  . temps de vol en float
+  . [vz_igc_ms] à 0,5 par défaut.
+  . [vitesse_igc_kmh] à 14 par defaut.
+  - modification GetAltiMetres(). Plus de reset m_DiffAltiFchAgl.
+
+le 20250121a :
  - mise a jour doc concepteur.
  - ajout d'un fichier de modif BertheVario à importer dans BertheVarioTac.
 

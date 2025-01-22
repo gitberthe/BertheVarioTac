@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 02/12/2024
+/// \date modification : 22/01/2025
 ///
 
 #ifndef _CCONFIGFILE_
@@ -38,9 +38,9 @@ public :
     void GetChar( int iVec , std::string & Name , std::string & Value ) const ;
 
     float m_coef_filtre_alti_baro = 0.9 ;   ///< coefficient de filtrage [0,1[ , 0.99 tres fort filtrage
-    int   m_vitesse_igc_kmh = 16 ;          ///< vitesse de declenchement enregistrement
+    int   m_vitesse_igc_kmh = 14 ;          ///< vitesse de declenchement enregistrement
     int   m_temps_igc_sec = 4 ;             ///< nombre de secondes de vitesse pour declenchement
-    float m_vz_igc_ms = 0.7 ;               ///< vz de vitesse pour declenchement
+    float m_vz_igc_ms = 0.5 ;               ///< vz de vitesse pour declenchement
     int   m_stab_gps_metre = 30 ;           ///< rayon dispersion gps pour stabilite
     int   m_stab_gps_sec = 10 ;             ///< taille pile en sec pour calcul rayon dispersion gps
     float m_vz_seuil_max  = 4. ;            ///< seuils de beep

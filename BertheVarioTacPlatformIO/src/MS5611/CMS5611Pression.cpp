@@ -4,7 +4,7 @@
 /// \brief Fichier du capteur de pression
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 07/09/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -91,7 +91,8 @@ m_Mutex.RelacherMutex() ;
 if ( Alti > 9999. || isnan(Alti) || Alti < -500. )
     {
     Alti = 9999. ;
-    SetAltiSolUndef() ; // si probleme de diff alti comme reboot en vol
+    //SetAltiSolUndef() ; // si probleme de diff alti comme reboot en vol
+                          // supprime le 13/01/2025 cause faux depart de vol Vz
     //CGlobalVar::BeepError() ;
     //g_GlobalVar.m_MutexI2c.PrendreMutex() ;
      g_MS5611.reset() ;

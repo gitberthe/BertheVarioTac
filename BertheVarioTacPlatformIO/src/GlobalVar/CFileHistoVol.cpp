@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 22/03/2024
-/// \date modification : 02/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -139,7 +139,7 @@ FileHisto.print("[IgcAnnee] ") ; FileHisto.println( g_GlobalVar.m_Annee ) ;
 FileHisto.print("[VzMax] ") ; FileHisto.println( m_VzMax ) ;
 FileHisto.print("[VzMin] ") ; FileHisto.println( m_VzMin ) ;
 FileHisto.print("[VsMax] ") ; FileHisto.println( m_VsMax ) ;
-FileHisto.print("[temps_vol] ") ; FileHisto.println( m_TempsDeVol ) ;
+FileHisto.print("[temps_vol] ") ; FileHisto.println( m_TempsDeVol , 1 ) ;
 FileHisto.print("[distance] ") ; FileHisto.println( m_DistanceKm ) ;
 FileHisto.print("[z_deco] ") ; FileHisto.println( m_ZDeco ) ;
 FileHisto.print("[z_max] ") ; FileHisto.println( m_ZMax ) ;

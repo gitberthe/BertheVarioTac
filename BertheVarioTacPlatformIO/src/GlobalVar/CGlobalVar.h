@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #ifndef _GLOBALVAR_
@@ -48,7 +48,7 @@ public :
 
     // pour affichage
     float m_VitVertMS ;     ///< vitesse verticale
-    int   m_DureeVolMin ;   ///< duree vol en minutes
+    float m_DureeVolMin ;   ///< duree vol en minutes
 
     // pour elaboration finesse
     CTerrainsConnu m_TerrainArr ;     ///< fichier de terrains connus pour elaboration finesse

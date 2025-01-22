@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 03/12/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -230,7 +230,7 @@ else if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS )
 else if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL )
     sprintf( TmpChar , "%2dV" , g_GlobalVar.GetNbSat()) ;
 else
-    sprintf( TmpChar , "%3d", g_GlobalVar.m_DureeVolMin ) ;
+    sprintf( TmpChar , "%3d", (int)g_GlobalVar.m_DureeVolMin ) ;
 m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
 //////////////
@@ -405,8 +405,11 @@ if ( g_GlobalVar.m_HistoVol.m_HistoDir.size() == 0 )
     goto fin_histo ;
     }
 
-char TmpCharNomFchIgc[20] ;
-sprintf( TmpCharNomFchIgc , "%s", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_NomIgc ) ;
+char NomFchIgc[20] ;
+strcpy( NomFchIgc , g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_NomIgc ) ;
+strtok( NomFchIgc , "/." ) ;
+char TmpCharNomFchIgc[40] ;
+sprintf( TmpCharNomFchIgc , "%d/%d %s", ivol+1 , g_GlobalVar.m_HistoVol.m_HistoDir.size() , NomFchIgc ) ;
 
 char TmpCharAltiDeco[20] ;
 sprintf( TmpCharAltiDeco , "%4dm", (int)g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_ZDeco ) ;
@@ -428,7 +431,7 @@ sprintf( TmpCharDistMax , "%5.1f", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_Dis
 
 // temps de vol
 char TmpCharTV[20] ;
-sprintf( TmpCharTV , " %3d'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeVol ) ;
+sprintf( TmpCharTV , " %4.1f'", g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_TempsDeVol ) ;
 
 
 // nom fch igc
@@ -533,7 +536,7 @@ return ECRAN_1_Histo ;
 CAutoPages::EtatsAuto CScreen::EcranListeIgcFch()
 {
 std::vector<std::string> VecNomIgc ;
-std::vector<int> VecTempsIgc ;
+std::vector<float> VecTempsIgc ;
 
 g_GlobalVar.ListeIgc(VecNomIgc,VecTempsIgc) ;
 
@@ -548,10 +551,14 @@ if ( IsPageChanged() )
     g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 
 
-    int TotalMin = 0 ;
+    float TotalMin = 0 ;
     int y_cursor ;
     for ( int ifch = 0 ; ifch < VecNomIgc.size() ; ifch++ )
-        TotalMin += VecTempsIgc[ifch] ;
+        {
+        float Temps = VecTempsIgc[ifch] ;
+        if ( Temps > 0.5 )
+            TotalMin += Temps ;
+        }
 
     char TmpChar[25] ;
 
@@ -561,13 +568,13 @@ if ( IsPageChanged() )
     y_cursor = 10 ;
     for ( ; ivec < VecNomIgc.size() ; ivec++ )
         {
-        sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , VecTempsIgc[ivec] ) ;
+        sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , (int)VecTempsIgc[ivec] ) ;
         y_cursor += 16 ;
         g_tft.setCursor( 10, y_cursor );
         g_tft.print( TmpChar ) ;
         }
 
-    sprintf( TmpChar , "tot. igc:%03dm", TotalMin ) ;
+    sprintf( TmpChar , "tot. igc:%03dm", (int)TotalMin ) ;
     g_tft.setCursor( 10, y_cursor + 25 );
     g_tft.print( TmpChar ) ;
     }
@@ -962,7 +969,7 @@ return ECRAN_5_TmaDessous ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief
+/// \brief Affiche les info d'une zone aerienne. Et permet de l'activer/de-activer
 CAutoPages::EtatsAuto CScreen::EcranTmaMod()
 {
 static int NumTma = -1 ;
@@ -1064,6 +1071,14 @@ else
     g_tft.setCursor(0,160);
     g_tft.print( "A week : ");
     g_tft.print( (pZone->HavePeriod()) ? pZone->m_pDerogFfvl->m_AltiBassePeriodeWeekEnd : -1 );
+
+    // si zone protegee
+    if ( pZone->IsProtect() )
+        {
+        g_tft.setCursor(0,180);
+        g_tft.print( "hau sol: ");
+        g_tft.print( pZone->GetHauteurSolZoneProtect() );
+        }
     }
 
 
@@ -1208,6 +1223,12 @@ y += DeltaY ;
 g_tft.setCursor( x  , y ) ;
 g_tft.print( "mag.:" ) ;
 sprintf( TmpChar , "     %4dd" , g_GlobalVar.m_QMC5883Mag.GetCapDegres() ) ;
+g_tft.print( TmpChar ) ;
+y += DeltaY ;
+// temperature
+g_tft.setCursor( x  , y ) ;
+g_tft.print( "tem.:" ) ;
+sprintf( TmpChar , "     %4.1fd" , g_GlobalVar.m_pCapteurPression->GetTemperatureDegres() ) ;
 g_tft.print( TmpChar ) ;
 y += DeltaY ;
 // free mem

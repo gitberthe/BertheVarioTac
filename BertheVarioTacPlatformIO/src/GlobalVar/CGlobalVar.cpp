@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -32,7 +32,6 @@ m_temps_debut = millis() ;
 /// \brief Pour un gain memoire
 void CGlobalVar::GainMemoire()
 {
-RazGpsPos() ;
 m_PileVit.ResetVit() ;
 m_HistoVol.m_HistoDir.clear() ;
 m_Config.FreeVect() ;
@@ -234,8 +233,13 @@ g_GlobalVar.m_FinDeVol.InitFinDeVol() ;
 // reset debut de vol vitesse
 g_GlobalVar.m_PileVit.ResetVit() ;
 
-// pour stabilisation gps
-g_GlobalVar.RazGpsPos() ;
+// on ne refait pas la stabilisation gps
+g_GlobalVar.m_StabGps.SetAlwaysStable() ;
+
+// raz deco
+g_GlobalVar.m_TerrainPosDeco.m_Lat =
+g_GlobalVar.m_TerrainPosDeco.m_Lon =
+g_GlobalVar.m_TerrainPosDeco.m_AltiBaro = 0 ;
 
 // demande d'arret des taches
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;

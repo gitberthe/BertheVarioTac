@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/04/2024
-/// \date modification : 02/10/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -13,19 +13,6 @@
 /// \brief
 CStabGps::~CStabGps()
 {
-if ( m_PosArr != NULL )
-    {
-    delete [] m_PosArr ;
-    m_PosArr = NULL ;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/// \brief Pour une relance Fichier Igc sans reboot
-void CStabGps::RazGpsPos()
-{
-m_ipile = 0 ;
-m_pile_full = false ;
 if ( m_PosArr != NULL )
     {
     delete [] m_PosArr ;
@@ -71,6 +58,11 @@ if ( m_ipile >= m_TaillePile )
 /// \brief Renvoie true la la position est dans un rayon stable.
 bool CStabGps::IsGpsStable() const
 {
+// si relance igc. ex relance en vol cause stationnaire long
+if ( m_AlwaysStable )
+    return true ;
+
+// si pile non pleine
 if ( !m_pile_full )
     return false ;
 

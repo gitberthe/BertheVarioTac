@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/03/2024
-/// \date modification : 25/11/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -88,6 +88,9 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     delay( 1000 ) ;
     iboucle++ ;
 
+    // temps pour zones periode aeriennes
+    g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
+
     // toutes les 7s beep d'attente
     bool beep = !(iboucle%m_BeepSecondes) ;
 
@@ -100,9 +103,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         {
         // pas de memorisation du depart de vol par bouton droit
         if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz )
-            {
             g_GlobalVar.m_Screen.RazButtons(2) ;
-            }
         // pour avoir une altitude sol à -1 au début
         g_GlobalVar.m_AltitudeSolHgt = g_GlobalVar.m_TerrainPosCur.m_AltiBaro + 2 ;
         continue ;
@@ -115,7 +116,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
 g_GlobalVar.m_DureeVolMin = ATTENTE_STABILITE_GPS ;
 
 // boucle d'attente vitesse minimale
-int iVz = 0 ;
+//int iVz = 0 ;
 while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     {
     // toutes les 1 secondes a 1hz
@@ -132,21 +133,19 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonDroit() )
         {
         // raz difference altitude presion/wgs84 = altitude affichée est barometrique pure
-        if ( ! g_GlobalVar.IsGpsStable() )
-            {
+        if ( ! g_GlobalVar.m_StabGps.IsGpsStable() )
             g_GlobalVar.m_pCapteurPression->SetAltiSolUndef() ;
-            }
 
         // purge boutons pour eviter un arret vol dans la foulée
-        g_GlobalVar.PurgeBoutons( 6 ) ;
-
+        g_GlobalVar.PurgeBoutons( 3 ) ;
+        // on passe au vol
         break ;
         }
 
     // si le gps nest pas stable au moins une fois (10 secondes)
-    g_GlobalVar.PushGpPos4Stab() ;
+    g_GlobalVar.m_StabGps.PushGpPos4Stab() ;
     // si pas attente vitesse
-    if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS )
+    if ( g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS && ! g_GlobalVar.m_StabGps.IsAlwaysStable() )
         {
         // beep attente gps 'S'
         if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
@@ -158,9 +157,16 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         g_GlobalVar.m_MutexVariable.RelacherMutex() ;
 
         // si le gps n'est pas stable
-        if ( ! g_GlobalVar.IsGpsStable() )
-           continue ;
+        if ( ! g_GlobalVar.m_StabGps.IsGpsStable() )
+            {
+            g_GlobalVar.m_PileVit.ResetVit() ;
+            // on reste en stabilisation gps
+            continue ;
+            }
         }
+
+    // affichage gps pret
+    g_GlobalVar.m_DureeVolMin = ATTENTE_VITESSE_VOL ;
 
     // beep attente vitesse
     g_GlobalVar.m_PileVit.PusGpsVit() ;
@@ -168,26 +174,23 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         {
         CGlobalVar::beeper( 1500 , 100 , false ) ;
         CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
-        //delay( 200 ) ;
         CGlobalVar::beeper( 2000 , 100 , false ) ;
         }
 
-    // affichage gps pret
-    g_GlobalVar.m_DureeVolMin = ATTENTE_VITESSE_VOL ;
 
     // si debut de vol cause vitesse
     if ( g_GlobalVar.m_PileVit.IsStartFlight() )
         break ;
 
     // si vitesse verticale depassee pendant 3s pour declenchement igc
-    if ( fabs(g_GlobalVar.m_VitVertMS) >= g_GlobalVar.m_Config.m_vz_igc_ms )
+    if ( (g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz) && (fabs(g_GlobalVar.m_VitVertMS) >= g_GlobalVar.m_Config.m_vz_igc_ms) )
         {
-        iVz++ ;
-        if ( iVz >= g_GlobalVar.m_Config.m_temps_igc_sec )
+        //iVz++ ;
+        //if ( iVz >= g_GlobalVar.m_Config.m_temps_igc_sec )
             break ;
         }
-    else
-        iVz = 0 ;
+    //else
+    //    iVz = 0 ;
     }
 
 // pour gain memoire
@@ -233,7 +236,6 @@ CGlobalVar::BeepOk() ;
 g_GlobalVar.m_FinDeVol.InitFinDeVol() ;
 
 // mise a jour du temps de vol toutes les secondes
-int iboucleHistoVol = 0 ;
 while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
     {
     // a 1 hz
@@ -243,8 +245,8 @@ while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
     unsigned long TempsCourant = millis() ;
     TempsCourant -= g_GlobalVar.m_MillisDebutVol ;
 
-    TempsCourant /= 1000 * 60 ;
-    g_GlobalVar.m_DureeVolMin = TempsCourant ;
+    float DureeVolMinutes = ((float)TempsCourant) / (1000 * 60) ;
+    g_GlobalVar.m_DureeVolMin = DureeVolMinutes ;
 
     // histo vol
     //float Distance =
@@ -253,14 +255,10 @@ while (g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run)
     // pour la finesse sol
     //g_GlobalVar.PushDistAlti( Distance , g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
 
-    // historique du vol toutes les 5 sec
-    if ( !(iboucleHistoVol%5) )
-        {
-        g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
-         g_GlobalVar.m_HistoVol.EcritureFichier( g_GlobalVar.GetIgcFileName() ) ;
-        g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
-        }
-    iboucleHistoVol++ ;
+    // historique du vol
+    g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
+     g_GlobalVar.m_HistoVol.EcritureFichier( g_GlobalVar.GetIgcFileName() ) ;
+    g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
     }
 
 g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Stopped = true ;
@@ -298,11 +296,14 @@ while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
 
     // arret du vol par bouton centre
     if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonCentre()
-         && !g_GlobalVar.m_FinDeVol.IsInFlight() )
+         && g_GlobalVar.m_VitesseKmh < 5. && fabsf(g_GlobalVar.m_VitVertMS) < 0.4 )
         {
+        // beep prise en compte relance
+        CGlobalVar::beeper( 6000 , 300 ) ;
+        // relance igc
         CGlobalVar::RelancerEnregistrementFichier() ;
         // purge boutons pour eviter un relance vol dans la fouléé
-        g_GlobalVar.PurgeBoutons( 6 ) ;
+        g_GlobalVar.PurgeBoutons( 4 ) ;
         break ;
         }
 

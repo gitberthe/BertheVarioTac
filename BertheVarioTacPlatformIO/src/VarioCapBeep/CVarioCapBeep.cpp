@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 24/11/2024
+/// \date modification : 22/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -85,7 +85,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     // desactivation du son cause TMA
     bool NotActive = g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS ||
                      g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_ALTI ||
-                     g_GlobalVar.m_ZonesAerAll.m_LimiteZone != ZONE_EN_DEHORS ;
+                     g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE ;
 
     // si alarme zone desactivé => son vario active
     if ( !g_GlobalVar.m_BeepAttenteGVZone )
@@ -108,8 +108,8 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     // si degueulante
     if ( LocalVitVertMS <= g_GlobalVar.m_Config.m_vz_seuil_bas )
         {
-        g_GlobalVar.beeper( LowFreq , 400 ) ;
-        delay( 450 ) ;
+        g_GlobalVar.beeper( LowFreq , 200 ) ;
+        delay( 400 ) ;
         continue ;
         }
     // descente normale
