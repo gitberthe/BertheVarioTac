@@ -336,15 +336,15 @@ else
 if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
      g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )
-    g_GlobalVar.m_Screen.SetText( "Vo+" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( "Vo+" , 1 ) ;
 else
-    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 1 ) ;
 
 // si vol en cours
 if ( ! g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped )
-    g_GlobalVar.m_Screen.SetText( "Vo-" , 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Vo-" , 2 ) ;
 else
-    g_GlobalVar.m_Screen.SetText( "" , 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
 
 // ecran menu si pas en vol
 if( g_GlobalVar.m_Screen.IsCenterPressed() && !g_GlobalVar.m_FinDeVol.IsInFlight() )
@@ -1491,16 +1491,21 @@ if ( Etat == CRandoVol::AttenteGps )
     {
     // beep
     CGlobalVar::beeper( 6000 , 300 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+
 
     ScreenRaz() ;
-    //g_tft.setFont(&FreeMonoBold12pt7b);
-    g_tft.setCursor(20, 75);
+    g_tft.setTextSize(2) ;
+    g_tft.setCursor(40, 75);
     // message
     g_tft.print("Acquisition\n      Gps");
 
     #ifdef DEBUG_RANDO_VOl
+    g_GlobalVar.m_Screen.SetText( "For" , 2 ) ;
     // bouton droit forcage à vichy
-    if ( BoutonDroit() )
+    if ( g_GlobalVar.BoutonDroit() )
         {
         // force gps ok
         g_GlobalVar.ForceGpsOk() ;
@@ -1524,11 +1529,20 @@ if ( Etat == CRandoVol::AttenteGps )
         // affichage menu
         Etat = CRandoVol::InitMenu ;
         }
-
     #endif
+
+    // reboot
+    if ( g_GlobalVar.BoutonCentre() )
+        CGlobalVar::Reboot() ;
+
     // si gps ok
     if ( g_GlobalVar.IsGpsOk() )
         Etat = CRandoVol::InitMenu ;
+
+    // arret des taches
+    g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = false ;
 
     return ECRAN_9a_RandoVolMenu ;
     }
@@ -1542,11 +1556,6 @@ if ( Etat == CRandoVol::InitMenu )
     g_GlobalVar.m_Screen.SetText( "m-" , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "sel",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "m+" , 2 ) ;
-
-    // arret des taches
-    g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = false ;
-    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
-    g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = false ;
 
     // destruction des zones
     g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
@@ -1568,17 +1577,8 @@ static int NbMenu = 0 ;
 if ( Etat == CRandoVol::AfficheMenu )
     {
     // temps de menu ecoulé
-    if ( NbMenu++ > 8 )
+    if ( NbMenu++ > 15 )
         {
-        // relecture fichier selectionne
-        if ( g_GlobalVar.m_pFileGpx != NULL && ! g_GlobalVar.m_pFileGpx->m_PtTerConnu )
-            g_GlobalVar.m_pFileGpx->LireFichier(true) ;
-        // destruction autres fichiers
-        for ( int ifch = 0 ; ifch < g_GlobalVar.m_VecGpx.size() ; ifch++ )
-            if ( g_GlobalVar.m_VecGpx[ifch] != g_GlobalVar.m_pFileGpx )
-                delete g_GlobalVar.m_VecGpx[ifch] ;
-        g_GlobalVar.m_VecGpx.clear() ;
-        g_GlobalVar.m_VecGpx.shrink_to_fit() ;
         // vers carte rando
         return ECRAN_9b_RandoVolCarte ;
         }
@@ -1586,11 +1586,11 @@ if ( Etat == CRandoVol::AfficheMenu )
     // affichage nom de piste
     ScreenRaz() ;
     g_tft.setCursor(0,20);
-    //g_tft.setFont(&FreeMonoBold9pt7b);
+    //g_tft.setTextSize(2) ;
 
     // nom trace des traces proches
     char TmpChar[50] ;
-    for ( int it = 0 ; it < 10 ; it++ )
+    for ( int it = 0 ; it < 15 ; it++ )
         {
         if ( it == SelectionMenu )
             sprintf(TmpChar,">%s",g_GlobalVar.GetTrackName(it)) ;
@@ -1612,20 +1612,9 @@ if ( g_GlobalVar.BoutonCentre() )
     // fichier selectionne
     else if ( Etat == CRandoVol::AfficheMenu )
         {
-        // fichier selectionne
-        if ( SelectionMenu >= 0 && SelectionMenu < g_GlobalVar.m_VecGpx.size() )
-            {
-            g_GlobalVar.m_pFileGpx = g_GlobalVar.m_VecGpx[SelectionMenu] ;
-            if ( ! g_GlobalVar.m_pFileGpx->m_PtTerConnu )
-                g_GlobalVar.m_pFileGpx->LireFichier(true) ;
-            }
-        // destruction autres fichiers
-        for ( int ifch = 0 ; ifch < g_GlobalVar.m_VecGpx.size() ; ifch++ )
-            if ( g_GlobalVar.m_VecGpx[ifch] != g_GlobalVar.m_pFileGpx )
-                delete g_GlobalVar.m_VecGpx[ifch] ;
-        g_GlobalVar.m_VecGpx.clear() ;
-        g_GlobalVar.m_VecGpx.shrink_to_fit() ;
         // mode rando
+        if ( SelectionMenu >= 0 && SelectionMenu < g_GlobalVar.m_VecGpx.size() )
+            g_GlobalVar.m_pFileGpx = g_GlobalVar.m_VecGpx[SelectionMenu] ;
         return ECRAN_9b_RandoVolCarte ;
         }
     }
@@ -1639,6 +1628,7 @@ if ( g_GlobalVar.BoutonGauche() )
     // selection -- pt/fichier
     else if ( Etat == CRandoVol::AfficheMenu )
         {
+        NbMenu = 0 ;
         SelectionMenu-- ;
         if ( SelectionMenu < 0 )
             SelectionMenu = 0 ;
@@ -1654,6 +1644,7 @@ if ( g_GlobalVar.BoutonDroit() )
     // selection ++  pt/fichier
     else if ( Etat == CRandoVol::AfficheMenu )
         {
+        NbMenu = 0 ;
         SelectionMenu++ ;
         if ( SelectionMenu >= g_GlobalVar.m_VecGpx.size() )
             SelectionMenu = g_GlobalVar.m_VecGpx.size()-1 ;
@@ -1675,150 +1666,133 @@ if ( IsPageChanged() )
     g_GlobalVar.m_Screen.SetText( "z-" , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "Inf",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "z+" , 2 ) ;
+
+    // relecture fichier selectionne
+    if ( g_GlobalVar.m_pFileGpx != NULL && ! g_GlobalVar.m_pFileGpx->m_PtTerConnu )
+        g_GlobalVar.m_pFileGpx->LireFichier(true) ;
+    // destruction autres fichiers
+    for ( int ifch = 0 ; ifch < g_GlobalVar.m_VecGpx.size() ; ifch++ )
+        if ( g_GlobalVar.m_VecGpx[ifch] != g_GlobalVar.m_pFileGpx )
+            delete g_GlobalVar.m_VecGpx[ifch] ;
+    g_GlobalVar.m_VecGpx.clear() ;
+    g_GlobalVar.m_VecGpx.shrink_to_fit() ;
     }
 
-/*
-const std::vector<CFileGpx::StPoint> & VecPts = *(pFileGpx->m_pVecTrack) ;
 
-// si navigation
-static float Slope = pFileGpx->m_SlopeMax + 0.00001 ;
+const std::vector<CFileGpx::StPoint> & VecPts = *(g_GlobalVar.m_pFileGpx->m_pVecTrack) ;
+
+// affichage carte
+static float Slope = g_GlobalVar.m_pFileGpx->m_SlopeMax + 0.00001 ;
 int EchelleMetre = Slope*MilesParDegres*100*UnMileEnMetres ;
 if ( EchelleMetre < 2 )
     EchelleMetre = 2 ;
-static int NbInfo = -1 ;
 
-// demande page info
-const int init_nb_info = 7 ;
-if ( g_GlobalVar.BoutonCentre() )
-    NbInfo = init_nb_info ;
-if ( NbInfo < -1 )
-    NbInfo = -1 ;
+float CapGpsRad = - g_GlobalVar.m_CapGpsDeg * PI / 180. ;
 
-// affichage page info
-display.fillRect(0,0, 200, 200, GxEPD_WHITE ); // x y w h
-if ( NbInfo-- >= 0 )
+// si pas d'orientation cap gps
+ScreenRaz() ;
+if ( !g_GlobalVar.m_OrientationCapGps )
+    CapGpsRad = 0. ;
+
+// dessin de la trace
+const int CentreX = 240/2 ;
+const int CentreY = 320/2 ;
+for ( int ip = 1 ; ip < VecPts.size() ; ip++ )
     {
-    }
-// affichage de la carte gpx
-else
-    {
-    float CapGpsRad = - g_GlobalVar.m_CapGpsDeg * PI / 180. ;
+    CFileGpx::StPoint PtsDeb ;
+    CFileGpx::StPoint PtsFin ;
+    PtsDeb.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[ip-1].m_Lat ;
+    PtsDeb.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[ip-1].m_Lon;
+    PtsFin.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[ip].m_Lat ;
+    PtsFin.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[ip].m_Lon ;
 
-    // si pas d'orientation cap gps
-    if ( !g_GlobalVar.m_OrientationCapGps )
-        CapGpsRad = 0. ;
+    float y1 = PtsDeb.m_Lat /  Slope ;
+    float x1 = PtsDeb.m_Lon / -Slope ;
+    float y2 = PtsFin.m_Lat /  Slope ;
+    float x2 = PtsFin.m_Lon / -Slope ;
 
-    // dessin de la trace
-    for ( int ip = 1 ; ip < VecPts.size() ; ip++ )
+    if ( g_GlobalVar.m_OrientationCapGps )
         {
-        CFileGpx::StPoint PtsDeb ;
-        CFileGpx::StPoint PtsFin ;
-        PtsDeb.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[ip-1].m_Lat ;
-        PtsDeb.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[ip-1].m_Lon;
-        PtsFin.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[ip].m_Lat ;
-        PtsFin.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[ip].m_Lon ;
-
-        float y1 = PtsDeb.m_Lat /  Slope ;
-        float x1 = PtsDeb.m_Lon / -Slope ;
-        float y2 = PtsFin.m_Lat /  Slope ;
-        float x2 = PtsFin.m_Lon / -Slope ;
-
-        if ( g_GlobalVar.m_OrientationCapGps )
-            {
-            float x1p = x1*cosf(CapGpsRad)-y1*sinf(CapGpsRad) ;
-            float y1p = x1*sinf(CapGpsRad)+y1*cosf(CapGpsRad) ;
-            float x2p = x2*cosf(CapGpsRad)-y2*sinf(CapGpsRad) ;
-            float y2p = x2*sinf(CapGpsRad)+y2*cosf(CapGpsRad) ;
-            x1 = x1p ;
-            y1 = y1p ;
-            x2 = x2p ;
-            y2 = y2p ;
-            }
-
-        x1 += 100 ;
-        y1 += 100 ;
-        x2 += 100 ;
-        y2 += 100 ;
-
-        // ligne de la trace
-        display.drawLine( x1 , y1 , x2 , y2 , GxEPD_BLACK ) ;
-
-        // point de la trace
-        display.drawCircle( x1 , y1 , 1 , GxEPD_BLACK ) ;
-        if ( ip == 1 )
-            display.drawCircle( x1 , y1 , 3 , GxEPD_BLACK ) ;
+        float x1p = x1*cosf(CapGpsRad)-y1*sinf(CapGpsRad) ;
+        float y1p = x1*sinf(CapGpsRad)+y1*cosf(CapGpsRad) ;
+        float x2p = x2*cosf(CapGpsRad)-y2*sinf(CapGpsRad) ;
+        float y2p = x2*sinf(CapGpsRad)+y2*cosf(CapGpsRad) ;
+        x1 = x1p ;
+        y1 = y1p ;
+        x2 = x2p ;
+        y2 = y2p ;
         }
 
-    // guidage point terrain connu
-    if ( VecPts.size() == 1 )
-        {
-        CFileGpx::StPoint PtsTerCon ;
-        PtsTerCon.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[0].m_Lat ;
-        PtsTerCon.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[0].m_Lon;
+    x1 += CentreX ;
+    y1 += CentreY ;
+    x2 += CentreX ;
+    y2 += CentreY ;
 
-        float y1 = PtsTerCon.m_Lat / Slope ;
-        float x1 = PtsTerCon.m_Lon / -Slope ;
+    // ligne de la trace
+    g_tft.drawLine( x1 , y1 , x2 , y2 , TFT_WHITE ) ;
 
-        if ( g_GlobalVar.m_OrientationCapGps )
-            {
-            float x1p = x1*cosf(CapGpsRad)-y1*sinf(CapGpsRad) ;
-            float y1p = x1*sinf(CapGpsRad)+y1*cosf(CapGpsRad) ;
-            x1 = x1p ;
-            y1 = y1p ;
-            }
-
-        x1 += 100 ;
-        y1 += 100 ;
-
-        display.drawCircle( x1 , y1 , 1 , GxEPD_BLACK ) ;
-        display.drawCircle( x1 , y1 , 3 , GxEPD_BLACK ) ;
-        }
-
-    // position courante
-    display.drawCircle( 100 , 100 , 4 , GxEPD_BLACK ) ;
-    display.drawCircle( 100 , 100 , 3 , GxEPD_BLACK ) ;
-
-    if ( !g_GlobalVar.m_OrientationCapGps )
-        {
-        // dessin du cap magnetique nord
-        int xnm = -50 * cosf( g_GlobalVar.m_Mpu9250.m_CapMagnetique * PI / 180. - PI/2. ) + 100 ;
-        int ynm =  50 * sinf( g_GlobalVar.m_Mpu9250.m_CapMagnetique * PI / 180. - PI/2. ) + 100 ;
-        display.drawLine( 100 , 100 , xnm , ynm , GxEPD_BLACK ) ;
-
-        // dessin du cap gps
-        int xng = -30 * cosf( -g_GlobalVar.m_CapGpsDeg * PI / 180. + PI + PI/2. ) + 100 ;
-        int yng =  30 * sinf( -g_GlobalVar.m_CapGpsDeg * PI / 180. + PI + PI/2. ) + 100 ;
-        display.drawLine( 100 , 100 , xng , yng , GxEPD_BLACK ) ;
-        }
-
-    // nom de la trace
-    display.setFont(&FreeMonoBold9pt7b);
-    display.setCursor(0,10);
-    display.print( pFileGpx->m_TrackName.c_str() ) ;
-    // zoom + zoom-
-    display.setFont(&FreeMonoBold12pt7b);
-    display.setCursor(0,190);
-    display.print( "z-" ) ;
-    display.setCursor(170,190);
-    display.print( "z+" ) ;
-    // echelle
-    display.setCursor(60,190);
-    display.print( EchelleMetre ) ;
-    display.print( "m2" ) ;
-
-    // modification echelle
-    if ( g_GlobalVar.BoutonDroit() )
-        Slope /= 2. ;
-    if ( g_GlobalVar.BoutonGauche() )
-        Slope *= 2. ;
-    // modification orientation carte
-    if ( g_GlobalVar.BoutonGaucheLong() || g_GlobalVar.BoutonDroitLong() ||
-         g_GlobalVar.BoutonGaucheDoubleAppui() || g_GlobalVar.BoutonDroitDoubleAppui() )
-        g_GlobalVar.m_OrientationCapGps = !g_GlobalVar.m_OrientationCapGps ;
+    // point de la trace
+    g_tft.drawCircle( x1 , y1 , 1 , TFT_WHITE ) ;
+    if ( ip == 1 )
+        g_tft.drawCircle( x1 , y1 , 3 , TFT_WHITE ) ;
     }
 
-display.display(true);
-*/
+// guidage point terrain connu
+if ( VecPts.size() == 1 )
+    {
+    CFileGpx::StPoint PtsTerCon ;
+    PtsTerCon.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat - VecPts[0].m_Lat ;
+    PtsTerCon.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon - VecPts[0].m_Lon;
+
+    float y1 = PtsTerCon.m_Lat / Slope ;
+    float x1 = PtsTerCon.m_Lon / -Slope ;
+
+    if ( g_GlobalVar.m_OrientationCapGps )
+        {
+        float x1p = x1*cosf(CapGpsRad)-y1*sinf(CapGpsRad) ;
+        float y1p = x1*sinf(CapGpsRad)+y1*cosf(CapGpsRad) ;
+        x1 = x1p ;
+        y1 = y1p ;
+        }
+
+    x1 += CentreX ;
+    y1 += CentreY ;
+
+    g_tft.drawCircle( x1 , y1 , 1 , TFT_WHITE ) ;
+    g_tft.drawCircle( x1 , y1 , 3 , TFT_WHITE ) ;
+    }
+
+// position courante
+g_tft.drawCircle( CentreX , CentreY , 4 , TFT_WHITE ) ;
+g_tft.drawCircle( CentreX , CentreY , 3 , TFT_WHITE ) ;
+
+if ( !g_GlobalVar.m_OrientationCapGps )
+    {
+    // dessin du cap magnetique nord
+    int xnm = -50 * cosf( g_GlobalVar.m_QMC5883Mag.GetCapDegres() * PI / 180. - PI/2. ) + CentreX ;
+    int ynm =  50 * sinf( g_GlobalVar.m_QMC5883Mag.GetCapDegres() * PI / 180. - PI/2. ) + CentreY ;
+    g_tft.drawLine( CentreX , CentreY , xnm , ynm , TFT_WHITE ) ;
+
+    // dessin du cap gps
+    int xng = -30 * cosf( -g_GlobalVar.m_CapGpsDeg * PI / 180. + PI + PI/2. ) + CentreX ;
+    int yng =  30 * sinf( -g_GlobalVar.m_CapGpsDeg * PI / 180. + PI + PI/2. ) + CentreY ;
+    g_tft.drawLine( CentreX , CentreY , xng , yng , TFT_WHITE ) ;
+    }
+
+// nom de la trace
+g_tft.setCursor(0,10);
+g_tft.print( g_GlobalVar.m_pFileGpx->m_TrackName.c_str() ) ;
+// echelle
+g_tft.setCursor(80,210);
+g_tft.print( EchelleMetre ) ;
+g_tft.print( "m2" ) ;
+
+// modification echelle
+if ( g_GlobalVar.BoutonDroit() )
+    Slope /= 2. ;
+if ( g_GlobalVar.BoutonGauche() )
+    Slope *= 2. ;
+
 // ecran info
 if ( g_GlobalVar.BoutonCentre() )
     return ECRAN_9c_RandoVolInfo ;
@@ -1830,106 +1804,154 @@ return ECRAN_9b_RandoVolCarte ;
 /// \brief Ecran rando-vol info.
 CAutoPages::EtatsAuto CScreen::EcranRandoVolInfo()
 {
+static float AltitudeRest = 222 ;
+static float DistanceRest = 1000 ;
+static float AltitudeFait = 222 ;
+static float DistanceFait = 1000 ;
+static CRandoVol::EtatRando Etat = CRandoVol::NoReboot ;
+
 if ( IsPageChanged() )
     {
+    Etat = CRandoVol::NoReboot ;
     ScreenRaz() ;
 
     // texte boutons
-    g_GlobalVar.m_Screen.SetText( "Car" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Ran" , 0 ) ;
     g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "Cap" , 2 ) ;
-    }
-
-
-/*
-    float AltitudeRest = 222 ;
-    float DistanceRest = 1000 ;
-    float AltitudeFait = 222 ;
-    float DistanceFait = 1000 ;
 
     // definition point courant
     CHgt2Agl Hgt2Agl ;
     CFileGpx::StPoint PtCur ;
     PtCur.m_Lat = g_GlobalVar.m_TerrainPosCur.m_Lat ;
     PtCur.m_Lon = g_GlobalVar.m_TerrainPosCur.m_Lon ;
-    PtCur.m_Alt = Hgt2Agl.GetGroundZ( PtCur.m_Lon , PtCur.m_Lat ) ;
+    PtCur.m_Alt = g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
     // calcul info
-    pFileGpx->GetInfo( PtCur , AltitudeRest , DistanceRest , AltitudeFait , DistanceFait ) ;
+    g_GlobalVar.m_pFileGpx->GetInfo( PtCur , AltitudeRest , DistanceRest , AltitudeFait , DistanceFait ) ;
+    }
 
-    // date
-    char TmpCharDate[35] ;
-    int secondes_date = g_GlobalVar.m_HeureSec ;
-    sprintf( TmpCharDate ,"%04d%02d%02d-%02d:%02d" ,
-            (int)(g_GlobalVar.m_Annee) ,
-            g_GlobalVar.m_Mois ,
-            g_GlobalVar.m_Jour ,
-            (int) (secondes_date/3600) ,   // heure
-            (int)((secondes_date/60)%60)   // minutes
-            ) ;
+if ( Etat == CRandoVol::InitReboot )
+    {
+    ScreenRaz() ;
+    g_tft.setCursor(5, 75);
+    g_tft.print("Confirme reboot");
 
-    // altitude restante
-    char TmpAltitudeRest[20] ;
-    sprintf( TmpAltitudeRest , "Alt r:   %4.0fm", AltitudeRest) ;
-    // distance restante
-    char TmpDistanceRest[20] ;
-    sprintf( TmpDistanceRest , "Dis r:  %5.0fm", DistanceRest) ;
-    // altitude fait
-    char TmpAltitudeFait[20] ;
-    sprintf( TmpAltitudeFait , "Alt f:   %4.0fm", AltitudeFait) ;
-    // distance restante
-    char TmpDistanceFait[20] ;
-    sprintf( TmpDistanceFait , "Dis f:  %5.0fm", DistanceFait) ;
+    // texte boutons
+    g_GlobalVar.m_Screen.SetText( "Can" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can" , 2 ) ;
+    }
 
-    // temperature
-    char TmpCharTemp[30] ;
-    sprintf( TmpCharTemp , "Temp :   %4.1fd", g_GlobalVar.m_MS5611.GetTemperatureDegres() ) ;
+ScreenRaz() ;
 
-    // v batterie
-    char TmpCharVB[20] ;
-    sprintf( TmpCharVB ,   "V bat:   %1.2fv", g_GlobalVar.GetVoltage() ) ;
+// date
+char TmpCharDate[35] ;
+int secondes_date = g_GlobalVar.m_HeureSec ;
+sprintf( TmpCharDate ,"%04d%02d%02d-%02d:%02d" ,
+        (int)(g_GlobalVar.m_Annee) ,
+        g_GlobalVar.m_Mois ,
+        g_GlobalVar.m_Jour ,
+        (int) (secondes_date/3600) ,   // heure
+        (int)((secondes_date/60)%60)   // minutes
+        ) ;
 
-    // memoire
-    char TmpCharMem[35] ;
-    sprintf( TmpCharMem ,  "f mem: %6db", (int) esp_get_free_heap_size() ) ;
+// altitude restante
+char TmpAltitudeRest[20] ;
+sprintf( TmpAltitudeRest , "Alt r:   %4.0fm", AltitudeRest) ;
+// distance restante
+char TmpDistanceRest[20] ;
+sprintf( TmpDistanceRest , "Dis r:  %5.0fm", DistanceRest) ;
+// altitude fait
+char TmpAltitudeFait[20] ;
+sprintf( TmpAltitudeFait , "Alt f:   %4.0fm", AltitudeFait) ;
+// distance restante
+char TmpDistanceFait[20] ;
+sprintf( TmpDistanceFait , "Dis f:  %5.0fm", DistanceFait) ;
 
-    display.setFont(&FreeMonoBold12pt7b);
+// temperature
+char TmpCharTemp[30] ;
+sprintf( TmpCharTemp , "Temp :   %4.1fd", g_GlobalVar.m_pCapteurPression->GetTemperatureDegres() ) ;
 
-    // date et heure
-    display.setCursor(0, 15);
-    display.print(TmpCharDate) ;
+// v batterie
+char TmpCharVB[20] ;
+sprintf( TmpCharVB ,   "V bat:   %1.2fv", g_GlobalVar.GetBatteryVoltage() ) ;
 
-    // alti restante
-    display.setCursor(0, 55);
-    display.print(TmpAltitudeRest);
-    // distance restance
-    display.setCursor(0, 75);
-    display.print(TmpDistanceRest);
-    // alti restante
-    display.setCursor(0,105);
-    display.print(TmpAltitudeFait);
-    // distance restance
-    display.setCursor(0,125);
-    display.print(TmpDistanceFait);
+// memoire
+char TmpCharMem[35] ;
+sprintf( TmpCharMem ,  "f mem: %6db", (int) esp_get_free_heap_size() ) ;
 
-    // temperature
-    display.setCursor(0,155);
-    display.print(TmpCharTemp);
+//g_tft.setFont(&FreeMonoBold12pt7b);
 
-    // memory
-    display.setCursor(0,175);
-    display.print(TmpCharMem);
+// date et heure
+g_tft.setCursor(0, 15);
+g_tft.print(TmpCharDate) ;
 
-    // batterie
-    display.setCursor(0,195);
-    display.print(TmpCharVB);
-*/
+// alti restante
+g_tft.setCursor(0, 55);
+g_tft.print(TmpAltitudeRest);
+// distance restance
+g_tft.setCursor(0, 75);
+g_tft.print(TmpDistanceRest);
+// alti restante
+g_tft.setCursor(0,105);
+g_tft.print(TmpAltitudeFait);
+// distance restance
+g_tft.setCursor(0,125);
+g_tft.print(TmpDistanceFait);
+
+// temperature
+g_tft.setCursor(0,155);
+g_tft.print(TmpCharTemp);
+
+// memory
+g_tft.setCursor(0,175);
+g_tft.print(TmpCharMem);
+
+// batterie
+g_tft.setCursor(0,195);
+g_tft.print(TmpCharVB);
+
 // reboot
 if ( g_GlobalVar.BoutonCentre() )
-    CGlobalVar::Reboot() ;
+    {
+    if ( Etat == CRandoVol::NoReboot )
+        Etat = CRandoVol::InitReboot ;
+    else
+        CGlobalVar::Reboot() ;
+    }
 
 // carte
 if ( g_GlobalVar.BoutonGauche() )
-    return ECRAN_9b_RandoVolCarte ;
+    {
+    if ( Etat == CRandoVol::InitReboot )
+        {
+        // texte boutons
+        g_GlobalVar.m_Screen.SetText( "Ran" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Cap" , 2 ) ;
+        Etat = CRandoVol::NoReboot ;
+        }
+    else
+        return ECRAN_9b_RandoVolCarte ;
+    }
+
+if ( g_GlobalVar.BoutonDroit() )
+    {
+    if ( Etat == CRandoVol::InitReboot )
+        {
+        // texte boutons
+        g_GlobalVar.m_Screen.SetText( "Ran" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Reb",  1 ) ;
+        g_GlobalVar.m_Screen.SetText( "Cap" , 2 ) ;
+        Etat = CRandoVol::NoReboot ;
+        }
+    else
+        {
+        g_GlobalVar.m_OrientationCapGps = !g_GlobalVar.m_OrientationCapGps ;
+        return ECRAN_9b_RandoVolCarte ;
+        }
+
+    }
 
 return ECRAN_9c_RandoVolInfo ;
 }

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 24/08/2024
-/// \date modification : 16/10/2024
+/// \date modification : 23/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -69,7 +69,7 @@ for ( int ip = 0 ; ip < TAILLE_PILE_FE ; ip++ )
 // calcul petite vitesse verticale
 bool VitesseVerPetite = true ;
 for ( int ip = 0 ; ip < TAILLE_PILE_FE ; ip++ )
-    if ( fabsf(m_PosArr[ip].m_VitVer) > 0.4 )
+    if ( fabsf(m_PosArr[ip].m_VitVer) > VZ_PETITE )
         {
         VitesseVerPetite = false ;
         break ;
@@ -80,11 +80,7 @@ if ( DistXY < 30. && DistAlti < 3. && VitesseHorPetite && VitesseVerPetite )
     {
     // bip fin de vol
     CGlobalVar::BeepOk() ;
-    delay(200);
-    CGlobalVar::BeepOk() ;
-    delay(200);
-    CGlobalVar::BeepOk() ;
-    delay(200);
+    CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 );
     CGlobalVar::BeepOk() ;
     return true ;
     }

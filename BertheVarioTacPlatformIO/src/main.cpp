@@ -226,6 +226,13 @@ if ( SpeedScreen )
 g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
+// pour eviter mutex accet carte sd/ecran
+if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_9b_RandoVolCarte )
+    {
+    CHgt2Agl Hgt2Agl ;
+    g_GlobalVar.m_TerrainPosCur.m_AltiBaro = Hgt2Agl.GetGroundZ( g_GlobalVar.m_TerrainPosCur.m_Lon , g_GlobalVar.m_TerrainPosCur.m_Lat ) ;
+    }
+
 #ifdef NO_GPS_DEBUG
  static int count_debug = 0 ;
  Serial.print( count_debug++) ;

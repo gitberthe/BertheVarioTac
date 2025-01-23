@@ -4,7 +4,7 @@
 /// \brief Automate de sequencement des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/01/2025
+/// \date modification : 23/01/2025
 ///
 
 #ifndef _CAUTOPAGE_
@@ -43,7 +43,6 @@ public :
     void      SequencementPages() ;
     EtatsAuto GetEtatAuto() const   ///< renvoie l'etat de l'automate d'affichage
                 { return m_EtatAuto ; } ;
-    //void      SetVzEtatAuto() ;
 
     bool IsPageChanged() const      ///< renvoie si l'on vien de chabger de page
         { return m_PageChanged ; } ;
@@ -51,7 +50,6 @@ public :
         { m_MillisEcran0 = millis() ; } ;
 
     CMutex m_MutexTft ;
-    //void LancerTacheTouch() ;
 
 protected :
 
@@ -94,7 +92,6 @@ protected :
 
 private :
     EtatsAuto       m_EtatAuto = ECRAN_0_Vz ;   ///< etat courant de l'automate
-    //EtatsAuto       m_LastEtatAuto = ECRAN_0_Vz ;   ///< pour le retour en arriere
     CEtatAutoFunc   m_Automate[FIN] ;       ///< l'automate
     bool            m_PageChanged = false ; ///< si l'on vient de changer de page
     const int       m_SecondesRetourEcran0 = 12;///< auto retour ecran 0

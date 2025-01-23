@@ -1,3 +1,6 @@
+le 20250123a :
+ - mode rando utilisable.
+ 
 le 20250122c :
  - modification doc concepteur.
  - ebauche mode rando.

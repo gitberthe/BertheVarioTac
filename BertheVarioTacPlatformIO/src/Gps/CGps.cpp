@@ -129,8 +129,8 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     // temps pour zones periode aeriennes
     g_GlobalVar.m_ZonesAerAll.SetDatePeriode() ;
 
-    // declenchement du vol par bouton droit si ecran 0_Vz
-    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonDroit() )
+    // declenchement du vol par bouton centre si ecran 0_Vz
+    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonCentre() )
         {
         // raz difference altitude presion/wgs84 = altitude affichée est barometrique pure
         if ( ! g_GlobalVar.m_StabGps.IsGpsStable() )
@@ -176,7 +176,6 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
         CGlobalVar::beeper( 2000 , 100 , false ) ;
         }
-
 
     // si debut de vol cause vitesse
     if ( g_GlobalVar.m_PileVit.IsStartFlight() )
@@ -295,8 +294,8 @@ while (g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run)
     g_GlobalVar.m_FinDeVol.PushPos4FlihgtEnd() ;
     delay( 500 ) ;
 
-    // arret du vol par bouton centre
-    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonCentre()
+    // arret du vol par bouton droit
+    if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_0_Vz && g_GlobalVar.BoutonDroit()
          && g_GlobalVar.m_VitesseKmh < 5. && fabsf(g_GlobalVar.m_VitVertMS) < 0.4 )
         {
         // beep prise en compte relance

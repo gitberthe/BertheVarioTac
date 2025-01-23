@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 13/01/2025
-/// \date modification : 22/01/2025
+/// \date modification : 23/01/2025
 ///
 
 #pragma once
@@ -22,8 +22,9 @@ public :
         AttenteGps ,
         InitMenu ,
         AfficheMenu ,
-        //InitTrace ,
-        //Navigation
+        NoReboot ,
+        InitReboot ,
+        RebootOk
         } ;
 
     void LireFichiersGpx() ;

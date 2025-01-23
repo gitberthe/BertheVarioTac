@@ -64,11 +64,14 @@ EtatsAuto NextStep = (this->*pFunction)() ;
 // si centre de l'ecran presse
 if ( g_GlobalVar.m_Screen.IsCenterPressed() )
     {
-    // si pas mode rando
-    if ( m_EtatAuto != ECRAN_9a_RandoVolMenu &&
-         m_EtatAuto != ECRAN_9b_RandoVolCarte &&
-         m_EtatAuto != ECRAN_9c_RandoVolInfo )
+    #ifdef DEBUG_RANDO_VOl
+     SetVzEtatAuto() ;
+    #else
+     if ( m_EtatAuto != ECRAN_9a_RandoVolMenu &&
+             m_EtatAuto != ECRAN_9b_RandoVolCarte &&
+             m_EtatAuto != ECRAN_9c_RandoVolInfo )
         SetVzEtatAuto() ;
+    #endif
     return ;
     }
 
