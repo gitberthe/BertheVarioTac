@@ -1,4 +1,4 @@
-
+ - temperature decalee
  - fuite memoire mode rando.
  - compte rendu ecran lors activation/de-activation zone
  - changement priorite tache son et autres taches.
