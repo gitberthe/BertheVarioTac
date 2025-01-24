@@ -1,3 +1,6 @@
+le 20250124c :
+ - screen epd text.
+
 le 20250124b :
  - ecran histo en minutes decimale.
  - alarme sonore reculade.

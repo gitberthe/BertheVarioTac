@@ -4,7 +4,7 @@
 /// \brief Encapsulation de l'ecran bas niveau
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 24/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -121,7 +121,8 @@ lv_indev_drv_register(&indev_drv);
 // berthe
 g_tft.fillRect(0, 0,240,320,TFT_BLACK);
 g_tft.setTextColor(TFT_WHITE,TFT_BLACK) ;
-g_tft.setEpdMode(epd_mode_t::epd_fastest);
+ //g_tft.setEpdMode(epd_mode_t::epd_fastest);
+g_tft.setEpdMode(epd_mode_t::epd_text);
 //g_tft.setFont(&fonts::Font2);
 g_tft.setColorDepth( 8 ) ;
 }

@@ -390,6 +390,7 @@ return ECRAN_0_Vz ;
 /// \brief Historique des fichier Igc
 CAutoPages::EtatsAuto CScreen::EcranHisto()
 {
+char * pChar ;
 static int ivol = 0 ;
 static int lastivol = -1 ;
 int y = 20 ;
@@ -422,9 +423,9 @@ if ( g_GlobalVar.m_HistoVol.m_HistoDir.size() == 0 )
 
 char NomFchIgc[20] ;
 strcpy( NomFchIgc , g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_NomIgc ) ;
-strtok( NomFchIgc , "/." ) ;
+pChar = strtok( NomFchIgc , "/." ) ;
 char TmpCharNomFchIgc[40] ;
-sprintf( TmpCharNomFchIgc , "%d/%d %s", ivol+1 , g_GlobalVar.m_HistoVol.m_HistoDir.size() , NomFchIgc ) ;
+sprintf( TmpCharNomFchIgc , "%d/%d %s", ivol+1 , g_GlobalVar.m_HistoVol.m_HistoDir.size() , pChar ) ;
 
 char TmpCharAltiDeco[20] ;
 sprintf( TmpCharAltiDeco , "%4dm", (int)g_GlobalVar.m_HistoVol.m_HistoDir[ivol].m_ZDeco ) ;
