@@ -1,3 +1,6 @@
+le 20250123a2 :
+ - mise a jour documentation utilisateur.
+
 le 20250123a :
  - mode rando utilisable.
  
