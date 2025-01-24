@@ -13,7 +13,7 @@ prix moyen sur aliexpess :
 - sd card 4g               8.57
 - batterie 2000mah 103450 10.43 pas assez d'autonomie
 - batterie 4000mah 124065 11.30 changement de conception
-- batterie 4000mah 965068 10.90
+- batterie 4000mah 965068 10.90 (12h sans problemes)
 - interrupteur x10         3.40
 - fil souple 28awg 5m      7.36
 - convert. 1S to 5v        4.49
