@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 23/01/2025
+/// \date modification : 24/01/2025
 ///
 
 //#define NO_OTA

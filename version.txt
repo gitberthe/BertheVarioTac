@@ -1,3 +1,8 @@
+le 20250124a :
+ - correction pt-decollage menu rando
+ - confirmation reboot info/rando.
+ - [coef_filtre_alti_baro] à 0.85 par defaut.
+ 
 le 20250123a2 :
  - mise a jour documentation utilisateur.
 

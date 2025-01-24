@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/01/2025
+/// \date modification : 24/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -1489,6 +1489,9 @@ if ( IsPageChanged() )
 // attente Gps
 if ( Etat == CRandoVol::AttenteGps )
     {
+    // plus de son
+    g_GlobalVar.m_BeepAttenteGVZone = false ;
+
     // beep
     CGlobalVar::beeper( 6000 , 300 ) ;
     g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
@@ -1539,11 +1542,6 @@ if ( Etat == CRandoVol::AttenteGps )
     if ( g_GlobalVar.IsGpsOk() )
         Etat = CRandoVol::InitMenu ;
 
-    // arret des taches
-    g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = false ;
-    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
-    g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = false ;
-
     return ECRAN_9a_RandoVolMenu ;
     }
 
@@ -1570,6 +1568,12 @@ if ( Etat == CRandoVol::InitMenu )
     // fichier par defaut
     if ( g_GlobalVar.m_VecGpx.size() )
         g_GlobalVar.m_pFileGpx = g_GlobalVar.m_VecGpx[0] ;
+
+    // arret des taches
+    g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run = false ;
+    g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run = false ;
+
     }
 
 // affichage du menu
@@ -1842,74 +1846,73 @@ if ( Etat == CRandoVol::InitReboot )
     g_GlobalVar.m_Screen.SetText( "Can" , 2 ) ;
     }
 
-ScreenRaz() ;
+if ( Etat != CRandoVol::InitReboot )
+    {
+    ScreenRaz() ;
 
-// date
-char TmpCharDate[35] ;
-int secondes_date = g_GlobalVar.m_HeureSec ;
-sprintf( TmpCharDate ,"%04d%02d%02d-%02d:%02d" ,
-        (int)(g_GlobalVar.m_Annee) ,
-        g_GlobalVar.m_Mois ,
-        g_GlobalVar.m_Jour ,
-        (int) (secondes_date/3600) ,   // heure
-        (int)((secondes_date/60)%60)   // minutes
-        ) ;
+    // date
+    char TmpCharDate[35] ;
+    int secondes_date = g_GlobalVar.m_HeureSec ;
+    sprintf( TmpCharDate ,"%04d%02d%02d-%02d:%02d" ,
+            (int)(g_GlobalVar.m_Annee) ,
+            g_GlobalVar.m_Mois ,
+            g_GlobalVar.m_Jour ,
+            (int) (secondes_date/3600) ,   // heure
+            (int)((secondes_date/60)%60)   // minutes
+            ) ;
 
-// altitude restante
-char TmpAltitudeRest[20] ;
-sprintf( TmpAltitudeRest , "Alt r:   %4.0fm", AltitudeRest) ;
-// distance restante
-char TmpDistanceRest[20] ;
-sprintf( TmpDistanceRest , "Dis r:  %5.0fm", DistanceRest) ;
-// altitude fait
-char TmpAltitudeFait[20] ;
-sprintf( TmpAltitudeFait , "Alt f:   %4.0fm", AltitudeFait) ;
-// distance restante
-char TmpDistanceFait[20] ;
-sprintf( TmpDistanceFait , "Dis f:  %5.0fm", DistanceFait) ;
+    // altitude restante
+    char TmpAltitudeRest[20] ;
+    sprintf( TmpAltitudeRest , "Alt r:   %4.0fm", AltitudeRest) ;
+    // distance restante
+    char TmpDistanceRest[20] ;
+    sprintf( TmpDistanceRest , "Dis r:  %5.0fm", DistanceRest) ;
+    // altitude fait
+    char TmpAltitudeFait[20] ;
+    sprintf( TmpAltitudeFait , "Alt f:   %4.0fm", AltitudeFait) ;
+    // distance restante
+    char TmpDistanceFait[20] ;
+    sprintf( TmpDistanceFait , "Dis f:  %5.0fm", DistanceFait) ;
 
-// temperature
-char TmpCharTemp[30] ;
-sprintf( TmpCharTemp , "Temp :   %4.1fd", g_GlobalVar.m_pCapteurPression->GetTemperatureDegres() ) ;
+    // temperature
+    char TmpCharTemp[30] ;
+    sprintf( TmpCharTemp , "Temp :   %4.1fd", g_GlobalVar.m_pCapteurPression->GetTemperatureDegres() ) ;
 
-// v batterie
-char TmpCharVB[20] ;
-sprintf( TmpCharVB ,   "V bat:   %1.2fv", g_GlobalVar.GetBatteryVoltage() ) ;
+    // v batterie
+    char TmpCharVB[20] ;
+    sprintf( TmpCharVB ,   "V bat:   %1.2fv", g_GlobalVar.GetBatteryVoltage() ) ;
 
-// memoire
-char TmpCharMem[35] ;
-sprintf( TmpCharMem ,  "f mem: %6db", (int) esp_get_free_heap_size() ) ;
+    // memoire
+    char TmpCharMem[35] ;
+    sprintf( TmpCharMem ,  "f mem: %6db", (int) esp_get_free_heap_size() ) ;
 
-//g_tft.setFont(&FreeMonoBold12pt7b);
+    //g_tft.setFont(&FreeMonoBold12pt7b);
 
-// date et heure
-g_tft.setCursor(0, 15);
-g_tft.print(TmpCharDate) ;
-
-// alti restante
-g_tft.setCursor(0, 55);
-g_tft.print(TmpAltitudeRest);
-// distance restance
-g_tft.setCursor(0, 75);
-g_tft.print(TmpDistanceRest);
-// alti restante
-g_tft.setCursor(0,105);
-g_tft.print(TmpAltitudeFait);
-// distance restance
-g_tft.setCursor(0,125);
-g_tft.print(TmpDistanceFait);
-
-// temperature
-g_tft.setCursor(0,155);
-g_tft.print(TmpCharTemp);
-
-// memory
-g_tft.setCursor(0,175);
-g_tft.print(TmpCharMem);
-
-// batterie
-g_tft.setCursor(0,195);
-g_tft.print(TmpCharVB);
+    // date et heure
+    g_tft.setCursor(0, 15);
+    g_tft.print(TmpCharDate) ;
+    // alti restante
+    g_tft.setCursor(0, 55);
+    g_tft.print(TmpAltitudeRest);
+    // distance restance
+    g_tft.setCursor(0, 75);
+    g_tft.print(TmpDistanceRest);
+    // alti restante
+    g_tft.setCursor(0,105);
+    g_tft.print(TmpAltitudeFait);
+    // distance restance
+    g_tft.setCursor(0,125);
+    g_tft.print(TmpDistanceFait);
+    // temperature
+    g_tft.setCursor(0,155);
+    g_tft.print(TmpCharTemp);
+    // memory
+    g_tft.setCursor(0,175);
+    g_tft.print(TmpCharMem);
+    // batterie
+    g_tft.setCursor(0,195);
+    g_tft.print(TmpCharVB);
+    }
 
 // reboot
 if ( g_GlobalVar.BoutonCentre() )
