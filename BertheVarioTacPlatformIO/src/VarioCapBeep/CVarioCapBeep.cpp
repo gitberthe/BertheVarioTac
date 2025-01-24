@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 22/01/2025
+/// \date modification : 24/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -135,7 +135,7 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
             else if ( BeepZerotage == 2 || BeepZerotage == 5 )
                 g_GlobalVar.beeper( LowFreq , 100 ) ;
             else
-                delay( 2000 ) ;
+                delay( 500 ) ;
             }
         // si le vol n'a pas debute
         else

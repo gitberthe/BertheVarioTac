@@ -103,6 +103,12 @@ pLine->m_Type = TYPE_VAR_FLOAT ;
 m_LinesVect.push_back( pLine ) ;
 
 pLine = new st_line ;
+pLine->m_NomVar = "[alarme_reculade]" ;
+pLine->m_pVar = (void*) & m_alarme_reculade  ;
+pLine->m_Type =  TYPE_VAR_BOOL;
+m_LinesVect.push_back( pLine ) ;
+
+pLine = new st_line ;
 pLine->m_NomVar = "[dtu]" ;
 pLine->m_pVar = (void*) & m_dtu  ;
 pLine->m_Type =  TYPE_VAR_INT;

@@ -108,12 +108,9 @@ void loop()
 
 // variables
 static int count_calcul = 0 ;
-static int count_5hz = 0 ;
+static int count_10hz = 0 ;
 static bool WifiSetupFileMgr = true ;
 static bool WifiSetupOta = true ;
-
-// compteur 5 hz
-count_5hz++ ;
 
 ////////////////////////
 // si mode wifi file mgr
@@ -130,7 +127,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     g_pfilemgr->handleClient();
 
     // si ecran pressé on reboot
-    if ( !(count_5hz%100) )
+    if ( !(count_10hz++%100) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -159,7 +156,7 @@ if ( g_GlobalVar.m_ModeHttpOta )
     WifiOtaHandle() ;
 
     // si ecran pressé on reboot
-    if ( !(count_5hz%100) )
+    if ( !(count_10hz++%100) )
         {
         // traitement de touch pad
         g_GlobalVar.m_Screen.HandleTouchScreen() ;
@@ -187,7 +184,7 @@ if( (millis()-g_GlobalVar.m_temps_debut)/1000 < 5 )
 
 ////////
 // 10 hz
-delay( 100 ) ;
+unsigned long time = millis() ;
 
 // traitement de touch pad
 //g_GlobalVar.m_Screen.m_MutexTft.PrendreMutex() ;
@@ -206,9 +203,16 @@ g_tft.startWrite();
 g_tft.endWrite();
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
+// compteur 10 hz
+count_10hz++ ;
+
+// 10 hz
+while ( millis() - time < 100 )
+    delay( 10 ) ;
+
 ///////
-// 1 hz
-if ( (count_5hz%10) && !Action )
+// 2 hz
+if ( (count_10hz%5) && !Action )
     return ;
 
 // si page Vz en cours
@@ -239,7 +243,7 @@ if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_9b_RandoVolCarte )
  Serial.println(" mode debug") ;
 #endif
 
-// une fois sur 2
+// une fois sur 2 a 1 hz
 if ( (count_calcul++)%2 )
     // calcul des zones aeriennes
     g_GlobalVar.m_ZonesAerAll.CalcZone() ;

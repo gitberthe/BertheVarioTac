@@ -1,3 +1,11 @@
+le 20250124b :
+ - ecran histo en minutes decimale.
+ - alarme sonore reculade.
+ - alarme sonore frontiere zone et limite altitude.
+ - son zerotage.
+ - [alarme_reculade] dans fichier de config.
+ - zone protege mieux determine
+
 le 20250124a :
  - correction pt-decollage menu rando
  - confirmation reboot info/rando.

@@ -130,7 +130,11 @@ if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS )
     g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
     if ( g_GlobalVar.m_BeepAttenteGVZone )
-        CGlobalVar::BeepError() ;
+        {
+        CGlobalVar::BeepOk() ;
+        CGlobalVar::beeper( SOUND_DELAY_ONLY , 150 ) ;
+        CGlobalVar::BeepOk() ;
+        }
     }
 // limite zone alti
 else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
@@ -139,6 +143,8 @@ else if ( g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_LIMITE_ALTI )
     g_tft.setTextSize( 3 ) ;
     g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneDansDessous.c_str() ) ;
+    if ( g_GlobalVar.m_BeepAttenteGVZone )
+        CGlobalVar::BeepOk() ;
     }
 // limite zone frontiere
 else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
@@ -147,6 +153,8 @@ else if ( g_GlobalVar.m_ZonesAerAll.m_LimiteZone == ZONE_LIMITE_FRONTIERE )
     g_tft.setTextSize( 3 ) ;
     g_tft.setTextColor(TFT_YELLOW) ;
     g_tft.print( g_GlobalVar.m_ZonesAerAll.m_NomZoneEnLimite.c_str() ) ;
+    if ( g_GlobalVar.m_BeepAttenteGVZone )
+        CGlobalVar::BeepOk() ;
     }
 // erreur hgt file
 else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
@@ -156,7 +164,7 @@ else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     g_tft.setTextColor(TFT_MAGENTA) ;
     g_tft.print("** Erreur  **** Hgt File *");
     if ( g_GlobalVar.m_BeepAttenteGVZone )
-        CGlobalVar::BeepError() ;
+        CGlobalVar::BeepError(true) ;
     }
 else
     {
@@ -171,6 +179,13 @@ else
         {
         sprintf( TmpChar , "\\\\R//" ) ;
         m_T2SPageVzArr[PAGE_VZ_RECULADE].Affiche(TmpChar,TFT_MAGENTA) ;
+        // alarme sonore
+        if ( g_GlobalVar.m_BeepAttenteGVZone && g_GlobalVar.m_Config.m_alarme_reculade && g_GlobalVar.m_FinDeVol.IsInFlight() )
+            {
+            CGlobalVar::beeper( 7000 , 150 ) ;
+            CGlobalVar::beeper( SOUND_DELAY_ONLY , 100 ) ;
+            CGlobalVar::beeper( 6000 , 150 ) ;
+            }
         }
     else if ( DeriveAngle >= DeriveMilieu )
         {
@@ -385,7 +400,7 @@ const int x2 = 140 ;
 if ( IsPageChanged() )
     {
     g_GlobalVar.m_HistoVol.LectureFichiers() ;
-    lastivol = -1 ;
+    ivol = g_GlobalVar.m_HistoVol.m_HistoDir.size()-1 ;
     ScreenRaz() ;
     }
 
@@ -550,7 +565,7 @@ if ( IsPageChanged() )
     g_GlobalVar.m_Screen.SetText( "",  1 ) ;
     g_GlobalVar.m_Screen.SetText( "Arc" , 2 ) ;
 
-
+    // total des vols de plus de 30s
     float TotalMin = 0 ;
     int y_cursor ;
     for ( int ifch = 0 ; ifch < VecNomIgc.size() ; ifch++ )

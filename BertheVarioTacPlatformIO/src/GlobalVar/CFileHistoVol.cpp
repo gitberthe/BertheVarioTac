@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 22/03/2024
-/// \date modification : 22/01/2025
+/// \date modification : 24/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -81,7 +81,7 @@ while( true )
         else if ( !strcmp( pNomParam , "[VsMax]" ) )
             HistoVol.m_VsMax = atof(pValParam) ;
         else if ( !strcmp( pNomParam , "[temps_vol]" ) )
-            HistoVol.m_TempsDeVol = atoi(pValParam) ;
+            HistoVol.m_TempsDeVol = atof(pValParam) ;
         else if ( !strcmp( pNomParam , "[IgcAnnee]" ) )
             HistoVol.m_AnneeDuVol = atoi(pValParam) ;
         else if ( !strcmp( pNomParam , "[distance]" ) )

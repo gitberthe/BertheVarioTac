@@ -49,7 +49,7 @@ public :
     int   m_dtu          = 2 ;              ///< diff heure TU
     int   m_AltiMargin   = 40 ;             ///< marge en altitude de zone TMA CTR en metres
     int   m_XYMargin     = 10 ;             ///< marge en xy de zone TMA CTR en metres
-    //bool  m_Termic       = false ;        ///< affichage termic ou terrain
+    bool  m_alarme_reculade = true ;         ///< alarme sonore en cas de reculade
 
     std::string m_Ssid ;     ///< identifiant wifi
     std::string m_Passwd ;   ///< mot de passe wifi

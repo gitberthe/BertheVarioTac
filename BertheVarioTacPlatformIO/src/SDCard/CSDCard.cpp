@@ -114,7 +114,7 @@ for ( int iv = 0 ; iv < VecHisto.size() ; iv++ )
     SD.mkdir( NomDirArch ) ;
 
     // deplacement/destruction fichier
-    if ( HistoVol.m_TempsDeVol < 1 )
+    if ( HistoVol.m_TempsDeVol < 1. )
         SD.remove( HistoVol.m_NomIgc ) ;
     else
         SD.rename( HistoVol.m_NomIgc , NomFchArch ) ;

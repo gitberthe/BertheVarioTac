@@ -92,19 +92,7 @@ return false ;
 /// \brief Si en vol cause vitesses sol et veritcale
 bool CFinDeVol::IsInFlight() const
 {
-// si vitesse sol minimale
-if ( g_GlobalVar.m_VitesseKmh > VITESSE_FAIBLE )
-    return true ;
-
-// si Vz importante
-if ( fabs(g_GlobalVar.m_VitVertMS) > VZ_PETITE )
-    return true ;
-
-// si igc et altitude superieur au dessus deco de 20 metres
-float AltiDessusDeco = g_GlobalVar.m_TerrainPosCur.m_AltiBaro - g_GlobalVar.m_TerrainPosDeco.m_AltiBaro ;
-if ( g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped == false &&
-     g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Run == true &&
-     AltiDessusDeco > ALTI_DESSUS_DECO * 4 )
+if ( g_GlobalVar.m_DureeVolMin >= 0. )
     return true ;
 
 return false ;
@@ -114,7 +102,7 @@ return false ;
 /// \brief Si a deja ete haut ou loin.
 bool CFinDeVol::IsFlightLocked() const
 {
-return m_ADejaEteLointOuHaut || (g_GlobalVar.m_VitesseKmh > VITESSE_FAIBLE) || (g_GlobalVar.m_VitVertMS > VZ_PETITE) ;
+return m_ADejaEteLointOuHaut || (g_GlobalVar.m_VitesseKmh > VITESSE_FAIBLE) ; // || (g_GlobalVar.m_VitVertMS > VZ_PETITE) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

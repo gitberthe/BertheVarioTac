@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 03/12/2024 : modification
+/// \date 24/01/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -200,8 +200,8 @@ else
 m_ZonesArr[m_NbZones-1] = pZone ;
 
 // zone protege PROTECT ou FFVL-Prot dans chaine
-bool IsProtect = (strstr( pChar , "PROTECT" ) != NULL) || (strstr( pChar , "FFVL-Prot" ) != NULL) ;
-IsProtect = IsProtect && (strstr( pChar , "m/sol" ) != NULL) ;
+bool IsProtect = ( (*pChar == 'P') && (strstr( pChar , "PROTECT" ) != NULL)) ||
+                 ( (*pChar == 'F') && (strstr( pChar , "FFVL-Prot" ) != NULL)) ;
 if ( IsProtect )
     {
     // detertimation plafond zone proetegee
@@ -220,44 +220,57 @@ if ( IsProtect )
     }
 
 // nom de zone
-std::string NomAff = pChar ;
+std::string NomOri = pChar ;
 
-// zone protegee on enleve "reserve naturelle nationale de la vallee de"
+// zone protegee on enleve des chaines
 int iespacemax = 3 ;
 char NomRND[]  = "Reserve naturelle nationale de " ;
 char NomRNDV[] = "Reserve naturelle nationale de la Vallee de " ;
 char NomProtect[] = "PROTECT " ;
-if ( strstr( pChar , NomProtect ) )
-    {
-    iespacemax = 1 ;
+char NomFFVL[] = "FFVL-Prot " ;
+// zone "FFVL"
+if ( (pChar[0] == 'F') && strstr( pChar , NomFFVL ) )
+    pChar += strlen( NomFFVL ) ;
+// zone "PROTECT"
+if ( (pChar[0] == 'P') && strstr( pChar , NomProtect ) )
     pChar += strlen( NomProtect ) ;
-    char * pTmpChar = strstr( pChar , NomRNDV ) ;
-    if ( pTmpChar != NULL )
-       pChar += strlen( NomRNDV ) ;
-    else
-        {
-        pTmpChar = strstr( pChar , NomRND ) ;
-        if ( pTmpChar != NULL )
-            pChar += strlen( NomRND ) ;
-        }
-    NomAff = pChar ;
+// reserve naturelle nationale de la vallee
+char * pTmpChar = strstr( pChar , NomRNDV ) ;
+if ( pTmpChar != NULL )
+    {
+    pChar += strlen( NomRNDV ) ;
+    iespacemax = 1 ;
     }
+// reserve naturelle nationale de
+pTmpChar = strstr( pChar , NomRND ) ;
+if ( pTmpChar != NULL )
+    {
+    pChar += strlen( NomRND ) ;
+    iespacemax = 1 ;
+    }
+std::string NomAff = pChar ;
 
 // formattage nom de zone 3 champs
 int iespace = 0 ;
 for ( int ic = 0 ; ic < NomAff.size() ; ic++ )
     {
-    if ( NomAff[ic] == '(' )   // premier (
+    // premier (
+    if ( NomAff[ic] == '(' )
         {
         NomAff.resize( ic ) ;
         break ;
         }
-    else if ( (NomAff[ic] == ' ' || NomAff[ic] == '-') && ++iespace >= iespacemax ) // trois champs max
+    // trois champs max
+    else if ( (NomAff[ic] == ' ' || NomAff[ic] == '-') && ++iespace >= iespacemax )
         {
         NomAff.resize( ic ) ;
         break ;
         }
     }
+// on enleve le dernier blanc
+if ( NomAff[NomAff.size()-1] == ' ' )
+    NomAff.resize(NomAff.size()-1) ;
+
 pZone->m_pNomAff = new char [NomAff.size() + 1 ] ;
 strcpy( pZone->m_pNomAff , NomAff.c_str() ) ;
 
