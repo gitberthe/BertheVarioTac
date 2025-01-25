@@ -960,6 +960,7 @@ return ECRAN_4_CfgFch ;
 /// \brief Indique la Tma desoous laquelle on est.
 CAutoPages::EtatsAuto CScreen::EcranTmaDessous()
 {
+static int NbAppBoutCentre = 0 ;
 std::string NomZone = "" ;
 
 // zone au dessus
@@ -971,20 +972,107 @@ g_GlobalVar.m_ZonesAerAll.m_Mutex.RelacherMutex() ;
 g_tft.setTextSize(2) ;
 
 if ( IsPageChanged() )
+    {
     ScreenRaz() ;
+    NbAppBoutCentre = 0 ;
+    // boutons
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Pt", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+    }
 
+// pour memorisation point
+bool BoutCentre = g_GlobalVar.BoutonCentre() ;
+if ( NbAppBoutCentre == 0 && BoutCentre )
+    {
+    ResetTimeOut() ;
+    NbAppBoutCentre = 1 ;
+    g_tft.setCursor(10,150);
+    g_tft.print( "Confirmation enregistrement point gps ?" );
+    g_GlobalVar.m_Screen.ScreenRazButtons() ;
+    //g_GlobalVar.m_Screen.SetFrozenDelaySec(2) ;
+
+    g_GlobalVar.m_Screen.SetText( "Can" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Enr", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "Can" , 2 ) ;
+    return ECRAN_5_TmaDessous ;
+    }
+
+// annulation enregistrement point ou pas
+if ( NbAppBoutCentre == 1 )
+    {
+    if ( g_GlobalVar.BoutonGauche() || g_GlobalVar.BoutonDroit() )
+        {
+        g_tft.setCursor(10,200);
+        g_tft.print( "Annulation." );
+        ResetTimeOut() ;
+        NbAppBoutCentre = 0 ;
+        // boutons
+        g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+        g_GlobalVar.m_Screen.SetText( "Pt", 1 ) ;
+        g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+        }
+    else if ( BoutCentre )
+        NbAppBoutCentre = 2 ;
+    return ECRAN_5_TmaDessous ;
+    }
+
+// enregistrement point dans fichier
+if ( NbAppBoutCentre >= 2 )
+    {
+    ResetTimeOut() ;
+    // boutons
+    g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
+    g_GlobalVar.m_Screen.SetText( "Pt", 1 ) ;
+    g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
+
+    NbAppBoutCentre = 0 ;
+    g_tft.setCursor(0,200);
+    // test si pint null
+    if ( g_GlobalVar.m_TerrainPosCur.m_Lat == 0. && g_GlobalVar.m_TerrainPosCur.m_Lon == 0. )
+        {
+        g_tft.print( "Point null non enregistre." );
+        return ECRAN_5_TmaDessous ;
+        }
+    else
+        g_tft.print( "Enregistrement point gps." );
+    // test ouverture fichier
+    char TmpChar[50] ;
+    File FchTerCon = SD.open(TERRAIN_FCH,FILE_APPEND);
+    if ( !FchTerCon )
+        return ECRAN_5_TmaDessous ;
+    FchTerCon.seek(SeekEnd) ;
+    // nom
+    sprintf(TmpChar,"pt_%d%d%d    ",(int)g_GlobalVar.m_TerrainPosCur.m_AltiBaro,
+                                       (int)(10*g_GlobalVar.m_TerrainPosCur.m_Lat),
+                                       (int)(10*g_GlobalVar.m_TerrainPosCur.m_Lon)) ;
+    FchTerCon.write((const uint8_t*)TmpChar,strlen(TmpChar)) ;
+    // altitude
+    sprintf( TmpChar , "%d    ", (int)g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
+    FchTerCon.write((const uint8_t*)TmpChar,strlen(TmpChar)) ;
+    // latitude
+    sprintf( TmpChar , "%.5f    ", g_GlobalVar.m_TerrainPosCur.m_Lat ) ;
+    FchTerCon.write((const uint8_t*)TmpChar,strlen(TmpChar)) ;
+    // longitude
+    sprintf( TmpChar , "%.5f\n", g_GlobalVar.m_TerrainPosCur.m_Lon ) ;
+    FchTerCon.write((const uint8_t*)TmpChar,strlen(TmpChar)) ;
+    // fermeture fichier
+    FchTerCon.close() ;
+    return ECRAN_5_TmaDessous ;
+    }
+
+// affichage zone et coordonnees
+ScreenRaz() ;
 // nom zone
 g_tft.setCursor(20,50);
-g_tft.print( "Tma Dessus:\n\n" );
-g_tft.print( NomZone.c_str() );
-
-g_GlobalVar.m_Screen.SetText( "" , 0 ) ;
-g_GlobalVar.m_Screen.SetText( "", 1 ) ;
-g_GlobalVar.m_Screen.SetText( "" , 2 ) ;
-/*if ( g_GlobalVar.m_Screen.IsButtonPressed( 1 ) )
-    {
-    return ECRAN_6_Sys ;
-    }*/
+g_tft.print( "Tma Dessus:\n" );
+g_tft.println( NomZone.c_str() );
+g_tft.print( "lat: " ) ;
+g_tft.println( g_GlobalVar.m_TerrainPosCur.m_Lat , 5 ) ;
+g_tft.print( "lon:  " ) ;
+g_tft.println( g_GlobalVar.m_TerrainPosCur.m_Lon , 5 ) ;
+g_tft.print( "alt:" ) ;
+g_tft.println( g_GlobalVar.m_TerrainPosCur.m_AltiBaro , 0 ) ;
 
 return ECRAN_5_TmaDessous ;
 }
