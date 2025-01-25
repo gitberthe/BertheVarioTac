@@ -1,3 +1,7 @@
+le 20250125a :
+ - offset temperature a froid.
+ - Modification tma activation/desactivation.
+
 le 20250124c :
  - screen epd text.
 

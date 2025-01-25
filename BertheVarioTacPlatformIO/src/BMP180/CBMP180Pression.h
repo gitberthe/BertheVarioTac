@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 22/01/2025
+/// \date modification : 25/01/2025
 ///
 
 #ifndef _BMP180PRESS_
@@ -46,7 +46,7 @@ public :
     double m_Temperature;
 
     void MesureAltitudeCapteur() ;
-    float GetTemperatureDegres() { return 0. ; } ;
+    float GetTemperatureDegres() ;
 } ;
 
 #endif

@@ -577,11 +577,15 @@ if ( IsPageChanged() )
         }
 
     char TmpChar[25] ;
-
-    g_tft.setTextSize(2) ;
-
-    int ivec = 0 ;
     y_cursor = 10 ;
+    g_tft.setTextSize(2) ;
+    sprintf( TmpChar , "total igc:%03dm", (int)TotalMin ) ;
+    g_tft.setCursor( 10, y_cursor );
+    g_tft.print( TmpChar ) ;
+    y_cursor += 3 ;
+
+    // liste des vols
+    int ivec = 0 ;
     for ( ; ivec < VecNomIgc.size() ; ivec++ )
         {
         sprintf( TmpChar , "%s %03d", (const char*)VecNomIgc[ivec].c_str() , (int)VecTempsIgc[ivec] ) ;
@@ -589,10 +593,6 @@ if ( IsPageChanged() )
         g_tft.setCursor( 10, y_cursor );
         g_tft.print( TmpChar ) ;
         }
-
-    sprintf( TmpChar , "tot. igc:%03dm", (int)TotalMin ) ;
-    g_tft.setCursor( 10, y_cursor + 25 );
-    g_tft.print( TmpChar ) ;
     }
 
 // defilement autre ecran
@@ -695,14 +695,16 @@ int yligne = 15 ;
 char TmpChar[25] ;
 for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
     {
-    if ( !VecZonesMod[iz]->m_DansFchActivation )
+    const CZoneAer * pZone = VecZonesMod[iz] ;
+    if ( !pZone->m_DansFchActivation )
         continue ;
     g_tft.setCursor(10+xcol, 40 + yligne );
 
     // nom des zones
-    if ( VecZonesMod[iz]->m_Activee )
+    if ( pZone->m_Activee )
         {
-        strcpy( TmpChar , VecZonesMod[iz]->m_pNomAff ) ;
+        strcpy( TmpChar , pZone->m_pNomAff ) ;
+        TmpChar[9] = 0 ;
         // remplacement des espaces
         int ic = 0 ;
         while ( TmpChar[ic] != 0 )
@@ -714,7 +716,7 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
         }
     else
         {
-        sprintf( TmpChar , "-%s" ,  VecZonesMod[iz]->m_pNomAff ) ;
+        sprintf( TmpChar , "-%s" ,  pZone->m_pNomAff ) ;
         TmpChar[9] = 0 ;
         // remplacement des espaces
         int ic = 0 ;
@@ -725,14 +727,20 @@ for ( int iz = 0 ; iz < VecZonesMod.size() ; iz++ )
             ic++ ;
             }
         }
+    if ( pZone->m_Activee )
+        g_tft.setTextColor(TFT_RED) ;
+    else
+        g_tft.setTextColor(TFT_WHITE) ;
     g_tft.print( TmpChar ) ;
     yligne += 19 ;
     if ( iz == 10 )
         {
-        xcol = 110 ;
+        xcol = 120 ;
         yligne = 15 ;
         }
     }
+
+g_tft.setTextColor(TFT_WHITE) ;
 
 g_GlobalVar.m_Screen.SetText( "Mod" , 0 ) ;
 g_GlobalVar.m_Screen.SetText( "", 1 ) ;
@@ -989,14 +997,14 @@ return ECRAN_5_TmaDessous ;
 CAutoPages::EtatsAuto CScreen::EcranTmaMod()
 {
 static int NumTma = -1 ;
-static int LastNumTma = -2 ;
 
 // tri par nom
 g_GlobalVar.m_ZonesAerAll.TriZonesNom() ;
 
 if ( IsPageChanged() )
     {
-    LastNumTma = -2 ;
+    ScreenRaz() ;
+    NumTma = 0 ;
     }
 
 // construction du tableau des zones
@@ -1027,11 +1035,6 @@ if ( NumTma >= 0 && NumTma < VecAffZones.size() )
     }
 
 g_tft.setTextSize(2) ;
-if ( LastNumTma != NumTma )
-    {
-    LastNumTma = NumTma ;
-    ScreenRaz() ;
-    }
 
 // titre
 if ( VecZone2Mod.size() == 0 )
@@ -1043,6 +1046,8 @@ if ( VecZone2Mod.size() == 0 )
     }
 else
     {
+    ScreenRaz() ;
+
     // num tma/ctr
     g_tft.setCursor(0, 15);
     g_tft.print(NumTma);
@@ -1114,15 +1119,22 @@ if ( BCentre && VecZone2Mod.size() == 0 )
     }
 
 // si modification activation
-if ( BCentre && VecZone2Mod.size() != 0 )
+if ( BCentre && VecZone2Mod.size() )
     {
-    for ( int iz = 0 ; iz < VecZone2Mod.size() ; iz++ )
+    ResetTimeOut() ;
+    for ( long iz = 0 ; iz < VecZone2Mod.size() ; iz++ )
         {
         CZoneAer * pZone = VecZone2Mod[iz] ;
         if ( pZone->m_DansFchActivation )
             {
             pZone->m_Activee = !pZone->m_Activee ;
             g_GlobalVar.m_ZonesAerAll.EcritureFichierZonesActive() ;
+            ScreenRaz() ;
+            g_tft.setCursor( 10 , 200 ) ;
+            if ( pZone->m_Activee )
+                g_tft.print( "zone activee" ) ;
+            else
+                g_tft.print( "zone de-activee" ) ;
             }
         }
     return ECRAN_3a_TmaAll ;
@@ -1131,6 +1143,8 @@ if ( BCentre && VecZone2Mod.size() != 0 )
 // decrementation numero de zone
 if ( g_GlobalVar.BoutonGauche() )
     {
+    ResetTimeOut() ;
+    ScreenRaz() ;
     NumTma-- ;
     if ( NumTma < -1 )
         NumTma = NbZones - 1 ;
@@ -1139,6 +1153,8 @@ if ( g_GlobalVar.BoutonGauche() )
 // incrementation numero de zone
 if ( g_GlobalVar.BoutonDroit() )
     {
+    ResetTimeOut() ;
+    ScreenRaz() ;
     int Size = VecAffZones.size()-1 ;
     NumTma++ ;
     if ( NumTma > Size )

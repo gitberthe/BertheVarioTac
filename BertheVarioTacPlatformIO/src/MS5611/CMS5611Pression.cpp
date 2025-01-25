@@ -4,7 +4,7 @@
 /// \brief Fichier du capteur de pression
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 22/01/2025
+/// \date modification : 25/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -39,6 +39,8 @@ else
 // meilleur resolution de mb
 g_MS5611.setOversampling( OSR_ULTRA_HIGH ) ;
 g_MS5611.setCompensation( true ) ;
+
+g_MS5611.setTemperatureOffset( -1.6 ) ;
 
 //g_GlobalVar.m_MutexI2c.RelacherMutex() ;
 }

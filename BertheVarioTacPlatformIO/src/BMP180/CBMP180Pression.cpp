@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 07/10/2024
+/// \date modification : 25/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -93,4 +93,15 @@ PAverage /= NbAverage ;
 m_Mutex.PrendreMutex() ;
  m_AltitudeBaroPure = pressure.altitude(PAverage,p0); ;
 m_Mutex.RelacherMutex() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Mesure la temperature
+float CBMP180Pression::GetTemperatureDegres()
+{
+double temp ;
+m_Mutex.PrendreMutex() ;
+ pressure.getTemperature( temp ) ;
+m_Mutex.RelacherMutex() ;
+return temp ;
 }
