@@ -39,8 +39,9 @@ RazButtons() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief Positionne par CGLFX.
-void CTouchButtons::SetPressed( bool pressed )
+/// \brief Appellee par de driver CGLFX en asynchrone.
+/// Indique si l'ecran a ete appuye et positionne la luminosite.
+void CTouchButtons::SetPressed()
 {
 // gel des boutons
 if ( (millis()-m_TimePressed) < (m_FrozenSec*1000) )
@@ -52,12 +53,16 @@ else
 if ( (millis()-m_TimePressed) < ANTI_REBONDS_MS )
     return ;
 
-m_ScreenPressed = pressed ;
+// variables pur le reste du programme
+m_ScreenPressed = true ;
 m_TimePressed = millis() ;
+
+// luminosite
+SetBrightness( & m_ScreenPressed ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// \brief si le centre de l'ecran est appuyé
+/// \brief Renvoi si le centre de l'ecran est appuyé
 bool CTouchButtons::IsCenterPressed()
 {
 bool ret = m_CenterPressed ;
@@ -68,9 +73,13 @@ return ret ;
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Lit la position du touch pad et active les boutons en consequence.
 /// Si on est en vol, la page menu par le centre de l'ecran n'est plus accessible.
+/// Appele regulierement par loop().
 /// \return true si un bouton pressé.
 bool CTouchButtons::HandleButtons()
 {
+// luminosite pour dans le noir
+SetBrightness( NULL ) ;
+
 // pour tous les boutons
 int ib = 0 ;
 for ( int x = 0 ; x < g_GlobalVar.m_Screen.m_Largeur ; x += g_GlobalVar.m_Screen.m_Largeur/m_NbButtons , ib++ )

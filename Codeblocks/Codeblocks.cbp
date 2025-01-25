@@ -98,6 +98,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/SDCard/CSDCard.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CAutoPages.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CBrightness.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CBrightness.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CLGFX.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CLGFX.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Screen/CScreen.cpp" />

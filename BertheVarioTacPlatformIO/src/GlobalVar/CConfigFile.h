@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 24/01/2025
+/// \date modification : 25/01/2025
 ///
 
 #ifndef _CCONFIGFILE_
@@ -49,7 +49,8 @@ public :
     int   m_dtu          = 2 ;              ///< diff heure TU
     int   m_AltiMargin   = 40 ;             ///< marge en altitude de zone TMA CTR en metres
     int   m_XYMargin     = 10 ;             ///< marge en xy de zone TMA CTR en metres
-    bool  m_alarme_reculade = true ;         ///< alarme sonore en cas de reculade
+    bool  m_alarme_reculade = true ;        ///< alarme sonore en cas de reculade
+    int   m_lum_seconde  = 20 ;             ///< valeur en seconde luminosite maximale sol
 
     std::string m_Ssid ;     ///< identifiant wifi
     std::string m_Passwd ;   ///< mot de passe wifi
@@ -69,8 +70,7 @@ public :
     friend CGlobalVar ;
 
 protected :
-    int   m_sat_sec = 12 ;                  ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)
-    int   m_luminosite = 1 ;                ///< valeur de division de la luminosite maximum : 255/x
+    int   m_sat_sec  = 12 ;             ///< secondes d'interdiction debut vol vitesse cause changement nombre satellites (pour 4 satellites)} ;
 } ;
 
 #endif

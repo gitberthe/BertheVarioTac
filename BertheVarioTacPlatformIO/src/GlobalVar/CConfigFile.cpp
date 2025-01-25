@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 24/11/2024
+/// \date modification : 25/11/2024
 ///
 
 #include "../BertheVarioTac.h"
@@ -31,8 +31,8 @@ pLine->m_Type = TYPE_VAR_BOOL ;
 m_LinesVect.push_back( pLine ) ;*/
 
 pLine = new st_line ;
-pLine->m_NomVar = "[luminosite]" ;
-pLine->m_pVar = (void*) & m_luminosite ;
+pLine->m_NomVar = "[lum_secondes]" ;
+pLine->m_pVar = (void*) & m_lum_seconde ;
 pLine->m_Type = TYPE_VAR_INT ;
 m_LinesVect.push_back( pLine ) ;
 

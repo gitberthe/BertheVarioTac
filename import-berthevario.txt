@@ -1,4 +1,5 @@
 
  - changement priorite tache son et autres taches.
  - modification nom points gps memorisable en page TMA dessous.
-
+ 
+ - revoir l'altibaro en mode rando

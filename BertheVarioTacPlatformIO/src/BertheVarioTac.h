@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 24/01/2025
+/// \date modification : 25/01/2025
 ///
 
 //#define NO_OTA
@@ -63,6 +63,7 @@
 // includes du logiciel //
 //////////////////////////
 #include "GlobalVar/CMutex.h"
+#include "Screen/CBrightness.h"
 #include "Screen/CTouchButtons.h"
 #include "Screen/CLGFX.h"
 #include "Screen/CAutoPages.h"

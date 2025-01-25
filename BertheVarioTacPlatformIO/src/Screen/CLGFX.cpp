@@ -68,7 +68,7 @@ else
     //Serial.println( touchY );
     g_GlobalVar.m_Screen.SetY( touchY ) ;
 
-    g_GlobalVar.m_Screen.SetPressed( true ) ;
+    g_GlobalVar.m_Screen.SetPressed() ;
     }
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 }
@@ -79,7 +79,6 @@ void CLGFX::InitScreen()
 {
 g_tft.begin();
 g_tft.setRotation(7);
-g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 uint16_t calData[] = { 317,3787,3847,3813,331,232,3860,238 };
 
 /*

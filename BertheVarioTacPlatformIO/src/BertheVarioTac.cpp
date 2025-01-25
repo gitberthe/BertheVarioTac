@@ -9,12 +9,13 @@
 
 #include "BertheVarioTac.h"
 
-char g_NumVersion[] = "20250125a" ;
+char g_NumVersion[] = "20250125b" ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Affiche le nom et le firmware
 void AfficheEcranDebut()
 {
+g_tft.setBrightness( 255 ) ;
 g_GlobalVar.m_Screen.ScreenRaz() ;
 // nom
 g_tft.setTextColor(TFT_MAGENTA) ;

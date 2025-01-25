@@ -788,9 +788,6 @@ if ( IsPageChanged() )
     s_LastiChamps = -2 ;
     }
 
-// on modifie la luminosite en direct
-g_tft.setBrightness( g_GlobalVar.GetBrightness() ) ;
-
 // texte bouton
 if ( s_CfgFileEnMod )
     {

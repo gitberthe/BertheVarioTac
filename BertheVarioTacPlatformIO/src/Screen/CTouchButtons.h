@@ -4,7 +4,7 @@
 /// \brief Boutons tactiles
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 01/11/2024
+/// \date modification : 25/01/2025
 ///
 
 #ifndef _TOUCHBUTTONS_
@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Pour les boutons tactiles en modifiables
-class CTouchButtons
+class CTouchButtons : private CBrightness
 {
 public :
     CTouchButtons() ;
@@ -33,7 +33,7 @@ public :
         { return m_XTouch ; } ;
     int GetY() const
         { return m_YTouch ; } ;
-    void SetPressed( bool pressed ) ;
+    void SetPressed() ;
     void SetFrozenDelaySec( int SecDelay ) ;
     bool IsCenterPressed() ;
 

@@ -1,3 +1,7 @@
+le 20250125b :
+ - gestion de la luminosite de l'ecran differente au sol.
+ - [lum_seconde] à la place de [luminosite] dans fichier de config.
+
 le 20250125a :
  - offset temperature a froid.
  - Modification tma activation/desactivation.

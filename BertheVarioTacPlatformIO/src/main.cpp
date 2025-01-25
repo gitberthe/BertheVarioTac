@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/01/2025
+/// \date modification : 25/01/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -54,9 +54,6 @@ g_GlobalVar.m_ZonesAerAll.LectureFichiers() ;
 // lecture fichier de configuration
 g_GlobalVar.m_Config.LectureFichier() ;
 g_GlobalVar.m_Config.FreeVect() ;
-
-// reglage luminosite
-g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 
 // init capteur de pression
 g_GlobalVar.m_pCapteurPression->InitCapteur() ;
@@ -225,9 +222,6 @@ if ( SpeedScreen )
 g_GlobalVar.m_Screen.SequencementPages() ;
 if ( SpeedScreen )
     g_tft.endWrite();
-
-// reglage luminosite
-g_tft.setBrightness( g_GlobalVar.GetBrightness() );
 g_GlobalVar.m_Screen.m_MutexTft.RelacherMutex() ;
 
 // pour eviter mutex accet carte sd/ecran
