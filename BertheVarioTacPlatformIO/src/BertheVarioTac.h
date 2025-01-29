@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 29/01/2025
 ///
 
 //#define NO_OTA
@@ -42,6 +42,11 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+
+////////////////////////////////////////////////////////////////////////////////
+// platform precdente
+// platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.01.01/platform-espressif32.zip
+// platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip
 
 //////////////////////////
 // define pour le debug //
@@ -130,6 +135,9 @@
 //#define VARIO_SDA_PIN 21
 //#define VARIO_SDA_PIN 35
 #define VARIO_SCL_PIN 22
+
+// haut parleur
+#define SPEAKER_PIN 26
 
 ////////////////
 // constantes //

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 30/10/2024
+/// \date modification : 29/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -33,6 +33,48 @@ g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = false ;
 xTaskCreatePinnedToCore(TacheSoundSvr, "SoundSvr", SOUNDSVR_STACK_SIZE , this, SOUNDSVR_PRIORITY, NULL, SOUNDSVR_CORE);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Tache pour jouer les sons qui sont dans la file d'attente.
+void CSoundSvr::TacheSoundSvr(void* param)
+{
+g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = false ;
+
+const int channel = 1 ;
+const int resolution = 8; // Résolution de 8 bits, 256 valeurs possibles
+
+// boucle du serveur
+StSoundRequest SoundRequest ;
+ledcAttachChannel(SPEAKER_PIN, SoundRequest.m_Frequence , resolution , channel );
+ledcDetach(SPEAKER_PIN) ;
+while (g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Run)
+    {
+    // attente 10 millisecondes
+    if( !xQueueReceive(g_GlobalVar.m_queue, &(SoundRequest), (TickType_t)0))
+        {
+        delay( 5 ) ;
+        continue ;
+        }
+
+    // traitement de la demande
+    if ( SoundRequest.m_Frequence > 0 )
+        {
+        ledcAttachChannel(SPEAKER_PIN, SoundRequest.m_Frequence , resolution , channel );
+        ledcWrite(SPEAKER_PIN, SoundRequest.m_Cycle );
+        }
+
+    // attente pendant le son
+    delay( SoundRequest.m_DelayMs ) ;
+
+    // desactivation du son
+    ledcDetach(SPEAKER_PIN) ;
+    }
+
+g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = true ;
+while( true )
+    vTaskDelete(NULL) ;
+}
+
+/*
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Tache pour jouer les sons qui sont dans la file d'attente.
 void CSoundSvr::TacheSoundSvr(void* param)
@@ -83,6 +125,7 @@ g_GlobalVar.m_TaskArr[SOUNDSVR_NUM_TASK].m_Stopped = true ;
 while( true )
     vTaskDelete(NULL) ;
 }
+*/
 
 //fin :
 //pinMode(26, OUTPUT);

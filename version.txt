@@ -1,3 +1,7 @@
+le 20250129a :
+ - platform https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip
+ - CSoundSvr changé.
+
 le 20250125c :
  - page tma dessous, enregistrement point gps dans fichier terconnu.txt.
  

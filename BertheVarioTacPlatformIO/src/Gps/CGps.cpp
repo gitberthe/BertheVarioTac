@@ -149,7 +149,7 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         {
         // beep attente gps 'S'
         if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
-            CGlobalVar::beeper( 1500 , 100 , false ) ;
+            CGlobalVar::beeper( 1500 , 100 ) ;
 
         // recalage altibaro
         g_GlobalVar.m_MutexVariable.PrendreMutex() ;
@@ -172,9 +172,9 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
     g_GlobalVar.m_PileVit.PusGpsVit() ;
     if ( beep && g_GlobalVar.m_BeepAttenteGVZone )
         {
-        CGlobalVar::beeper( 1500 , 100 , false ) ;
+        CGlobalVar::beeper( 1500 , 100 ) ;
         CGlobalVar::beeper( SOUND_DELAY_ONLY , 200 ) ;
-        CGlobalVar::beeper( 2000 , 100 , false ) ;
+        CGlobalVar::beeper( 2000 , 100 ) ;
         }
 
     // si debut de vol cause vitesse

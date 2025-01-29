@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 29/01/2025
 ///
 
 #ifndef _GLOBALVAR_
@@ -75,11 +75,12 @@ public :
     static void BeepError(bool small = false) ;
     static void Reboot() ;
     static void BeepOk() ;
-    static void beeper( int frequence , int DurationMs , bool VolumeFort = true ) ;
+    static void beeper( int frequence , int DurationMs ) ;
 
     static void  RelancerEnregistrementFichier() ;
 
 private :
+    CSoundSvr::StSoundRequest m_Req ;   ///< pour le son
 
     static void  TacheRelanceIgc(void *param) ;
 } ;

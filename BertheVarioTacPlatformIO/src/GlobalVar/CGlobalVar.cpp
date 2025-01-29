@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 29/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -90,18 +90,17 @@ beeper( 7000 , 100 ) ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Permet de demander un son au serveur de son
-void CGlobalVar::beeper( int frequence , int DurationMs , bool VolumeFort )
+void CGlobalVar::beeper( int frequence , int DurationMs )
 {
-//g_GlobalVar.m_MutexI2c.PrendreMutex() ;
-CSoundSvr::StSoundRequest Req ;
-Req.m_Frequence = frequence ;
-Req.m_DelayMs = DurationMs ;
-if ( VolumeFort )
+g_GlobalVar.m_Req.m_Frequence = frequence ;
+g_GlobalVar.m_Req.m_DelayMs = DurationMs ;
+g_GlobalVar.PostSoundRequest( & g_GlobalVar.m_Req ) ;
+
+/*if ( VolumeFort )
     Req.m_Volume = DAC_CW_SCALE_1 ;
 else
-    Req.m_Volume = DAC_CW_SCALE_8 ;
-g_GlobalVar.PostSoundRequest( & Req ) ;
-//g_GlobalVar.m_MutexI2c.RelacherMutex() ;
+    Req.m_Volume = DAC_CW_SCALE_8 ;*/
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
