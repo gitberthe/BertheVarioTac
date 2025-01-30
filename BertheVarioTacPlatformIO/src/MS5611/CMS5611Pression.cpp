@@ -4,7 +4,7 @@
 /// \brief Fichier du capteur de pression
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 25/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -58,6 +58,13 @@ return (44330.0f * (1.0f - powf((float)pressure_mb_x100 / (float)seaLevelPressur
 void CMS5611Pression::Read()
 {
 g_MS5611.read() ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Renvoie la pression en hPa.
+float CMS5611Pression::GetPressionhPa() const
+{
+return g_MS5611.getPressure() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

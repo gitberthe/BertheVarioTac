@@ -4,7 +4,7 @@
 /// \brief Fichier du capteur de pression
 ///
 /// \date creation     : 07/03/2024
-/// \date modification : 22/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #ifndef _CMS5611_
@@ -27,6 +27,7 @@ public :
 
     float GetAltiMetres() override ;
     float GetTemperatureDegres() override ;
+    float GetPressionhPa() const override ;
 
 private :
     void  Read() ;

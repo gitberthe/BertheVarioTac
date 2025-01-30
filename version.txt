@@ -1,3 +1,6 @@
+le 20250130a :
+ - ajout de [xc_track] pour envoi de la pression par bluetooth à XC-Track.
+
 le 20250129a :
  - platform https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip
  - CSoundSvr changé.

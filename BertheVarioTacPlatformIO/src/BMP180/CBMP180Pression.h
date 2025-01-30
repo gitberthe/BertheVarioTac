@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #ifndef _BMP180PRESS_
@@ -16,9 +16,10 @@ class CVirtCaptPress
 {
 public :
 
-    virtual void InitCapteur() = 0 ;
-    virtual void MesureAltitudeCapteur() = 0 ;
+    virtual void  InitCapteur() = 0 ;
+    virtual void  MesureAltitudeCapteur() = 0 ;
     virtual float GetTemperatureDegres() = 0 ;
+    virtual float GetPressionhPa() const = 0 ;
 
     virtual float GetAltiMetres() ;
 
@@ -45,8 +46,12 @@ public :
     bool   m_InitOk = false ;
     double m_Temperature;
 
-    void MesureAltitudeCapteur() ;
+    void  MesureAltitudeCapteur() ;
     float GetTemperatureDegres() ;
+    float GetPressionhPa() const override ;
+
+private :
+    double m_PAverage ;
 } ;
 
 #endif

@@ -37,6 +37,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/BMP180/CBMP180Pression.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/BertheVarioTac.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Bluetooth/CBleXct.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/Bluetooth/CBleXct.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CFinSol.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CFinSol.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Calculateur/CSortArray.h" />

@@ -903,7 +903,7 @@ if ( BoutonGau && s_CfgFileEnMod && m_CfgFileiChamps >= 0 && m_CfgFileiChamps < 
     else if ( pLine->m_Type == TYPE_VAR_BOOL )
         {
         bool *pVal = (bool*) pLine->m_pVar ;
-        *pVal = !*pVal ;
+        *pVal = !(*pVal) ;
         }
     g_GlobalVar.m_Screen.ScreenRaz() ;
     }

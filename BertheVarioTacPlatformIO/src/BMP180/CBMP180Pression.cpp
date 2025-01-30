@@ -4,7 +4,7 @@
 /// \brief Capteur de pression
 ///
 /// \date creation     : 22/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -59,6 +59,13 @@ else
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Mesure l'altitude baro pure
+float CBMP180Pression::GetPressionhPa() const
+{
+return m_PAverage ;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Mesure l'altitude baro pure
 void CBMP180Pression::MesureAltitudeCapteur()
 {
 if ( ! m_InitOk )
@@ -89,9 +96,10 @@ for ( int i = 0 ; i < NbAverage ; i++ )
     PAverage += P ;
     }
 PAverage /= NbAverage ;
+m_PAverage = PAverage ;
 
 m_Mutex.PrendreMutex() ;
- m_AltitudeBaroPure = pressure.altitude(PAverage,p0); ;
+ m_AltitudeBaroPure = pressure.altitude(m_PAverage,p0); ;
 m_Mutex.RelacherMutex() ;
 }
 

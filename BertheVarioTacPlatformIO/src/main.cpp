@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 25/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -77,16 +77,18 @@ g_GlobalVar.LanceTacheVarioCapBeep() ;
 // raz de l'ecran
 g_GlobalVar.m_Screen.ScreenRaz(false) ;
 
-// lancement tache touch
-//g_GlobalVar.m_Screen.LancerTacheTouch() ;
-
 // desactivation du wifi pour autonomie batterie
 esp_wifi_stop() ;
 esp_wifi_deinit() ;
 
 // blue tooth
-//esp_bt_controller_disable();
-//esp_bt_controller_deinit();
+if ( g_GlobalVar.m_Config.m_xc_track )
+    g_GlobalVar.m_BleXct.Init( BLE_NAME ) ;
+else
+    {
+    esp_bt_controller_disable();
+    esp_bt_controller_deinit();
+    }
 
 // mode economie d'energie
 esp_pm_config_esp32_t pm_config ;
@@ -101,8 +103,6 @@ ESP_ERROR_CHECK(esp_pm_configure(&pm_config));
 /// \brief boucle sans fin
 void loop()
 {
-//g_GlobalVar.m_QMC5883Mag.ScanI2C() ;
-
 // variables
 static int count_calcul = 0 ;
 static int count_10hz = 0 ;
@@ -206,6 +206,13 @@ count_10hz++ ;
 // 10 hz
 while ( millis() - time < 100 )
     delay( 10 ) ;
+
+// envoi bluetooth Xc-Track
+if ( g_GlobalVar.m_Config.m_xc_track )
+    {
+    if ( g_GlobalVar.m_BleXct.IsInitialised() )
+        g_GlobalVar.m_BleXct.Send() ;
+    }
 
 ///////
 // 2 hz

@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 29/01/2025
+/// \date modification : 30/01/2025
 ///
 
 //#define NO_OTA
@@ -35,7 +35,7 @@
 #include <esp_bt.h>
 #include <esp_pm.h>
 #include <lz4.h>
-
+#include <NimBLEDevice.h>
 
 #include <math.h>
 #include <map>
@@ -109,6 +109,7 @@
 #include "QMC5883L/CQMC5883Mag.h"
 #include "RandoVol/CFileGpx.h"
 #include "RandoVol/CRandoVol.h"
+#include "Bluetooth/CBleXct.h"
 
 ////////////////////////
 // definition des pin //

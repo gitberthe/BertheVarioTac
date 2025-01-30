@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 29/01/2025
+/// \date modification : 30/01/2025
 ///
 
 #ifndef _GLOBALVAR_
@@ -38,6 +38,7 @@ public :
     CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
     CVirtCaptPress* m_pCapteurPression ;    ///< capteur de pression BMP180 ou MS5611
     CQMC5883Mag     m_QMC5883Mag ;   ///< capteur magnetique
+    CBleXct         m_BleXct ;      ///< bluetooth Xc-Track
 
     bool m_ModeHttpFileMgr = false ;   ///< si mode http pour file manager
     bool m_ModeHttpOta = false ;       ///< si mode telechargement de firmware http
