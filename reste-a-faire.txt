@@ -4,4 +4,4 @@ le 2025-02-03 :
 
 - validation en dynamique
 
-- hauteur sol BertheVario
+- menu glissant rando

@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 24/01/2025 : modification
+/// \date 03/02/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -204,17 +204,25 @@ bool IsProtect = ( (*pChar == 'P') && (strstr( pChar , "PROTECT" ) != NULL)) ||
                  ( (*pChar == 'F') && (strstr( pChar , "FFVL-Prot" ) != NULL)) ;
 if ( IsProtect )
     {
-    // detertimation plafond zone proetegee
-    if ( strstr( pChar , "1000m/sol" ) != NULL )
-        pZone->m_HauteurSolZoneProtege = 1000 ;
-    else if ( strstr( pChar , "500m/sol" ) != NULL )
-        pZone->m_HauteurSolZoneProtege = 500 ;
-    else if ( strstr( pChar , "300m/sol" ) != NULL )
-        pZone->m_HauteurSolZoneProtege = 300 ;
-    else if ( strstr( pChar , "150m/sol" ) != NULL )
-        pZone->m_HauteurSolZoneProtege = 150 ;
-    else if ( strstr( pChar , "50m/sol" ) != NULL )
-        pZone->m_HauteurSolZoneProtege = 50 ;
+    // si m/sol trouve
+    char * pCharFin = strstr( pChar , "m/sol" ) ;
+    if ( pCharFin != NULL )
+        {
+        char TmpBuff[500] ;
+        strcpy( TmpBuff , pChar ) ;
+        *pCharFin = 0 ;
+        // on recule jusqu'a l'espace
+        while( *pCharFin != ' ' && *pCharFin != '(' && pCharFin != pChar )
+            pCharFin-- ;
+        // on ravance d'un coup
+        pCharFin++ ;
+        // hauteur sol
+        pZone->m_HauteurSolZoneProtege = atoi( pCharFin ) ;
+        // si probleme de conversion hauteur max
+        if ( pZone->m_HauteurSolZoneProtege == 0 )
+            pZone->m_HauteurSolZoneProtege = 1000 ;
+        }
+    // 1000 metres par defaut
     else
         pZone->m_HauteurSolZoneProtege = 1000 ;
     }

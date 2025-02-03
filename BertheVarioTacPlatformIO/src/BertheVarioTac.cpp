@@ -4,12 +4,12 @@
 /// \brief Main du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 30/01/2025
+/// \date modification : 03/02/2025
 ///
 
 #include "BertheVarioTac.h"
 
-char g_NumVersion[] = "20250130a" ;
+char g_NumVersion[] = "20250203a" ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Affiche le nom et le firmware
