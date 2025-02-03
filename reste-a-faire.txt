@@ -1,5 +1,7 @@
-le 2025-01-22 :
+le 2025-02-03 :
 
-- boitier
+- boitier 3d
 
 - validation en dynamique
+
+- hauteur sol BertheVario
