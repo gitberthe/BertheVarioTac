@@ -1,7 +1,5 @@
-le 2025-02-03 :
+le 2025-02-04 :
 
 - boitier 3d
 
 - validation en dynamique
-
-- menu glissant rando
