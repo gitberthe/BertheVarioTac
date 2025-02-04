@@ -1586,10 +1586,12 @@ CAutoPages::EtatsAuto CScreen::EcranRandoVolMenu()
 {
 static CRandoVol::EtatRando Etat = CRandoVol::ConfirmeRando ;
 static int SelectionMenu = 0 ;
+static int MenuDeroulant = 0 ;
 
 // si page changee
 if ( IsPageChanged() )
     {
+    MenuDeroulant = 0 ;
     SelectionMenu = 0 ;
     Etat = CRandoVol::ConfirmeRando ;
     g_GlobalVar.m_pFileGpx = NULL ;
@@ -1622,7 +1624,7 @@ if ( Etat == CRandoVol::AttenteGps )
     // message
     g_tft.print("Acquisition\n      Gps");
 
-    #ifdef DEBUG_RANDO_VOl
+    #ifdef DEBUG_RANDO_VOL
     g_GlobalVar.m_Screen.SetText( "For" , 2 ) ;
     // bouton droit forcage à vichy
     if ( g_GlobalVar.BoutonDroit() )
@@ -1695,6 +1697,7 @@ if ( Etat == CRandoVol::InitMenu )
 
 // affichage du menu
 static int NbMenu = 0 ;
+const int NbAffLigneMenu = 15 ;
 if ( Etat == CRandoVol::AfficheMenu )
     {
     // temps de menu ecoulé
@@ -1711,7 +1714,7 @@ if ( Etat == CRandoVol::AfficheMenu )
 
     // nom trace des traces proches
     char TmpChar[50] ;
-    for ( int it = 0 ; it < 15 ; it++ )
+    for ( int it = 0 + MenuDeroulant ; it < NbAffLigneMenu + MenuDeroulant ; it++ )
         {
         if ( it == SelectionMenu )
             sprintf(TmpChar,">%s",g_GlobalVar.GetTrackName(it)) ;
@@ -1751,8 +1754,12 @@ if ( g_GlobalVar.BoutonGauche() )
         {
         NbMenu = 0 ;
         SelectionMenu-- ;
+        MenuDeroulant-- ;
+
         if ( SelectionMenu < 0 )
             SelectionMenu = 0 ;
+        if ( SelectionMenu == 0 )
+            MenuDeroulant = 0 ;
         }
     }
 
@@ -1769,6 +1776,8 @@ if ( g_GlobalVar.BoutonDroit() )
         SelectionMenu++ ;
         if ( SelectionMenu >= g_GlobalVar.m_VecGpx.size() )
             SelectionMenu = g_GlobalVar.m_VecGpx.size()-1 ;
+        if ( SelectionMenu > NbAffLigneMenu/2 )
+            MenuDeroulant++ ;
         }
     }
 

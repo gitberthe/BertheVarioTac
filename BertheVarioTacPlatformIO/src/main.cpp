@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/01/2025
+/// \date modification : 03/02/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -82,9 +82,11 @@ esp_wifi_stop() ;
 esp_wifi_deinit() ;
 
 // blue tooth
+#ifdef XC_TRACK
 if ( g_GlobalVar.m_Config.m_xc_track )
     g_GlobalVar.m_BleXct.Init( BLE_NAME ) ;
 else
+#endif
     {
     esp_bt_controller_disable();
     esp_bt_controller_deinit();
@@ -208,11 +210,13 @@ while ( millis() - time < 100 )
     delay( 10 ) ;
 
 // envoi bluetooth Xc-Track
+#ifdef XC_TRACK
 if ( g_GlobalVar.m_Config.m_xc_track )
     {
     if ( g_GlobalVar.m_BleXct.IsInitialised() )
         g_GlobalVar.m_BleXct.Send() ;
     }
+#endif
 
 ///////
 // 2 hz

@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 30/01/2025
+/// \date modification : 03/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -42,11 +42,13 @@ pLine->m_pVar = (void*) & m_coef_filtre_alti_baro  ;
 pLine->m_Type = TYPE_VAR_FLOAT ;
 m_LinesVect.push_back( pLine ) ;
 
+#ifdef XC_TRACK
 pLine = new st_line ;
 pLine->m_NomVar = "[xc_track]" ;
 pLine->m_pVar = (void*) & m_xc_track ;
 pLine->m_Type = TYPE_VAR_BOOL ;
 m_LinesVect.push_back( pLine ) ;
+#endif
 
 pLine = new st_line ;
 pLine->m_NomVar = "[vitesse_igc_kmh]" ;

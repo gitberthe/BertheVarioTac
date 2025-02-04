@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 08/03/2024
-/// \date modification : 30/01/2025
+/// \date modification : 03/02/2025
 ///
 
 #ifndef _CCONFIGFILE_
@@ -51,7 +51,9 @@ public :
     int   m_XYMargin     = 10 ;             ///< marge en xy de zone TMA CTR en metres
     bool  m_alarme_reculade = true ;        ///< alarme sonore en cas de reculade
     int   m_lum_seconde  = 20 ;             ///< valeur en seconde luminosite maximale sol
-    bool  m_xc_track     = false ;          ///< bluetooth xc-track de la pression
+    #ifdef XC_TRACK
+     bool  m_xc_track     = false ;          ///< bluetooth xc-track de la pression
+    #endif
 
     std::string m_Ssid ;     ///< identifiant wifi
     std::string m_Passwd ;   ///< mot de passe wifi

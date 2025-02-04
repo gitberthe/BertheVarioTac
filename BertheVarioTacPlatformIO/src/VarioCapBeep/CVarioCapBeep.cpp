@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 30/01/2025
+/// \date modification : 03/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -83,8 +83,10 @@ const float SeuilVzMin = g_GlobalVar.m_Config.m_vz_seuil_haut ;
 while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     {
     // si xctrack
+    #ifdef XC_TRACK
     if ( g_GlobalVar.m_Config.m_xc_track )
         break ;
+    #endif
 
     // desactivation du son cause TMA
     bool NotActive = g_GlobalVar.m_ZonesAerAll.m_DansDessousUneZone == ZONE_DEDANS ||

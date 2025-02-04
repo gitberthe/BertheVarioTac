@@ -56,13 +56,14 @@
 //#define NO_GPS_DEBUG
 //#define MAG_DEBUG
 //#define BRIGHT_DEBUG
-//#define DEBUG_RANDO_VOl
+//#define DEBUG_RANDO_VOL
 
 /////////////////////////////
 // define pour le materiel //
 /////////////////////////////
 //#define BMP180_PRESS
 #define MS5611_PRESS
+#define XC_TRACK
 
 //////////////////////////
 // includes du logiciel //

@@ -1,3 +1,7 @@
+le 20250204a :
+ - menu deroulant mode rando.
+ - ajout de #define XC_TRACK dans BertheVarioTac.h pour eviter une consommation memoire si inutilise.
+ 
 le 20250203a :
  - modification initialisation hauteur sol zone protegée fonction de la denomination 
     (variable et plus 1000/500/300/150/50m ex: "PROTECT reserve annecy 200m/sol")
