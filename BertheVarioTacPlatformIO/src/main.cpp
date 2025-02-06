@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 03/02/2025
+/// \date modification : 06/02/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -106,7 +106,6 @@ ESP_ERROR_CHECK(esp_pm_configure(&pm_config));
 void loop()
 {
 // variables
-static int count_calcul = 0 ;
 static int count_10hz = 0 ;
 static bool WifiSetupFileMgr = true ;
 static bool WifiSetupOta = true ;
@@ -248,13 +247,12 @@ if ( g_GlobalVar.m_Screen.GetEtatAuto() == CAutoPages::ECRAN_9b_RandoVolCarte )
  Serial.println(" mode debug") ;
 #endif
 
-// une fois sur 2 a 1 hz
-if ( (count_calcul++)%2 )
-    // calcul des zones aeriennes
-    g_GlobalVar.m_ZonesAerAll.CalcZone() ;
-else
-    // calcul terrain le plus proche
-    g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
+
+// calcul des zones aeriennes
+g_GlobalVar.m_ZonesAerAll.CalcZone() ;
+
+// calcul terrain le plus proche
+g_GlobalVar.m_TerrainArr.CalcTerrainPlusProche() ;
 
 // mode economie d'energie
 //esp_light_sleep_start() ;

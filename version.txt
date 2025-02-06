@@ -1,3 +1,6 @@
+le 20250206a :
+ - calcul penetration zone et terrain proche à 2hz.
+
 le 20250204a :
  - menu deroulant mode rando.
  - ajout de #define XC_TRACK dans BertheVarioTac.h pour eviter une consommation memoire si inutilise.
