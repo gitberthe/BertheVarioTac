@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 03/02/2025
+/// \date modification : 06/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -49,18 +49,21 @@ while (g_GlobalVar.m_TaskArr[VARIOCAP_NUM_TASK].m_Run)
     // lecture cap magnetique
     g_GlobalVar.m_QMC5883Mag.LectureCap() ;
 
-    // mesure altitude recalee et mise a jour altitude courante
+    // mesure altitude capteur
     const float coef = g_GlobalVar.m_Config.m_coef_filtre_alti_baro ;
     g_GlobalVar.m_pCapteurPression->MesureAltitudeCapteur() ;
+    // calcul altibaro pure filtree
     AltiBaroFiltree = (1.-coef) * g_GlobalVar.m_pCapteurPression->GetAltiBaroPureMetres() + coef * AltiBaroFiltree ;
+
+    // mise a jour altitude recalee
     g_GlobalVar.m_TerrainPosCur.m_AltiBaro = g_GlobalVar.m_pCapteurPression->GetAltiMetres() ;
 
-    // decalage du tableau alti fifo par 0 sur x secondes
+    // decalage du tableau alti fifo par 0 sur 1 secondes
     for ( int i = DIV_SECONDES ; i>0 ; i-- )
         AltiPressForVzArr[ i ] = AltiPressForVzArr[ i - 1 ] ;
     AltiPressForVzArr[ 0 ] = AltiBaroFiltree ;
 
-    // calcul difference alti baro pure
+    // calcul difference alti baro pure sur 1 seconde pour Vz
     float DiffAlti = AltiPressForVzArr[ 0 ] - AltiPressForVzArr[ DIV_SECONDES ] ;
 
     // recopie de Vz
