@@ -1,5 +1,5 @@
 le 20250207c :
- - corection fuite memoire ~CZoneAer().
+ - corection fuite memoire ~CZoneAer(). Meilleur fonctionnement fileManager.
 
 le 20250207b :
  - correction bug important zone activable masquée par zone avec derogation.
