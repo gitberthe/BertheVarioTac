@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 26/11/2024
+/// \date modification : 07/02/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -77,8 +77,8 @@ g_GlobalVar.m_ZonesAerAll.DeleteAll() ;
 
 // affichage
 g_GlobalVar.m_Screen.ScreenRaz() ;
-g_tft.setCursor( 10 , 50 ) ;
-g_tft.println( "Touch/reboot" ) ;
+g_tft.setCursor( 0 , 50 ) ;
+g_tft.println( "Ota\nTouch/reboot" ) ;
 g_tft.println( "Connect to wifi\n" ) ;
 
 WiFi.mode(WIFI_STA);

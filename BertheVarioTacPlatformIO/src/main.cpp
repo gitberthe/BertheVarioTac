@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 06/02/2025
+/// \date modification : 07/02/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -118,6 +118,7 @@ if ( g_GlobalVar.m_ModeHttpFileMgr )
     // si init wifi
     if ( WifiSetupFileMgr )
         {
+        // init file manager
         WifiSetupFileMgr = false ;
         WifiInitFileMgr() ;
         }

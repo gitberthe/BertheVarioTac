@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 14/10/2024
+/// \date modification : 07/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -16,6 +16,12 @@ void WifiInitFileMgr()
 // arret des autres taches
 g_GlobalVar.StopAll() ;
 
+// pour gain memoire xctrack
+g_GlobalVar.m_Config.m_xc_track = false ;
+esp_bt_controller_disable();
+esp_bt_controller_deinit();
+
+// delay de 0.5s
 delay( 500 ) ;
 
 // raz des boutons
@@ -50,9 +56,9 @@ Serial.println(WiFi.localIP());
 
 // adresse wifi
 char buf[50];
-sprintf(buf, "IP: %d.%d.%d.%d", WiFi.localIP()[0], WiFi.localIP()[1], WiFi.localIP()[2], WiFi.localIP()[3] );
+sprintf(buf, "FileManager\nIP: %d.%d.%d.%d", WiFi.localIP()[0], WiFi.localIP()[1], WiFi.localIP()[2], WiFi.localIP()[3] );
 g_GlobalVar.m_Screen.ScreenRaz() ;
-g_tft.setCursor( 10 , 50 ) ;
+g_tft.setCursor( 0 , 50 ) ;
 g_tft.print( buf ) ;
 g_tft.setCursor( 50 , 100 ) ;
 g_tft.print( "touch/reboot" ) ;

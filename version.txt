@@ -1,3 +1,7 @@
+le 20250207a :
+ - gain memoire wifi ota bluetooth.
+ - correction bug CDistFront::IsNearFront() vecteurs colineaire.
+
 le 20250206a :
  - calcul penetration zone et terrain proche à 2hz.
 
