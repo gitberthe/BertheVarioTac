@@ -765,8 +765,8 @@ else
     {
     // zone la plus basse
     const CZoneAer * pZone = VecZoneInArea[0] ;
-    // si la zone du dessus a une derogation elle est prioritaire
-    for ( int iz= 0 ; iz < VecZoneInArea.size() ; iz++ )
+    // si la zone du dessus a une derogation elle est prioritaire (sauf si zone activable)
+    for ( int iz= 0 ; iz < VecZoneInArea.size() && !pZone->m_DansFchActivation ; iz++ )
         if ( VecZoneInArea[iz]->HavePeriod() )
             {
             pZone = VecZoneInArea[iz] ;
