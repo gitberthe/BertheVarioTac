@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 03/12/2024
+/// \date modification : 07/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -19,11 +19,19 @@ int     CZoneAer::ms_max_dst_size ;                 // taille du buffer lz4
 /// \brief Destructeur, liberation des points
 CZoneAer::~CZoneAer()
 {
+// points non compressés
 if ( m_PolyStLaLoArr != NULL )
     {
     delete [] m_PolyStLaLoArr ;
     m_PolyStLaLoArr = NULL ;
     m_NbStLaLoPts = 0 ;
+    }
+// points compresse
+if ( m_CharLz4Arr != NULL )
+    {
+    delete [] m_CharLz4Arr ;
+    m_CharLz4Arr = NULL ;
+    m_Lz4BuffSize = 0 ;
     }
 }
 

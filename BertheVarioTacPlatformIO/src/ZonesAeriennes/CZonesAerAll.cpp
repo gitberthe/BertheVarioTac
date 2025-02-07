@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 03/02/2025 : modification
+/// \date 07/02/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -24,15 +24,21 @@ CZonesAerAll::CZonesAerAll()
 /// bloque autrement.
 void CZonesAerAll::DeleteAll()
 {
+// zones en tableaux
 for ( int iz = 0 ; iz < m_NbZones ; iz++ )
     {
     CZoneAer * pZoneAer = m_ZonesArr[iz] ;
     delete pZoneAer ;
     }
 
+// tableau de zones
 m_NbZones = 0 ;
 delete [] m_ZonesArr ;
 m_ZonesArr = NULL ;
+
+// buffer de compression
+if ( CZoneAer::ms_compressed_data_lz4 != NULL )
+    delete [] CZoneAer::ms_compressed_data_lz4 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +100,8 @@ char * TmpChar = new char [TaillMaxChar+1] ;
 int ic = 0 ;
 
 // allocation pour 1000 points maximum
+if ( CZoneAer::ms_compressed_data_lz4 != NULL )
+    delete [] CZoneAer::ms_compressed_data_lz4 ;
 CZoneAer::ms_max_dst_size = LZ4_compressBound( MAX_POINTS_ZONE * 2 * sizeof(short) );
 CZoneAer::ms_compressed_data_lz4 = new char [CZoneAer::ms_max_dst_size] ;
 

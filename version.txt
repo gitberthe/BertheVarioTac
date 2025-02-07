@@ -1,3 +1,6 @@
+le 20250207c :
+ - corection fuite memoire ~CZoneAer().
+
 le 20250207b :
  - correction bug important zone activable masquée par zone avec derogation.
 

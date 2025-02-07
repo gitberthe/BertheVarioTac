@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 03/12/2024 : modification
+/// \date 07/02/2025 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -89,7 +89,7 @@ private :
     CZoneAer::st_coord_poly *   m_PolyStLaLoArr=NULL;   ///< tableau des points de la zone
     short                       m_NbStLaLoPts = 0 ;     ///< nombre de points de la zone
 
-    char                        *m_CharLz4Arr=NULL ;     ///< tableau des short compresse lz4
+    char                        *m_CharLz4Arr=NULL ;    ///< tableau des short compresse lz4
     short                       m_Lz4BuffSize ;         ///< taille du buffer des short compresses lz4
     bool                        m_CompressLz4 ;         ///< indique si les donnees sont compressee lz4
 
