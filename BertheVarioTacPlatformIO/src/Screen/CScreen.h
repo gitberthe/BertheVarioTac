@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 22/01/2025
+/// \date modification : 08/02/2025
 ///
 
 #ifndef _CSCREEN_
@@ -67,6 +67,8 @@ private :
 
     CAutoPages::EtatsAuto EcranTmaMod() ;
     CAutoPages::EtatsAuto EcranConfimeArchIgcFch() ;
+
+    void GetCapChar( int CapDeg , char * NomCap ) ;
 
     std::vector<CText2Screen>   m_T2SPageVzArr ;  ///< tableau des champs page Vz
 } ;

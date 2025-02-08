@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 24/01/2025
+/// \date modification : 08/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -30,6 +30,31 @@ m_T2SPageVzArr[PAGE_VZ_ALTI_BARO].SetPos(  15 , 240 , 3 , 'm' ) ;
 void CScreen::HandleTouchScreen()
 {
 lv_timer_handler(); /* let the GUI do its work */
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Renvoi le nom du cap en 2 lettres
+void CScreen::GetCapChar( int CapDeg , char * NomCap )
+{
+int CapMarge = 45/2 + 1 ;
+if ( CapDeg < CapMarge || CapDeg > (360-CapMarge) )
+    strcpy( NomCap, "N " ) ;
+else if ( abs(CapDeg-45) < CapMarge )
+    strcpy( NomCap, "NE" ) ;
+else if ( abs(CapDeg-90) < CapMarge )
+    strcpy( NomCap, "E " ) ;
+else if ( abs(CapDeg-135) < CapMarge )
+    strcpy( NomCap, "SE" ) ;
+else if ( abs(CapDeg-180) < CapMarge )
+    strcpy( NomCap, "S " ) ;
+else if ( abs(CapDeg-225) < CapMarge )
+    strcpy( NomCap, "SW" ) ;
+else if ( abs(CapDeg-270) < CapMarge )
+    strcpy( NomCap, "W " ) ;
+else if ( abs(CapDeg-315) < CapMarge )
+    strcpy( NomCap, "NW" ) ;
+else
+    strcpy( NomCap, "  " ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -168,8 +193,29 @@ else if ( g_GlobalVar.m_Hgt2Agl.m_ErreurFichier )
     }
 else
     {
-    // nom terrain
-    sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
+    static int AffTerrainFront = 0 ;
+
+    // nom terrain/finesse
+    if ( (AffTerrainFront++/3)%2 )
+        sprintf( TmpChar , "%s%2d" , TmpCharNomSite , (int)FinesseTerrainMinimum ) ;
+    // dist/alt/cap frontiere zone
+    else
+        {
+        int DistFront   = g_GlobalVar.m_ZonesAerAll.m_DistXYNextZone ;
+        int AltFront    = g_GlobalVar.m_ZonesAerAll.m_DistAltCurZone ;
+        int CapFrontDeg = atan2f( g_GlobalVar.m_ZonesAerAll.m_PtFrontProche.m_Lat - g_GlobalVar.m_TerrainPosCur.m_Lat ,
+                              g_GlobalVar.m_ZonesAerAll.m_PtFrontProche.m_Lon - g_GlobalVar.m_TerrainPosCur.m_Lon ) *
+                              -180. / PI + 90 + 360 ;
+        CapFrontDeg %= 360 ;
+        // limitations frontiere zone
+        if ( DistFront > 999 )
+            DistFront = 999 ;
+        if ( AltFront > 999 )
+            AltFront = 999 ;
+        char TmpCharCap[25] ;
+        GetCapChar( CapFrontDeg , TmpCharCap ) ;
+        sprintf( TmpChar , "  %3dA %3d%s", AltFront , DistFront , TmpCharCap ) ;
+        }
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 
     // reculade
@@ -250,31 +296,14 @@ m_T2SPageVzArr[PAGE_VZ_DUREE_VOL].Affiche(TmpChar) ;
 
 //////////////
 // cap lettres
-int Cap = g_GlobalVar.m_CapGpsDeg ;
+int CapGps = g_GlobalVar.m_CapGpsDeg ;
+GetCapChar( CapGps , TmpChar ) ;
 //int Cap = g_GlobalVar.m_QMC5883Mag.GetCapDegres() ;
-int CapMarge = 45/2 + 1 ;
-char TmpCharNomCap[] = "  " ;
-if ( Cap < CapMarge || Cap > (360-CapMarge) )
-    strcpy( TmpCharNomCap, "N " ) ;
-else if ( labs(Cap-45) < CapMarge )
-    strcpy( TmpCharNomCap, "NE" ) ;
-else if ( labs(Cap-90) < CapMarge )
-    strcpy( TmpCharNomCap, "E " ) ;
-else if ( labs(Cap-135) < CapMarge )
-    strcpy( TmpCharNomCap, "SE" ) ;
-else if ( labs(Cap-180) < CapMarge )
-    strcpy( TmpCharNomCap, "S " ) ;
-else if ( labs(Cap-225) < CapMarge )
-    strcpy( TmpCharNomCap, "SW" ) ;
-else if ( labs(Cap-270) < CapMarge )
-    strcpy( TmpCharNomCap, "W " ) ;
-else if ( labs(Cap-315) < CapMarge )
-    strcpy( TmpCharNomCap, "NW" ) ;
-m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche(TmpCharNomCap) ;
+m_T2SPageVzArr[PAGE_VZ_CAP_LET].Affiche(TmpChar) ;
 
 /////////////
 // cap degres
-sprintf( TmpChar , "%3d", Cap ) ;
+sprintf( TmpChar , "%3d", CapGps ) ;
 m_T2SPageVzArr[PAGE_VZ_CAP_DEG].Affiche(TmpChar) ;
 
 ///////////////
