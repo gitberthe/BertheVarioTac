@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 07/02/2025 : modification
+/// \date 08/02/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -38,7 +38,10 @@ m_ZonesArr = NULL ;
 
 // buffer de compression
 if ( CZoneAer::ms_compressed_data_lz4 != NULL )
+    {
     delete [] CZoneAer::ms_compressed_data_lz4 ;
+    CZoneAer::ms_compressed_data_lz4 = NULL ;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -639,14 +642,13 @@ for ( long iz = 0 ; iz < m_NbZones ; iz++ )
 return NULL ;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Tri croissant de nom pour ecran gestion zone
 void CZonesAerAll::TriZonesNom()
 {
 CSortArray::m_pArr = m_ZonesArr ;
 CSortArray::m_Size = m_NbZones ;
-CZoneAer::TriParNom( true ) ;
+CZoneAer::TrierPar( CZoneAer::TriParNom ) ;
 TriSchellMetzner() ;
 }
 
@@ -659,16 +661,50 @@ return ((*p1)<(*p2));
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Tri altitude croissante pour determination
-void CZonesAerAll::TriZonesAltitude( std::vector<const CZoneAer *> & VecZones )
+void CZonesAerAll::TriZonesParAltitude( std::vector<const CZoneAer *> & VecZones )
 {
 /*CSortArray::m_pArr = & VecZones[0] ;
 CSortArray::m_Size = VecZones.size() ;
 CZoneAer::TriParNom( false ) ;
 TriSchellMetzner(true) ; */
-CZoneAer::TriParNom( false ) ;
-
+CZoneAer::TrierPar( CZoneAer::TriParAltitude ) ;
 std::sort(VecZones.begin(), VecZones.end(),MySortFunction);
 //std::reverse(VecZones.begin(),VecZones.end());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Reduit le vecteur aux zones necessaires en prenant en compte la derogation
+/// et l'activabilite de la zone
+void CZonesAerAll::ClasseZoneRetenueAltitude( std::vector<const CZoneAer *> & VecZonesIn )
+{
+std::vector<const CZoneAer *> VecZonesRet ;
+
+// tri par altitude
+TriZonesParAltitude( VecZonesIn ) ;
+
+// tri suivant la derogation
+for ( size_t iz = 0 ; iz < VecZonesIn.size()  ; iz++ )
+    {
+    // zone activable pris en compte apres
+    if ( VecZonesIn[iz]->m_DansFchActivation )
+        continue ;
+    // si zone avec derogation, on efface les autres avant
+    if ( VecZonesIn[iz]->HavePeriod() )
+        VecZonesRet.clear() ;
+    // ajout de la zone
+    VecZonesRet.push_back( VecZonesIn[iz] ) ;
+    }
+
+// rajout des zones activables
+for ( size_t iz = 0 ; iz < VecZonesIn.size()  ; iz++ )
+    if ( VecZonesIn[iz]->m_DansFchActivation )
+        VecZonesRet.push_back( VecZonesIn[iz] ) ;
+
+// recopie des zones
+VecZonesIn = VecZonesRet ;
+
+// tri par altitude
+TriZonesParAltitude( VecZonesIn ) ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -709,9 +745,6 @@ PtsEnCours.m_Lon = 3.041811;   // anzat-le-luguet
 //PtsEnCours.m_Lon = 2.81738;   // sancy zone protege
 
 #endif
-
-// tri des zones par surface croissante, rapide si deja trié
-//TriZonesSurface() ;
 
 // si test wifi positionnement altitude sol
 if ( g_GlobalVar.m_ModeHttpFileMgr )
@@ -757,13 +790,11 @@ for ( long iz = 0 ; iz < m_NbZones ; iz++ )
         }
     }
 
-// tri des zones par altitude croissante
-TriZonesAltitude( VecZoneInArea ) ;
-/*Serial.println( "debut de tri" ) ;
-for ( int iz = 0 ; iz < VecZoneInAreaNorm.size() ; iz++ )
-    Serial.println( VecZoneInAreaNorm[iz]->GetAltiBasse() ) ;*/
+// classement reduction zone
+ClasseZoneRetenueAltitude( VecZoneInArea ) ;
 
 // cas des zones normales
+const CZoneAer * pZoneIn = NULL ;
 if ( VecZoneInArea.size() == 0 )
     {
     RetStrIn = "aucune_zone" ;
@@ -772,17 +803,10 @@ if ( VecZoneInArea.size() == 0 )
 else
     {
     // zone la plus basse
-    const CZoneAer * pZone = VecZoneInArea[0] ;
-    // si la zone du dessus a une derogation elle est prioritaire (sauf si zone activable)
-    for ( int iz= 0 ; iz < VecZoneInArea.size() && !pZone->m_DansFchActivation ; iz++ )
-        if ( VecZoneInArea[iz]->HavePeriod() )
-            {
-            pZone = VecZoneInArea[iz] ;
-            break ;
-            }
+    pZoneIn = VecZoneInArea[0] ;
 
     // variables de zone
-    int  PlafondZone = pZone->GetAltiBasse() ;
+    int  PlafondZone = pZoneIn->GetAltiBasse() ;
     bool Corent = ( PlafondZone == 822 ) ;
 
     ////////////
@@ -795,14 +819,14 @@ else
         if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro > m_Plafond4Valid) &&
              (g_GlobalVar.m_TerrainPosCur.m_AltiBaro > (g_GlobalVar.m_AltitudeSolHgt+300)) )
             {
-            sprintf( TmpChar , "In %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            sprintf( TmpChar , "In %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrIn = ZONE_DEDANS ;
             RetStrIn = TmpChar ;
             }
         // dessous
         else
             {
-            sprintf( TmpChar , "Be %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            sprintf( TmpChar , "Be %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrIn = ZONE_DESSOUS ;
             RetStrIn = TmpChar ;
             }
@@ -816,7 +840,7 @@ else
         if ( ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > m_Plafond4Valid) &&
              ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt+300)) )
             {
-            sprintf( TmpChar , "Al %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            sprintf( TmpChar , "Al %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrLimite = ZONE_LIMITE_ALTI ;
             RetStrLimite = TmpChar ;
             }
@@ -829,16 +853,15 @@ else
         if ( PlafondZone < g_GlobalVar.m_TerrainPosCur.m_AltiBaro )
             {
             m_Plafond4Valid = PlafondZone ;
-            sprintf( TmpChar , "In %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            sprintf( TmpChar , "In %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrIn = ZONE_DEDANS ;
             RetStrIn = TmpChar ;
             }
         // en dessous
         else
             {
-            //const CZoneAer & ZoneDuDessus = *VecZoneInAreaNorm[1] ;
-            m_Plafond4Valid = pZone->GetAltiBasse() ;
-            sprintf( TmpChar , "Be %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            m_Plafond4Valid = pZoneIn->GetAltiBasse() ;
+            sprintf( TmpChar , "Be %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrIn = ZONE_DESSOUS ;
             RetStrIn = TmpChar ;
             }
@@ -847,40 +870,16 @@ else
         if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > PlafondZone )
             {
             m_Plafond4Valid = PlafondZone ;
-            sprintf( TmpChar , "Al %s al:%4dm" , pZone->m_pNomAff , m_Plafond4Valid ) ;
+            sprintf( TmpChar , "Al %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrLimite = ZONE_LIMITE_ALTI ;
             RetStrLimite = TmpChar ;
             }
         }
     }
 
-/*// pour toutes les zones activables recherche dedans si pas deja dedans une comme TMA
-for ( int iz = 0 ; iz < VecZoneInAreaActivee.size() && RetNbrIn != ZONE_DEDANS ; iz++ )
-    {
-    const CZoneAer & Zone = *VecZoneInAreaActivee[iz] ;
-    int PlafondZone = Zone.GetAltiBasse() ;
-
-    // si dedans
-    if ( g_GlobalVar.m_TerrainPosCur.m_AltiBaro >= PlafondZone )
-        {
-        RetNbrIn = ZONE_DEDANS ;
-        // construction nom + altitude
-        char TmpChar[50] ;
-        m_Plafond4Valid=PlafondZone ;
-        sprintf( TmpChar , "In %s al:%4dm" , Zone.m_pNomAff , m_Plafond4Valid ) ;
-        RetStrIn = TmpChar ;
-        break ;
-        }
-    // si limite altitude
-    else if ( (PlafondZone-g_GlobalVar.m_Config.m_AltiMargin) < g_GlobalVar.m_TerrainPosCur.m_AltiBaro )
-        {
-        m_Plafond4Valid = PlafondZone ;
-        sprintf( TmpChar , "Al %s al:%4dm" , Zone.m_pNomAff , m_Plafond4Valid ) ;
-        RetNbrLimite = ZONE_LIMITE_ALTI ;
-        RetStrLimite = TmpChar ;
-        }
-    }*/
-
+// liberation memoire
+VecZoneInArea.clear() ;
+VecZoneInArea.shrink_to_fit() ;
 
 // si zone protege et pas deja dedans une comme TMA ou activable
 int HauteurSolZoneProtegee = 1000 ;
@@ -911,11 +910,97 @@ if ( pZoneProtegee != NULL && RetNbrIn != ZONE_DEDANS )
         }
     }
 
+// variables de sortie zone en cours
 m_Mutex.PrendreMutex() ;
  m_DansDessousUneZone = RetNbrIn ;
  m_NomZoneDansDessous = RetStrIn ;
 m_Mutex.RelacherMutex() ;
 
+// raz des variables distance prochaine zone et mise a jour distance altitude
+if ( pZoneIn != NULL )
+    {
+    int DistAltCurZone = pZoneIn->GetAltiBasse() - g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
+    m_DistAltCurZone = DistAltCurZone ;
+    }
+else
+    m_DistAltCurZone = 9999 ;
+
+// determination des zones proches et à l'altitude de croisement dans les 1.5 km
+const int DistanceMaxProcheXY = 1500 ;
+std::vector<CZoneAer *> VecZoneProchesXY ;   // zones proches
+for ( int iz = 0 ; iz < m_NbZones; iz++ )
+    {
+    CZoneAer * pZoneXY = m_ZonesArr[iz] ;
+
+    // si la zone n'est pas active
+    if ( !pZoneXY->m_Activee )
+        continue ;
+
+    // pas la zone en cours
+    if ( pZoneIn == pZoneXY )
+        continue ;
+
+    // dans le rayon de 1.5 km
+    float DistBaryMetres = sqrtf( powf(pZoneXY->m_Barycentre.m_Lat-PtsEnCours.m_Lat,2) + powf(pZoneXY->m_Barycentre.m_Lon-PtsEnCours.m_Lon,2) )  * 60. * UnMileEnMetres ;
+    bool DansLeRayonProche = DistBaryMetres < ( pZoneXY->m_RayonMetre + DistanceMaxProcheXY ) ;
+
+    // si pas dans le rayon proche
+    if ( !DansLeRayonProche )
+        continue ;
+
+    // prise en compte de l'altitude
+    bool IsNearFrontAlti = false ;
+    if ( pZoneXY->IsProtect() )
+        IsNearFrontAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro <= (PlafondZoneProtegee+g_GlobalVar.m_Config.m_AltiMargin) ;
+        //continue ;
+    else
+        IsNearFrontAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro >= (pZoneXY->GetAltiBasse()-g_GlobalVar.m_Config.m_AltiMargin) ;
+
+    // si a l'altitude de croisement
+    if ( IsNearFrontAlti )
+        {
+        VecZoneProchesXY.push_back( pZoneXY ) ;
+        pZoneXY->UnCompressZone() ;
+        // distance et point frontiere proche
+        pZoneXY->m_DistanceFrontiere = CDistFront::IsNearFront( pZoneXY->m_PolyStLaLoArr , pZoneXY->m_NbStLaLoPts , PtsEnCours , pZoneXY->m_PtFrontProche ) ;
+        pZoneXY->FreeFloat() ;
+        }
+    }
+
+// tri distance minimale des zones
+CZoneAer::TrierPar( CZoneAer::TriParDistance ) ;
+std::sort(VecZoneProchesXY.begin(), VecZoneProchesXY.end(),MySortFunction);
+
+// si zone la plus proche
+if ( VecZoneProchesXY.size() )
+    {
+    const CZoneAer * pZoneProche = VecZoneProchesXY[0] ;
+
+    // distance et point prochaine zone
+    m_DistXYNextZone = pZoneProche->m_DistanceFrontiere ;
+    m_PtFrontProche  = pZoneProche->m_PtFrontProche ;
+
+    // si marge distance atteinte
+    if ( pZoneProche->m_DistanceFrontiere <= g_GlobalVar.m_Config.m_XYMargin )
+        {
+        RetNbrLimite = ZONE_LIMITE_FRONTIERE ;
+        // construction nom + altitude
+        if ( pZoneProche->IsProtect() )
+            m_Plafond4Valid = HauteurSolZoneProtegee ;
+        else
+            m_Plafond4Valid = pZoneProche->GetAltiBasse() ;
+        sprintf( TmpChar , "Bo %s al:%4dm" , pZoneProche->m_pNomAff , m_Plafond4Valid ) ;
+        RetStrLimite = TmpChar ;
+        }
+    }
+else
+    {
+    m_DistXYNextZone = 9999 ;
+    m_PtFrontProche.m_Lat = 90 ;
+    m_PtFrontProche.m_Lon = 0 ;
+    }
+
+/*
 // pour toutes les zones recherche frontiere XY
 for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrIn != ZONE_DEDANS && g_GlobalVar.m_Config.m_XYMargin > 0 ; iz++ )
     {
@@ -967,7 +1052,7 @@ for ( int iz = 0 ; iz < m_NbZones && RetNbrLimite != ZONE_LIMITE_ALTI && RetNbrI
         break ;
         }
     }
-
+*/
 
 // variables de sortie fontiere
 m_Mutex.PrendreMutex() ;

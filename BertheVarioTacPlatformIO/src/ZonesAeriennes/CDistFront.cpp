@@ -4,15 +4,17 @@
 /// \brief
 ///
 /// \date creation     : 28/03/2024
-/// \date modification : 07/02/2025
+/// \date modification : 08/02/2025
 ///
 
 #include "../BertheVarioTac.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Renvoie true si on est proche de la frontiere.
-bool CDistFront::IsNearFront( CZoneAer::st_coord_poly * PolygoneArr , int NbPts , CZoneAer::st_coord_poly PtEnCours )
+float CDistFront::IsNearFront( CZoneAer::st_coord_poly * PolygoneArr , int NbPts , CZoneAer::st_coord_poly PtEnCours ,
+                                CZoneAer::st_coord_poly & PtFrontProche )
 {
+float DistanceMin = 9E20 ;
 
 // verification distance de tous les points
 for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
@@ -20,10 +22,11 @@ for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
     const CZoneAer::st_coord_poly & pts = PolygoneArr[ipts] ;
     float dist = sqrtf( powf(pts.m_Lat-PtEnCours.m_Lat,2) + powf(pts.m_Lon-PtEnCours.m_Lon,2) ) ;
     dist *= 60 * UnMileEnMetres ;
-    if ( dist <= g_GlobalVar.m_Config.m_XYMargin )
+    // distance minimale et point
+    if ( DistanceMin > dist )
         {
-        //Serial.println("ici") ;
-        return true ;
+        DistanceMin = dist ;
+        PtFrontProche = pts ;
         }
     }
 
@@ -57,14 +60,16 @@ for ( int ipts = 0 ; ipts < NbPts ; ipts++ )
     // si point projete est dans le segment de droite (norme plus petite et colineaire)
     if ( VecProjDroite.GetNorm() <= VecDir.GetNorm() && VecProjDroite.GetAngleDeg( VecDir ) < 90. )
         {
-        // si distance au point
-        if ( (VecPerDroite.GetNorm() * 60. * UnMileEnMetres) <= g_GlobalVar.m_Config.m_XYMargin )
+        float dist = VecPerDroite.GetNorm() * 60. * UnMileEnMetres ;
+        // distance minimale et point
+        if ( DistanceMin > dist )
             {
-            //Serial.println("la") ;
-            return true ;
+            DistanceMin = dist ;
+            PtFrontProche.m_Lon = PtProj.m_x ;
+            PtFrontProche.m_Lat = PtProj.m_y ;
             }
         }
     }
 
-return false ;
+return DistanceMin ;
 }
