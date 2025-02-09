@@ -1,3 +1,8 @@
+le 20250209a :
+ - apparition conditionnelle de l'altitude proche <500m et distance proche <= 999m.
+   ex : _________ ou 455A _____ ou _____ 687NE ou 499A 999SE.
+ - modification de CDistFront::IsNearFront().
+
 le 20250208a :
  - alternance affichage terrain proche/finesse avec altitude/distance/cap 
    jusqu'a la prochaine zone TMA/CTR... rencontrée, à l'altitude ou l'on est,

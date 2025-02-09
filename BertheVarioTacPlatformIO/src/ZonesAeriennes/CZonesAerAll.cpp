@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 08/02/2025 : modification
+/// \date 09/02/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -962,7 +962,7 @@ for ( int iz = 0 ; iz < m_NbZones; iz++ )
         VecZoneProchesXY.push_back( pZoneXY ) ;
         pZoneXY->UnCompressZone() ;
         // distance et point frontiere proche
-        pZoneXY->m_DistanceFrontiere = CDistFront::IsNearFront( pZoneXY->m_PolyStLaLoArr , pZoneXY->m_NbStLaLoPts , PtsEnCours , pZoneXY->m_PtFrontProche ) ;
+        pZoneXY->m_DistanceFrontiere = CDistFront::IsNearFront( pZoneXY->m_PolyStLaLoArr , pZoneXY->m_NbStLaLoPts , PtsEnCours , pZoneXY->m_CapFrontProche ) ;
         pZoneXY->FreeFloat() ;
         }
     }
@@ -972,13 +972,15 @@ CZoneAer::TrierPar( CZoneAer::TriParDistance ) ;
 std::sort(VecZoneProchesXY.begin(), VecZoneProchesXY.end(),MySortFunction);
 
 // si zone la plus proche
+m_DistXYNextZone = 9999 ;
+m_CapFrontProche = -1 ;
 if ( VecZoneProchesXY.size() )
     {
     const CZoneAer * pZoneProche = VecZoneProchesXY[0] ;
 
     // distance et point prochaine zone
     m_DistXYNextZone = pZoneProche->m_DistanceFrontiere ;
-    m_PtFrontProche  = pZoneProche->m_PtFrontProche ;
+    m_CapFrontProche = pZoneProche->m_CapFrontProche ;
 
     // si marge distance atteinte
     if ( pZoneProche->m_DistanceFrontiere <= g_GlobalVar.m_Config.m_XYMargin )
@@ -992,12 +994,6 @@ if ( VecZoneProchesXY.size() )
         sprintf( TmpChar , "Bo %s al:%4dm" , pZoneProche->m_pNomAff , m_Plafond4Valid ) ;
         RetStrLimite = TmpChar ;
         }
-    }
-else
-    {
-    m_DistXYNextZone = 9999 ;
-    m_PtFrontProche.m_Lat = 90 ;
-    m_PtFrontProche.m_Lon = 0 ;
     }
 
 /*

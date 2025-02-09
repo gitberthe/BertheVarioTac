@@ -128,8 +128,8 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZoneAer.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesAerAll.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesAerAll.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesFch.cpp" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesFch.h" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesFchValid.cpp" />
+		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CZonesFchValid.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/main.cpp" />
 		<Extensions />
 	</Project>

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// \file CZonesFch.h
+/// \file CZonesFchValid.h
 ///
 /// \brief
 ///
@@ -16,7 +16,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// \file Classe qui test et valide les zones aeriennes. fichier in =>
 /// CZonesAerAll::CalcZone() => fichier out.
-class CZonesFch : public CZonesAerAll
+class CZonesFchValid : public CZonesAerAll
 {
 public :
     void Valid() ;

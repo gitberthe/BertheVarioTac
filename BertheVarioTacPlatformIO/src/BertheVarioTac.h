@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 03/02/2025
+/// \date modification : 09/02/2025
 ///
 
 //#define NO_OTA
@@ -94,7 +94,7 @@
 #include "ZonesAeriennes/CDistFront.h"
 #include "ZonesAeriennes/CPolygone.h"
 #include "ZonesAeriennes/CZonesAerAll.h"
-#include "ZonesAeriennes/CZonesFch.h"
+#include "ZonesAeriennes/CZonesFchValid.h"
 #include "Gps/CTrame.h"
 #include "Gps/CIgc.h"
 #include "Gps/CStabGps.h"

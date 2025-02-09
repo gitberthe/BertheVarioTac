@@ -4,7 +4,7 @@
 /// \brief Variable globale
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 30/01/2025
+/// \date modification : 09/02/2025
 ///
 
 #ifndef _GLOBALVAR_
@@ -35,7 +35,7 @@ public :
     CFilesHistoVols m_HistoVol ;    ///< historique du vol precedent
     CHgt2Agl        m_Hgt2Agl ;     ///< pour determiner la hauteur sol
     CPileVit        m_PileVit ;     ///< pour lancement vol suivant la vitesse gps
-    CZonesFch       m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
+    CZonesFchValid  m_ZonesAerAll ; ///< tableau des zones aeriennes pris en compte
     CVirtCaptPress* m_pCapteurPression ;    ///< capteur de pression BMP180 ou MS5611
     CQMC5883Mag     m_QMC5883Mag ;   ///< capteur magnetique
     CBleXct         m_BleXct ;      ///< bluetooth Xc-Track

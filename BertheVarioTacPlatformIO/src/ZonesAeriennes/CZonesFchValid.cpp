@@ -1,17 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// \file CZonesFch.cpp
+/// \file CZonesFchValid.cpp
 ///
 /// \brief
 ///
 /// \date creation     : 30/03/2024
-/// \date modification : 03/12/2024
+/// \date modification : 09/02/2025
 ///
 
 #include "../BertheVarioTac.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Procedure de validation de zone fichier txt in/out.
-void CZonesFch::Valid()
+void CZonesFchValid::Valid()
 {
 const int TaillMaxChar = 3000 ; // taille buffer en concurence memoire avec g_Termic
 char * TmpChar = new char [TaillMaxChar+1] ;
@@ -69,7 +69,7 @@ delete [] TmpChar ;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Procedure de validation de zone fichier txt in/out.
-void CZonesFch::TraiteBufferValidZoneIn( char * buff )
+void CZonesFchValid::TraiteBufferValidZoneIn( char * buff )
 {
 if ( buff == NULL || *buff == 0 || *buff == '#' || *buff == '\n' )
     {

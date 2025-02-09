@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 08/02/2025
+/// \date modification : 09/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -37,7 +37,9 @@ lv_timer_handler(); /* let the GUI do its work */
 void CScreen::GetCapChar( int CapDeg , char * NomCap )
 {
 int CapMarge = 45/2 + 1 ;
-if ( CapDeg < CapMarge || CapDeg > (360-CapMarge) )
+if ( CapDeg < 0 )
+    strcpy( NomCap, "--" ) ;
+else if ( CapDeg < CapMarge || CapDeg > (360-CapMarge) )
     strcpy( NomCap, "N " ) ;
 else if ( abs(CapDeg-45) < CapMarge )
     strcpy( NomCap, "NE" ) ;
@@ -203,18 +205,22 @@ else
         {
         int DistFront   = g_GlobalVar.m_ZonesAerAll.m_DistXYNextZone ;
         int AltFront    = g_GlobalVar.m_ZonesAerAll.m_DistAltCurZone ;
-        int CapFrontDeg = atan2f( g_GlobalVar.m_ZonesAerAll.m_PtFrontProche.m_Lat - g_GlobalVar.m_TerrainPosCur.m_Lat ,
-                              g_GlobalVar.m_ZonesAerAll.m_PtFrontProche.m_Lon - g_GlobalVar.m_TerrainPosCur.m_Lon ) *
-                              -180. / PI + 90 + 360 ;
-        CapFrontDeg %= 360 ;
-        // limitations frontiere zone
-        if ( DistFront > 999 )
-            DistFront = 999 ;
-        if ( AltFront > 999 )
-            AltFront = 999 ;
-        char TmpCharCap[25] ;
-        GetCapChar( CapFrontDeg , TmpCharCap ) ;
-        sprintf( TmpChar , "  %3dA %3d%s", AltFront , DistFront , TmpCharCap ) ;
+        int CapFrontDeg = g_GlobalVar.m_ZonesAerAll.m_CapFrontProche ;
+
+        // limitations frontiere zone distance
+        char TmpCharDistFront[10] = "_____" ;
+        if ( DistFront <= 999 )
+            {
+            char TmpCharCap[5] ;
+            GetCapChar( CapFrontDeg , TmpCharCap ) ;
+            sprintf( TmpCharDistFront , "%3d%s" , DistFront , TmpCharCap ) ;
+            }
+        // limitations frontiere zone altitude
+        char TmpCharAltFront[10] = "____ "  ;
+        if ( AltFront <= 500 )
+            sprintf( TmpCharAltFront , "%3dA " , AltFront ) ;
+        // concatenation alti dist front
+        sprintf( TmpChar , "  %s%s", TmpCharAltFront , TmpCharDistFront ) ;
         }
     m_T2SPageVzArr[PAGE_VZ_FIN_TER].Affiche(TmpChar) ;
 
