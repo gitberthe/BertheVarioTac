@@ -207,7 +207,7 @@ else
         int AltFront    = g_GlobalVar.m_ZonesAerAll.m_DistAltCurZone ;
         int CapFrontDeg = g_GlobalVar.m_ZonesAerAll.m_CapFrontProche ;
 
-        // limitations frontiere zone distance
+        // limitations frontiere zone distance < à DISTANCE_PROCHE_XY
         char TmpCharDistFront[10] = "_____" ;
         if ( DistFront <= 999 )
             {
@@ -405,10 +405,7 @@ if( g_GlobalVar.m_Screen.IsCenterPressed() && !g_GlobalVar.m_FinDeVol.IsInFlight
 // desactivation/activation du son
 else if ( g_GlobalVar.BoutonGauche() )
     {
-    /*if ( g_GlobalVar.m_DureeVolMin == ATTENTE_VITESSE_VOL ||
-         g_GlobalVar.m_DureeVolMin == ATTENTE_STABILITE_GPS ||
-         g_GlobalVar.m_DureeVolMin == ATTENTE_MESSAGE_GPS )*/
-        g_GlobalVar.m_BeepAttenteGVZone = ! g_GlobalVar.m_BeepAttenteGVZone ;
+    g_GlobalVar.m_BeepAttenteGVZone = ! g_GlobalVar.m_BeepAttenteGVZone ;
     return ECRAN_0_Vz ;
     }
 //// page suivante

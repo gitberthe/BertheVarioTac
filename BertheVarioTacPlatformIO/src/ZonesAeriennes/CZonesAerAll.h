@@ -23,6 +23,8 @@
 
 #define MAX_POINTS_ZONE         1000
 
+#define DISTANCE_PROCHE_XY      1500
+
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Classe regoupant et calculant les zones aeriennes du fichier zonesaer.txt
 class CZonesAerAll : public CSortArray<CZoneAer> , public CDate, public CDistFront
