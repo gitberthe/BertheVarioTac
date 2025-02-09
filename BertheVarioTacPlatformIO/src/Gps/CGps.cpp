@@ -112,9 +112,6 @@ while ( g_GlobalVar.m_TaskArr[TEMPS_NUM_TASK].m_Run )
         break ;
     }
 
-// remise a true des beep zone aerienne si desactive lors attente gps
-g_GlobalVar.m_BeepAttenteGVZone = true ;
-
 // etat du GPS
 g_GlobalVar.m_DureeVolMin = ATTENTE_STABILITE_GPS ;
 
@@ -278,6 +275,9 @@ void CGps::TacheGpsIgc(void *param)
 #ifdef _LG_DEBUG_
  Serial.println("tache igc lancee");
 #endif
+
+ // remise a true des beep zone aerienne si desactive lors attente gps
+g_GlobalVar.m_BeepAttenteGVZone = true ;
 
 g_GlobalVar.m_TaskArr[IGC_NUM_TASK].m_Stopped = false ;
 
