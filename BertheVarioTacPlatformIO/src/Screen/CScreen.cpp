@@ -4,7 +4,7 @@
 /// \brief Definition des pages ecran
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 09/02/2025
+/// \date modification : 10/02/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -208,7 +208,8 @@ else
         int CapFrontDeg = g_GlobalVar.m_ZonesAerAll.m_CapFrontProche ;
 
         // limitations frontiere zone distance < à DISTANCE_PROCHE_XY
-        char TmpCharDistFront[10] = "_____" ;
+        //                          "999NE"
+        char TmpCharDistFront[10] = "     " ;
         if ( DistFront <= 999 )
             {
             char TmpCharCap[5] ;
@@ -216,7 +217,8 @@ else
             sprintf( TmpCharDistFront , "%3d%s" , DistFront , TmpCharCap ) ;
             }
         // limitations frontiere zone altitude
-        char TmpCharAltFront[10] = "____ "  ;
+        //                         "500A "
+        char TmpCharAltFront[10] = "     "  ;
         if ( AltFront <= 500 )
             sprintf( TmpCharAltFront , "%3dA " , AltFront ) ;
         // concatenation alti dist front
