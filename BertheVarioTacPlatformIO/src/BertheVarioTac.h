@@ -22,7 +22,14 @@
 #ifndef NO_OTA
  #include <WiFiClient.h>
  #include <WebServer.h>
- //#include <HTTPClient.h>
+ #include <HTTPClient.h>
+ #include "esp_tls.h"
+ #include "esp_http_client.h"
+ #include "mbedtls/ssl.h"
+ #include "ssl_client.h"
+ #include "mqtt_client.h"
+ #include "esp_tls.h"
+ #include "esp_sntp.h"
 #endif
 #include <FS.h>
 #include <ESPFMfGK.h>
@@ -45,7 +52,9 @@
 #include <limits>
 
 ////////////////////////////////////////////////////////////////////////////////
-// platform precdente
+// platform precedente
+// bad : platform = espressif32
+// bad : platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip
 // platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.01.01/platform-espressif32.zip
 // platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip
 
@@ -112,6 +121,8 @@
 #include "RandoVol/CFileGpx.h"
 #include "RandoVol/CRandoVol.h"
 #include "Bluetooth/CBleXct.h"
+
+//#include "NetworkClientSecure.h"
 //#include "Wifi/CWifiNotam.h"
 
 ////////////////////////
