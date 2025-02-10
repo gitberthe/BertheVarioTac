@@ -792,7 +792,7 @@ if ( g_GlobalVar.BoutonGauche() )
     return ECRAN_3b_TmaMod ;
     }
 
-// si changement modification zone
+// si changement modification zones
 if ( g_GlobalVar.BoutonCentre() )
     {
     /*
