@@ -55,6 +55,7 @@
 // platform precedente
 // bad : platform = espressif32
 // bad : platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip
+// bad : platform = https://github.com/platformio/platform-espressif32.git
 // platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.01.01/platform-espressif32.zip
 // platform = https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip
 
