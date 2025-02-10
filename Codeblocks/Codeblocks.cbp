@@ -116,8 +116,6 @@
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CSoundSvr.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/VarioCapBeep/CVarioCapBeep.h" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/Wifi/CWifiNotam.cpp" />
-		<Unit filename="../BertheVarioTacPlatformIO/src/Wifi/CWifiNotam.h" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Wifi/WifiFileMgr.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/Wifi/WifiOta.cpp" />
 		<Unit filename="../BertheVarioTacPlatformIO/src/ZonesAeriennes/CDate.cpp" />

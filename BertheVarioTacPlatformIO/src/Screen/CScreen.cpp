@@ -799,7 +799,7 @@ if ( g_GlobalVar.BoutonCentre() )
     //return ECRAN_4_CfgFch ;
     CWifiNotam WifiNotam ;
     if ( !WifiNotam.InitClient() )
-        CGlobalVar::BeepOk() ;*/
+        CGlobalVar::BeepOk() ; */
     }
 
 return ECRAN_3a_TmaAll ;
