@@ -4,7 +4,7 @@
 /// \brief Include global du projet de vario tactile
 ///
 /// \date creation     : 20/09/2024
-/// \date modification : 09/02/2025
+/// \date modification : 10/02/2025
 ///
 
 //#define NO_OTA
@@ -22,6 +22,7 @@
 #ifndef NO_OTA
  #include <WiFiClient.h>
  #include <WebServer.h>
+ //#include <HTTPClient.h>
 #endif
 #include <FS.h>
 #include <ESPFMfGK.h>
@@ -111,6 +112,7 @@
 #include "RandoVol/CFileGpx.h"
 #include "RandoVol/CRandoVol.h"
 #include "Bluetooth/CBleXct.h"
+//#include "Wifi/CWifiNotam.h"
 
 ////////////////////////
 // definition des pin //

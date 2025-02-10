@@ -795,7 +795,10 @@ if ( g_GlobalVar.BoutonGauche() )
 // si changement modification zone
 if ( g_GlobalVar.BoutonCentre() )
     {
-    //return ECRAN_4_CfgFch ;
+    /*//return ECRAN_4_CfgFch ;
+    CWifiNotam WifiNotam ;
+    if ( !WifiNotam.InitClient() )
+        CGlobalVar::BeepOk() ;*/
     }
 
 return ECRAN_3a_TmaAll ;
