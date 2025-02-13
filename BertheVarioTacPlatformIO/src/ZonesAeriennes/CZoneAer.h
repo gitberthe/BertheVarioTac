@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 09/02/2025 : modification
+/// \date 13/02/2025 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -61,6 +61,13 @@ public :
         TriParDistance
         } ;
 
+    // type de zone
+    enum TypeZone
+        {
+        ZoneGeneric ,
+        ZoneCorent
+        } ;
+
     ~CZoneAer() ;
 
     static  void TrierPar( TriPar Tri )
@@ -72,6 +79,9 @@ public :
                 { return m_HauteurSolZoneProtege > 0 ; } ;
     short   GetHauteurSolZoneProtect() const
                 { return m_HauteurSolZoneProtege ; } ;
+
+    TypeZone GetTypeZone() const ;
+    int      GetAltiSolZone( TypeZone TZ ) const ;
 
     char *              m_pNomAff ;             ///< nom court de la zone a afficher
     bool                m_Activee = true ;          ///< zone activee
