@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 09/02/2025 : modification
+/// \date 25/02/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -419,66 +419,87 @@ std::string PeriodeFin = strtok( NULL ,";");
 std::string AltiSemaine = strtok( NULL ,";");
 std::string AltiWeekEnd = strtok( NULL ,";");
 
-CZoneAer * pZone = Find( NomOri.c_str() ) ;
-
-// si pas de zone
-if ( pZone == NULL )
-    {
-    Serial.println("zone aerienne non trouvée periode") ;
-    g_GlobalVar.BeepError() ;
-    *buff = 0 ;
-    return ;
-    }
-
-// recopie nom pour affiche
-if ( NomAff != "-" && NomAff != "" )
-    {
-    delete [] pZone->m_pNomAff ;
-    pZone->m_pNomAff = new char [NomAff.size()+1] ;
-    strcpy( pZone->m_pNomAff , NomAff.c_str() ) ;
-    }
-/*Serial.print(pZone->m_NomOri.c_str()) ;
-Serial.print("|") ;
-Serial.println(pZone->m_pNomAff) ;*/
-
-// periode debut
+std::string JourDeb = "" ;
+std::string MoisDeb = "" ;
 if ( PeriodeDeb != "-" && PeriodeDeb != "" )
     {
-    if ( pZone->m_pDerogFfvl == NULL )
-        pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
-    std::string Jour = strtok( & PeriodeDeb[0] , "-" ) ;
-    std::string Mois = strtok( NULL , "-" ) ;
-    pZone->m_pDerogFfvl->m_PeriodeDebutJour = atoi( Jour.c_str() ) ;
-    pZone->m_pDerogFfvl->m_PeriodeDebutMois = atoi( Mois.c_str() ) ;
+    JourDeb = strtok( & PeriodeDeb[0] , "-" ) ;
+    MoisDeb = strtok( NULL , "-" ) ;
     }
 
-// periode fin
+std::string JourFin = "" ;
+std::string MoisFin = "" ;
+std::string AltiSemaineStr = "" ;
+std::string AltiWeekEndStr = "" ;
 if ( PeriodeFin != "-" && PeriodeFin != "" )
     {
-    if ( pZone->m_pDerogFfvl == NULL )
-        pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
-    std::string Jour = strtok( & PeriodeFin[0] , "-" ) ;
-    std::string Mois = strtok( NULL , "-" ) ;
-    pZone->m_pDerogFfvl->m_PeriodeFinJour = atoi( Jour.c_str() ) ;
-    pZone->m_pDerogFfvl->m_PeriodeFinMois = atoi( Mois.c_str() ) ;
+    JourFin = strtok( & PeriodeFin[0] , "-" ) ;
+    MoisFin = strtok( NULL , "-" ) ;
+    AltiSemaineStr = strtok( & AltiSemaine[0] , "-" ) ;
+    AltiWeekEndStr = strtok( & AltiWeekEnd[0] , "-" ) ;
     }
 
-// alti semaine
-if ( AltiSemaine != "-" && AltiSemaine != "" )
-    {
-    if ( pZone->m_pDerogFfvl == NULL )
-        pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
-    std::string Alti = strtok( & AltiSemaine[0] , "-" ) ;
-    pZone->m_pDerogFfvl->m_AltiBassePeriodeSemaine = atoi( Alti.c_str() ) ;
-    }
 
-// alti week-end
-if ( AltiWeekEnd != "-" && AltiWeekEnd != "" )
+for ( long iz = 0 ; iz < m_NbZones ; iz++ )
     {
-    if ( pZone->m_pDerogFfvl == NULL )
-        pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
-    std::string Alti = strtok( & AltiWeekEnd[0] , "-" ) ;
-    pZone->m_pDerogFfvl->m_AltiBassePeriodeWeekEnd = atoi( Alti.c_str() ) ;
+    CZoneAer * pZone = m_ZonesArr[iz] ;
+
+    // si pas de zone
+    if ( pZone == NULL )
+        {
+        Serial.println("zone aerienne non trouvée periode") ;
+        *buff = 0 ;
+        return ;
+        }
+
+    // si pas bon nom de zone
+    if ( strcmp( pZone->m_pNomAff , NomOri.c_str() ) )
+        continue ;
+
+    // recopie nom pour affiche
+    if ( NomAff != "-" && NomAff != "" )
+        {
+        delete [] pZone->m_pNomAff ;
+        pZone->m_pNomAff = new char [ NomAff.size() + 1 ] ;
+        strcpy( pZone->m_pNomAff , NomAff.c_str() ) ;
+        }
+    /*Serial.print(pZone->m_NomOri.c_str()) ;
+    Serial.print("|") ;
+    Serial.println(pZone->m_pNomAff) ;*/
+
+    // periode debut
+    if ( JourDeb != "" )
+        {
+        if ( pZone->m_pDerogFfvl == NULL )
+            pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
+        pZone->m_pDerogFfvl->m_PeriodeDebutJour = atoi( JourDeb.c_str() ) ;
+        pZone->m_pDerogFfvl->m_PeriodeDebutMois = atoi( MoisDeb.c_str() ) ;
+        }
+
+    // periode fin
+    if ( JourFin != "" )
+        {
+        if ( pZone->m_pDerogFfvl == NULL )
+            pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
+        pZone->m_pDerogFfvl->m_PeriodeFinJour = atoi( JourFin.c_str() ) ;
+        pZone->m_pDerogFfvl->m_PeriodeFinMois = atoi( MoisFin.c_str() ) ;
+        }
+
+    // alti semaine
+    if ( AltiSemaineStr != "" )
+        {
+        if ( pZone->m_pDerogFfvl == NULL )
+            pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
+        pZone->m_pDerogFfvl->m_AltiBassePeriodeSemaine = atoi( AltiSemaineStr.c_str() ) ;
+        }
+
+    // alti week-end
+    if ( AltiWeekEndStr != "" )
+        {
+        if ( pZone->m_pDerogFfvl == NULL )
+            pZone->m_pDerogFfvl = new CZoneAerDerogFfvl ;
+        pZone->m_pDerogFfvl->m_AltiBassePeriodeWeekEnd = atoi( AltiWeekEnd.c_str() ) ;
+        }
     }
 
 // pour prochain appel
