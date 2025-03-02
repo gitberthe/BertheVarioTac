@@ -6,7 +6,7 @@
 /// \date creation   : 23/03/2024
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
 ///                    -DLZ4_MEMORY_USAGE=15 compression maximum avec cette memoire
-/// \date 13/02/2025 : modification
+/// \date 01/03/2025 : modification
 ///
 
 #ifndef _ZONE_AR_
@@ -65,7 +65,8 @@ public :
     enum TypeZone
         {
         ZoneGeneric ,
-        ZoneCorent
+        ZoneCorent ,
+        ZoneStYan
         } ;
 
     ~CZoneAer() ;
@@ -80,8 +81,10 @@ public :
     short   GetHauteurSolZoneProtect() const
                 { return m_HauteurSolZoneProtege ; } ;
 
-    TypeZone GetTypeZone() const ;
-    int      GetAltiSolZone( TypeZone TZ ) const ;
+    TypeZone GetTypeZone() const
+                { return m_TypeZone ; } ;
+    void     SetTypeZone() ;
+    int      GetAltiSolZone() const ;
 
     char *              m_pNomAff ;             ///< nom court de la zone a afficher
     bool                m_Activee = true ;          ///< zone activee
@@ -118,6 +121,8 @@ private :
 
     short                       m_ResolutionMetre ;     ///< resolution en metre de la zone lors de compression short
     short                       m_HauteurSolZoneProtege = -1 ; ///< hauteur de la zone protegee
+
+    TypeZone                    m_TypeZone = ZoneGeneric ;  ///< type de zone, generique, corent, st yan
 
     static TriPar               ms_TriPar ;  ///< pour un tri par nom/distance/altitude
 } ;

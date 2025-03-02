@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 25/02/2025 : modification
+/// \date 01/03/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -49,7 +49,7 @@ if ( CZoneAer::ms_compressed_data_lz4 != NULL )
 void CZonesAerAll::SetDatePeriode()
 {
 SetDateTU( g_GlobalVar.m_Annee, g_GlobalVar.m_Mois, g_GlobalVar.m_Jour, 0. ) ;
-bool WeekEnd = IsWeekEnd() ;
+m_IsWeekEnd = IsWeekEnd() ;
 float JDCur = GetJD_TU() ;
 
 /*Serial.print( g_GlobalVar.m_Annee ) ;
@@ -60,6 +60,9 @@ Serial.println( "CZonesAerAll::SetDatePeriode()" ) ;*/
 for ( int iz = 0 ; iz < m_NbZones ; iz++ )
     {
     CZoneAer & ZoneAer = *m_ZonesArr[iz] ;
+
+    // type de zone
+    ZoneAer.SetTypeZone() ;
 
     // si zone sans periode
     if ( ZoneAer.m_pDerogFfvl == NULL )
@@ -76,7 +79,7 @@ Serial.println( "CZonesAerAll::SetDatePeriode()" ) ;*/
     if ( (DateDebut.GetJD_TU() <= JDCur) && (JDCur <= DateDefin.GetJD_TU()) )
         {
         // positionnement alti fonction periode
-        if ( WeekEnd )
+        if ( m_IsWeekEnd )
             ZoneAer.m_pDerogFfvl->m_AltiAPrendreEnCompte = ALTI_PERIODE_WEEKEND ;
         else
             ZoneAer.m_pDerogFfvl->m_AltiAPrendreEnCompte = ALTI_PERIODE_SEMAINE ;
@@ -846,7 +849,7 @@ else
 
         // si dedans
         if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro > m_Plafond4Valid) &&
-             (g_GlobalVar.m_TerrainPosCur.m_AltiBaro > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone(CZoneAer::ZoneCorent))) )
+             (g_GlobalVar.m_TerrainPosCur.m_AltiBaro > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone())) )
             {
             sprintf( TmpChar , "In %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrIn = ZONE_DEDANS ;
@@ -861,21 +864,49 @@ else
             }
 
         // si limite alti
-        /*Serial.print( g_GlobalVar.m_AltitudeSolHgt ) ;
-        Serial.print( "," ) ;
-        Serial.print( g_GlobalVar.m_TerrainPosCur.m_AltiBaro ) ;
-        Serial.print( "," ) ;
-        Serial.println( g_GlobalVar.m_Config.m_AltiMargin ) ;*/
         if ( ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > m_Plafond4Valid) &&
-             ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone(CZoneAer::ZoneCorent))) )
+             ((g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone())) )
             {
             sprintf( TmpChar , "Al %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
             RetNbrLimite = ZONE_LIMITE_ALTI ;
             RetStrLimite = TmpChar ;
             }
         }
-    ////////////////
-    // si pas corent
+    ///////////////
+    // si saint yan
+    else if ( pZoneIn->GetTypeZone() == CZoneAer::ZoneStYan )
+        {
+        m_Plafond4Valid = PlafondZone ;
+
+        // si l'on est en pas en week end
+        if ( ! m_IsWeekEnd )
+            {
+            // si dedans
+            if ( g_GlobalVar.m_TerrainPosCur.m_AltiBaro > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone()) )
+                {
+                sprintf( TmpChar , "In %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
+                RetNbrIn = ZONE_DEDANS ;
+                RetStrIn = TmpChar ;
+                }
+            // dessous
+            else
+                {
+                sprintf( TmpChar , "Be %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
+                RetNbrIn = ZONE_DESSOUS ;
+                RetStrIn = TmpChar ;
+                }
+
+            // si limite alti
+            if ( (g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone()) )
+                {
+                sprintf( TmpChar , "Al %s al:%4dm" , pZoneIn->m_pNomAff , m_Plafond4Valid ) ;
+                RetNbrLimite = ZONE_LIMITE_ALTI ;
+                RetStrLimite = TmpChar ;
+                }
+            }
+        }
+    ////////////////////
+    // si zone generique
     else
         {
         // si dedans
@@ -951,12 +982,21 @@ if ( pZoneIn != NULL )
     int PlafondZone = pZoneIn->GetAltiBasse() ;
     int DistAltCurZone = PlafondZone - g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
 
+    //////////////////////////////////////////////
     // si corent prise en compte de l'altitude sol
     if ( pZoneIn->GetTypeZone() == CZoneAer::ZoneCorent )
         {
-        int AltitudeSolPlus300 = g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone(CZoneAer::ZoneCorent) ;
+        int AltitudeSolPlus300 = g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone() ;
         int DistAltSol = AltitudeSolPlus300 - g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
         m_DistAltCurZone = std::max( DistAltSol , DistAltCurZone ) ;
+        }
+    //////////////////////////////////////////////
+    // si st yan prise en compte de l'altitude sol
+    else if ( pZoneIn->GetTypeZone() == CZoneAer::ZoneStYan )
+        {
+        int AltitudeSolPlus610 = g_GlobalVar.m_AltitudeSolHgt + pZoneIn->GetAltiSolZone() ;
+        int DistAltSol = AltitudeSolPlus610 - g_GlobalVar.m_TerrainPosCur.m_AltiBaro ;
+        m_DistAltCurZone = DistAltSol ;
         }
     else
         m_DistAltCurZone = DistAltCurZone ;
@@ -976,6 +1016,10 @@ for ( int iz = 0 ; iz < m_NbZones; iz++ )
 
     // pas la zone en cours
     if ( pZoneIn == pZoneXY )
+        continue ;
+
+    // si zone st yan le week end
+    if ( pZoneXY->GetTypeZone() == CZoneAer::ZoneStYan && m_IsWeekEnd )
         continue ;
 
     // dans le rayon de 1.5 km

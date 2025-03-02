@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 23/03/2024
-/// \date modification : 09/02/2025
+/// \date modification : 01/03/2025
 ///
 
 #ifndef _ZONE_AR_ALL_
@@ -57,6 +57,7 @@ protected :
     int             m_NbZones = 0 ;   ///< nombre de zones
     CZoneAer **     m_ZonesArr= NULL ;///< tableau des zones
     int             m_Plafond4Valid ; /// pour validation
+    bool            m_IsWeekEnd ;     ///< pour savoir si l'on est en week end
 
     CZoneAer * Find( const char * NomOri ) ;
 
