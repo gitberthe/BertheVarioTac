@@ -4,7 +4,7 @@
 /// \brief loop de l'application
 ///
 /// \date creation     : 21/09/2024
-/// \date modification : 07/02/2025
+/// \date modification : 20/03/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -83,14 +83,11 @@ esp_wifi_deinit() ;
 
 // blue tooth
 #ifdef XC_TRACK
-if ( g_GlobalVar.m_Config.m_xc_track )
-    g_GlobalVar.m_BleXct.Init( BLE_NAME ) ;
-else
+ g_GlobalVar.m_BleXct.Init( BLE_NAME ) ;
+#else
+ esp_bt_controller_disable();
+ esp_bt_controller_deinit();
 #endif
-    {
-    esp_bt_controller_disable();
-    esp_bt_controller_deinit();
-    }
 
 // mode economie d'energie
 esp_pm_config_esp32_t pm_config ;
@@ -211,11 +208,8 @@ while ( millis() - time < 100 )
 
 // envoi bluetooth Xc-Track
 #ifdef XC_TRACK
-if ( g_GlobalVar.m_Config.m_xc_track )
-    {
-    if ( g_GlobalVar.m_BleXct.IsInitialised() )
-        g_GlobalVar.m_BleXct.Send() ;
-    }
+if ( g_GlobalVar.m_BleXct.IsInitialised() )
+    g_GlobalVar.m_BleXct.Send() ;
 #endif
 
 ///////

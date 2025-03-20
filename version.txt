@@ -1,3 +1,9 @@
+le 20250320a :
+ - prise en compte de la hauteur sol pour pre-alarme frontiere XY à Saint-Sandoux.
+ - emmission message xc_track determiné uniquement par #define XC_TRACK 
+ - son vario toujours determiné par [xc_track] == 0 
+ - declenchement debut de vol par 2 Vz minimales consecutives. 
+
 le 20250301a :
  - meilleur prise en compte zone st-yan
  

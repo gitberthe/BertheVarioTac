@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 07/02/2025
+/// \date modification : 30/02/2025
 ///
 
 #include "BertheVarioTac.h"
@@ -70,7 +70,7 @@ delay( 500 ) ;
 g_GlobalVar.m_Screen.RazButtons() ;
 
 // creation fichier de validation zones
-g_GlobalVar.m_ZonesAerAll.Valid() ;
+//g_GlobalVar.m_ZonesAerAll.Valid() ;
 
 // liberation memoire
 g_GlobalVar.m_ZonesAerAll.DeleteAll() ;

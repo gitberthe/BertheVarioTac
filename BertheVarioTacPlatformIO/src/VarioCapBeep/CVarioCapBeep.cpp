@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 03/10/2024
-/// \date modification : 06/02/2025
+/// \date modification : 30/03/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -88,7 +88,10 @@ while (g_GlobalVar.m_TaskArr[VARIOBEEP_NUM_TASK].m_Run)
     // si xctrack
     #ifdef XC_TRACK
     if ( g_GlobalVar.m_Config.m_xc_track )
-        break ;
+        {
+        delay( 500 ) ;
+        continue ;
+        }
     #endif
 
     // desactivation du son cause TMA

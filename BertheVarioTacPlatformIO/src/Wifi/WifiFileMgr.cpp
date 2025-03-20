@@ -4,7 +4,7 @@
 /// \brief
 ///
 /// \date creation     : 14/10/2024
-/// \date modification : 07/02/2025
+/// \date modification : 20/03/2025
 ///
 
 #include "../BertheVarioTac.h"
@@ -17,7 +17,6 @@ void WifiInitFileMgr()
 g_GlobalVar.StopAll() ;
 
 // pour gain memoire xctrack
-g_GlobalVar.m_Config.m_xc_track = false ;
 esp_bt_controller_disable();
 esp_bt_controller_deinit();
 

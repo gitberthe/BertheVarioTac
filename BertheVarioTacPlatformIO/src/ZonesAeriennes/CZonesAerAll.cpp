@@ -8,7 +8,7 @@
 /// \date 25/11/2024 : la compression du nombre de points de zone ce fait dans
 ///                    BVTZoneAerienne.
 /// \date 25/11/2024 : ajout de la compression des float en short et lz4.
-/// \date 01/03/2025 : modification
+/// \date 20/03/2025 : modification
 ///
 
 #include "../BertheVarioTac.h"
@@ -1033,10 +1033,17 @@ for ( int iz = 0 ; iz < m_NbZones; iz++ )
     // prise en compte de l'altitude
     bool IsNearFrontAlti = false ;
     if ( pZoneXY->IsProtect() )
+        // zone proche protege
         IsNearFrontAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro <= (PlafondZoneProtegee+g_GlobalVar.m_Config.m_AltiMargin) ;
-        //continue ;
     else
+        {
+        // zone proche generique
         IsNearFrontAlti = g_GlobalVar.m_TerrainPosCur.m_AltiBaro >= (pZoneXY->GetAltiBasse()-g_GlobalVar.m_Config.m_AltiMargin) ;
+        // si saint sandoux proche CTR Corent alors prise en compte hauteur sol
+        if ( pZoneXY->GetTypeZone() == CZoneAer::ZoneCorent )
+            // altitude majoree marge alti > altitude sol plus 300m
+            IsNearFrontAlti &= (g_GlobalVar.m_TerrainPosCur.m_AltiBaro+g_GlobalVar.m_Config.m_AltiMargin) > (g_GlobalVar.m_AltitudeSolHgt + pZoneXY->GetAltiSolZone())  ;
+        }
 
     // si a l'altitude de croisement
     if ( IsNearFrontAlti )
